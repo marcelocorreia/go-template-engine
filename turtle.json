@@ -8,7 +8,20 @@
   "packaging": "tar.gz",
   "generate-pom": false,
   "repositories": [
-
   ],
-  "version-string": "main.VERSION"
+  "version-string": "main.VERSION",
+  "builds": [
+    {
+      "os": "darwin",
+      "arch": "amd64",
+      "type": "go",
+      "id": "darwin"
+    },
+    {
+      "os": "linux",
+      "arch": "amd64",
+      "type": "go",
+      "id": "linux"
+    }
+  ]
 }
