@@ -37,7 +37,7 @@ func main() {
 				os.Exit(1)
 				
 			}
-		} else if strings.HasSuffix(*templateVarsFile, ".json") {
+		} else if strings.HasSuffix(*templateVarsFile, ".yaml") {
 			err := yaml.Unmarshal(file, &varsFile)
 			if err != nil {
 				fmt.Println(err)
