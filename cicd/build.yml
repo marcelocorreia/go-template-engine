@@ -11,4 +11,4 @@ inputs:
 - name: go_repo
 
 run:
-  path: make package
+  path: pwd
