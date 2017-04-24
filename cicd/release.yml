@@ -12,5 +12,4 @@ inputs:
 
 run:
   path: ls
-  args:
-    - [-l]
+  args: [-l]
