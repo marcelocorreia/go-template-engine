@@ -30,10 +30,6 @@ deps:
 .PHONY: deps
 
 build:
-	$(call docker_build,_build)
-.PHONY: build
-
-_build:
 	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
 .PHONY: _build
 
@@ -45,24 +41,10 @@ clean:
 	rm -rf ./bin/* ./dist/*
 .PHONY: clean
 
-package:
-	$(call docker_build,_package)
-	$(call create_tar)
+
+package: clean deps lint build
+	@[ -f ./dist/linux ] && echo dist folder found, skipping creation || mkdir -p ./dist/linux
+	tar -cvzf ./dist/linux/$(APP)-linux-amd64.tar.gz -C ./bin .
 .PHONY: package
 
-_package: clean deps lint _build
-	$(call create_tar)
-.PHONY: _package
 
-define docker_build
-	@docker run --rm \
-		-v $(PWD):$(DOCKER_WORKING_DIR) \
-		-w $(DOCKER_WORKING_DIR) \
-		$(IMAGE_GO_GLIDE) \
-		bash -c "uname -a; make $1" && chown $(USER): .* *
-endef
-
-define create_tar
-    @[ -f ./dist/linux ] && echo dist folder found, skipping creation || mkdir -p ./dist/linux
-    tar -cvzf ./dist/linux/$(APP)-linux-amd64.tar.gz -C ./bin .
-endef

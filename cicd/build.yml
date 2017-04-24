@@ -1,5 +1,19 @@
----
-platform: linux
+name: build--
+plan:
+  - get: go_repo
+    trigger: true
+  - task: integration
+    config:
+      platform: linux
 
-run:
-  path: pwd
+      image_resource:
+        type: docker-image
+        source:
+          repository: marcelocorreia/go-glide-builder
+          tag: 'latest'
+
+      inputs:
+        - name: go_repo
+
+      run:
+        path: pwd
