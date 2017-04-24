@@ -47,6 +47,11 @@ package:
 	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make clean deps lint test build tar
 .PHONY: package
 
+list:
+	cd /go/src/github.com/$(NAMESPACE)/$(APP)/dist ; ls -l
+.PHONY: list
+
+
 tar:
 	@[ -f ./dist/linux ] && echo dist folder found, skipping creation || mkdir -p ./dist/linux
 	tar -cvzf ./dist/linux/$(APP)-linux-amd64.tar.gz -C ./bin .
