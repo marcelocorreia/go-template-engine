@@ -45,6 +45,7 @@ package:
 	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
 	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
 	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make clean deps lint test build tar
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); ls -l
 .PHONY: package
 
 list:
