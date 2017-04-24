@@ -11,4 +11,6 @@ inputs:
   - name: dist
 
 run:
-  path: go_repo/cicd/show_files.sh
+  path: ls
+  args:
+    - [-l]
