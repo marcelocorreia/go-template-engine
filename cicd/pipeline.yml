@@ -1,6 +1,6 @@
 ---
 resources:
-  - name: go_repo
+  - name: resource-tutorial
     type: git
     source:
       uri: {{git_repo_url}}
@@ -9,11 +9,11 @@ resources:
       username: {{github_user}}
 
 jobs:
-- name: package
+- name: job-pass-files
   public: true
   plan:
-  - get: go_repo
-  - task: build
-    file: go_repo/cicd/build.yml
-  - task: release
-    file: go_repo/cicd/release.yml
+  - get: resource-tutorial
+  - task: create-some-files
+    file: resource-tutorial/cicd/create_some_files.yml
+  - task: show-some-files
+    file: resource-tutorial/cicd/show_files.yml
