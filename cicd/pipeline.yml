@@ -1,0 +1,17 @@
+resources:
+  - name: go_repo
+    type: git
+    source:
+      uri: {{git_repo_url}}
+      branch: master
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
+jobs:
+  - name: build
+    serial: true
+    plan:
+      - get: go_repo
+        trigger: true
+      - task: build-bin
+        file: ./cicd/build.yml

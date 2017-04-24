@@ -3,16 +3,20 @@ GOPATH?=/go
 REPO_NAME=go-template-engine
 OUTPUT_FILE=./bin/$(APP)
 DOCKER_WORKING_DIR=$(GOPATH)/src/github.com/marcelocorreia/$(REPO_NAME)
+NAMESPACE=marcelocorreia
 IMAGE_GO_GLIDE=marcelocorreia/go-glide-builder:latest
 TEST_OUTPUT_DIR=tmp
 
-#pipeline:
-#	fly -t main set-pipeline \
-#		-n -p $(APP) \
-#		-c cicd/pipeline.yml \
-#		-l /home/marcelo/.ssh/ci-credentials.yml \
-#		-v git_repo_url=git@github.com:$(NAMESPACE)/$(APP).git
-#.PHONY: pipeline
+pipeline:
+	fly -t dev set-pipeline \
+		-n -p $(APP) \
+		-c cicd/pipeline.yml \
+		-l $(HOME)/.ssh/ci-credentials.yml \
+		-v git_repo_url=git@github.com:$(NAMESPACE)/$(APP).git
+
+	fly -t dev unpause-pipeline -p $(APP)
+
+.PHONY: pipeline
 
 
 default: deps
