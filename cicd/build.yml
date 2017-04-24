@@ -1,19 +1,15 @@
-name: build--
-plan:
-  - get: go_repo
-    trigger: true
-  - task: integration
-    config:
-      platform: linux
+platform: linux
 
-      image_resource:
-        type: docker-image
-        source:
-          repository: marcelocorreia/go-glide-builder
-          tag: 'latest'
+inputs:
+  - name: go_repo
+    path: .
 
-      inputs:
-        - name: go_repo
+image_resource:
+  type: docker-image
+  source:
+    repository: marcelocorreia/go-glide-builder
+    tag: 'latest'
 
-      run:
-        path: pwd
+run:
+  path: make
+  args: [package]
