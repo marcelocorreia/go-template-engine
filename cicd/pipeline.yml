@@ -15,3 +15,5 @@ jobs:
   - get: go_repo
   - task: build
     file: go_repo/cicd/build.yml
+  - task: release
+    file: go_repo/cicd/release.yml
