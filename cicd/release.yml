@@ -8,8 +8,8 @@ image_resource:
     tag: 'latest'
 
 inputs:
-- name: go_repo
+- name: go-repo
 - name: dist
 
 run:
-  path: go_repo/cicd/show_files.sh
+  path: go-repo/cicd/show_files.sh
