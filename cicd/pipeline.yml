@@ -25,6 +25,7 @@ jobs:
               repository: marcelocorreia/go-glide-builder
               tag: 'latest'
           run:
-            path: make package
+            path: make
+            args: [package]
 
 
