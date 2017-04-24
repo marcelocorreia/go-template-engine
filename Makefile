@@ -60,6 +60,8 @@ list:
 tar:
 	@[ -f ./dist/linux ] && echo dist folder found, skipping creation || mkdir -p ./dist/linux
 	tar -cvzf ./dist/$(APP)-linux-amd64.tar.gz -C ./bin .
+	@[ -f ../dist ] && echo dist folder found, skipping creation || mkdir -p ../dist
+	cp ./dist/* ../dist/
 .PHONY: tar
 
 
