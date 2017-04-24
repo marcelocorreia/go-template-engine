@@ -48,7 +48,7 @@ package:
 .PHONY: package
 
 list:
-	cd /go/src/github.com/$(NAMESPACE)/$(APP)/dist ; ls -l
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); ls -l
 .PHONY: list
 
 
