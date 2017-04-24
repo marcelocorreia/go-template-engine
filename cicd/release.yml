@@ -8,7 +8,6 @@ image_resource:
     tag: 'latest'
 
 inputs:
-  - name: go_repo
   - name: dist
 
 run:
