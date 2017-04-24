@@ -42,9 +42,9 @@ clean:
 .PHONY: clean
 
 package:
-	mkdir -p /tmp/1234/src/github.com/$(NAMESPACE)/$(APP)
+	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
 	rsync -avz --exclude 'vendor' ./* /tmp/1234/src/github.com/$(NAMESPACE)/$(APP)/
-	cd /tmp/1234/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/tmp/1234 make clean deps lint build tar
+	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make clean deps lint build tar
 .PHONY: package
 
 tar:
