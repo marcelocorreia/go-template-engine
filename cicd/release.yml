@@ -12,5 +12,4 @@ inputs:
   - name: dist
 
 run:
-  path: ls
-  args: [-l, dist]
+  path: go_repo/show_files.sh
