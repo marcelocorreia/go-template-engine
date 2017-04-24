@@ -1,5 +1,6 @@
 APP=sample
 pipeline:
+	git add . ; git commit -m "lazy dev"; git push
 	fly -t dev set-pipeline \
 		-n -p $(APP) \
 		-l $(HOME)/.ssh/ci-credentials.yml \
