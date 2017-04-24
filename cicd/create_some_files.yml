@@ -6,10 +6,10 @@ image_resource:
   source: {repository: busybox}
 
 inputs:
-- name: resource-tutorial
+- name: go-repo
 
 outputs:
 - name: some-files
 
 run:
-  path: resource-tutorial/cicd/create_some_files.sh
+  path: go-repo/cicd/create_some_files.sh
