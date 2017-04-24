@@ -43,8 +43,8 @@ clean:
 
 package:
 	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
-	rsync -avz --exclude 'vendor' ./* /tmp/1234/src/github.com/$(NAMESPACE)/$(APP)/
-	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make clean deps lint build tar
+	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
+	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make package
 .PHONY: package
 
 tar:
