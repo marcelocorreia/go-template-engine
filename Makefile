@@ -16,7 +16,7 @@ pipeline:
 
 	fly -t dev unpause-pipeline -p $(APP)
 
-	fly -t dev trigger-job -j $(APP)/build
+	fly -t dev trigger-job -j $(APP)/package
 
 
 .PHONY: pipeline

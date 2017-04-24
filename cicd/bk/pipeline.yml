@@ -1,0 +1,48 @@
+resources:
+  - name: go_repo
+    type: git
+    source:
+      uri: {{git_repo_url}}
+      branch: master
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
+jobs:
+  - name: build
+    public: true
+    plan:
+      - get: go_repo
+        trigger: true
+      - task: build
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: marcelocorreia/go-glide-builder
+              tag: 'latest'
+          inputs:
+            - name: go_repo
+
+          outputs:
+            - name: dist
+
+          run:
+            path: go_repo/make.sh
+            args: [package]
+
+      - task: ls
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: marcelocorreia/go-glide-builder
+              tag: 'latest'
+          inputs:
+            - name: shit
+
+          run:
+            path: ls
+            args: [-lRa]
+

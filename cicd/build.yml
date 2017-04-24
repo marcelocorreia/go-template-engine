@@ -11,8 +11,8 @@ inputs:
   - name: go_repo
 
 outputs:
-  - name: dist/
+  - name: dist
 
 run:
-  path: make
-  args: [package]
+  path: ls
+  args: [-l]
