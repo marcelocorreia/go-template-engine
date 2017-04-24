@@ -34,4 +34,4 @@ sshkey*
 target/
 terraform.state*
 vendor/
-/glide/
+.glide/
