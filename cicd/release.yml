@@ -8,11 +8,8 @@ image_resource:
     tag: 'latest'
 
 inputs:
-  - name: go_repo
-
-outputs:
-  - name: dist
+- name: go_repo
+- name: dist
 
 run:
-  path: go_repo/make.sh
-  args: [package]
+  path: go_repo/cicd/show_files.sh

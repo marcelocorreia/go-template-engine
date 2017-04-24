@@ -17,3 +17,7 @@ jobs:
     file: go-repo/cicd/create_some_files.yml
   - task: show-some-files
     file: go-repo/cicd/show_files.yml
+  - task: build
+    file: go-repo/cicd/build.yml
+  - task: release
+    file: go-repo/cicd/release.yml
