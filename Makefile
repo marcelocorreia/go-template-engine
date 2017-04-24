@@ -8,6 +8,7 @@ IMAGE_GO_GLIDE=marcelocorreia/go-glide-builder:latest
 TEST_OUTPUT_DIR=tmp
 
 pipeline:
+	git add . ; git commit -m "lazy dev"; git push
 	fly -t dev set-pipeline \
 		-n -p $(APP) \
 		-c cicd/pipeline.yml \

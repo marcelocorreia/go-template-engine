@@ -14,5 +14,5 @@ outputs:
   - name: dist
 
 run:
-  path: ls
-  args: [-l]
+  path: go_repo/make.sh
+  args: [package]
