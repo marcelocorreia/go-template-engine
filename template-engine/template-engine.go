@@ -1,13 +1,12 @@
 package template_engine
 
 import (
+	"bytes"
 	"io/ioutil"
 	"text/template"
-	"bytes"
 )
 
-
-func    ParseTemplateFile(templateFile string, params interface{}) (string, error) {
+func ParseTemplateFile(templateFile string, params interface{}) (string, error) {
 	tplFile, err := ioutil.ReadFile(templateFile)
 
 	if err != nil {

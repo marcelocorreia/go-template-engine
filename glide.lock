@@ -1,0 +1,34 @@
+hash: c8de20ac29788bcfe17b333298760b72b7844a368e9b9b283ea4986008e881d2
+updated: 2017-04-24T18:00:05.235433713+10:00
+imports:
+- name: github.com/alecthomas/template
+  version: a0175ee3bccc567396460bf5acd36800cb10c49c
+  repo: https://github.com/alecthomas/template
+- name: github.com/alecthomas/units
+  version: 2efee857e7cfd4f3d0138cc3cbb1b4966962b93a
+  repo: https://github.com/alecthomas/units
+- name: github.com/davecgh/go-spew
+  version: 346938d642f2ec3594ed81d874461961cd0faa76
+  repo: https://github.com/davecgh/go-spew
+  subpackages:
+  - spew
+- name: github.com/daviddengcn/go-colortext
+  version: 805cee6e0d43c72ba1d4e3275965ff41e0da068a
+  repo: https://github.com/daviddengcn/go-colortext
+- name: github.com/pmezard/go-difflib
+  version: 792786c7400a136282c1664665ae0a8db921c6c2
+  repo: https://github.com/pmezard/go-difflib
+  subpackages:
+  - difflib
+- name: github.com/stretchr/testify
+  version: 4d4bfba8f1d1027c4fdbe371823030df51419987
+  repo: https://github.com/stretchr/testify
+  subpackages:
+  - assert
+- name: gopkg.in/alecthomas/kingpin.v2
+  version: e9044be3ab2a8e11d4e1f418d12f0790d57e8d70
+  repo: https://gopkg.in/alecthomas/kingpin.v2
+- name: gopkg.in/yaml.v2
+  version: a3f3340b5840cee44f372bddb5880fcbc419b46a
+  repo: https://gopkg.in/yaml.v2
+testImports: []
