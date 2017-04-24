@@ -41,10 +41,15 @@ clean:
 	rm -rf ./bin/* ./dist/*
 .PHONY: clean
 
+package:
+	mkdir -p /tmp/1234/src/github.com/$(NAMESPACE)/$(APP)
+	rsync -avz --exclude 'vendor' ./* /tmp/1234/src/github.com/$(NAMESPACE)/$(APP)/
+	cd /tmp/1234/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/tmp/1234 make clean deps lint build tar
+.PHONY: package
 
-package: clean deps lint build
+tar:
 	@[ -f ./dist/linux ] && echo dist folder found, skipping creation || mkdir -p ./dist/linux
 	tar -cvzf ./dist/linux/$(APP)-linux-amd64.tar.gz -C ./bin .
-.PHONY: package
+.PHONY: tar
 
 
