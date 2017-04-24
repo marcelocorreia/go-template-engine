@@ -12,4 +12,4 @@ inputs:
   - name: dist
 
 run:
-  path: go_repo/show_files.sh
+  path: go_repo/cicd/show_files.sh
