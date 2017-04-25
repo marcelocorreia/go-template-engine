@@ -4,3 +4,5 @@ dir=$(dirname $0)
 cd $dir
 
 make $1
+
+cp -Rv dist/ ../
