@@ -18,6 +18,7 @@ jobs:
 - name: release
   public: true
   plan:
+  - get: go-repo
+    passed: [go-template-engine]
   - task: release
     file: go-repo/cicd/release.yml
-    passed: [go-template-engine]
