@@ -30,6 +30,7 @@ resources:
   type: s3
   source:
     bucket: mcpackages
+    regexp: go-template-engine/go-template-engine-(.*).gz
     access_key_id: {{aws_access_key_id}}
     secret_access_key: {{aws_secret_access_key}}
     region_name: ap-southeast-2
