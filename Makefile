@@ -20,7 +20,7 @@ pipeline:
 
 	fly -t dev trigger-job -j $(APP)/go-template-engine
 
-
+	fly -t dev watch -j $(APP)/go-template-engine
 .PHONY: pipeline
 
 
