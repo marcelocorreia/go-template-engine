@@ -25,7 +25,7 @@ resources:
     user: {{github_user}}
     repository: {{git_repo}}
     access_token: {{github_token}}
-    versionned_file: resource_version/version  
+    versioned_file: resource_version/version
 
 - name: s3
   type: s3
