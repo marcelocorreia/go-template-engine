@@ -57,5 +57,5 @@ jobs:
         - package/*gz
     - put: s3
       params:
-        file: package/go-template-engine-*-linux-amd64.tar.gz
+        file: package/*.tar.gz
         acl: public-read
