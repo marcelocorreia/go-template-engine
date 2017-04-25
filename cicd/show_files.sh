@@ -1,4 +1,5 @@
 #!/bin/sh
 
-ls -lR *
+ls -l /tmp
+
 pwd
