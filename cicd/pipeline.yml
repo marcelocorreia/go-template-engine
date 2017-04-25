@@ -9,7 +9,7 @@ resources:
     username: {{github_user}}
 
 jobs:
-- name: job-pass-files
+- name: package
   public: true
   plan:
   - get: go-repo
