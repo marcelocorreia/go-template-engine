@@ -24,6 +24,7 @@ jobs:
   public: true
   plan:
   - get: go-repo
+    trigger: true
   - put: resource_version
     params:
       bump: patch
