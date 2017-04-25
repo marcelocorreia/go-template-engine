@@ -26,6 +26,12 @@ resources:
     repository: {{git_repo}}
     access_token: {{github_token}}
 
+- name: s3
+  type: s3
+  source:
+    bucket: correia.io-dev
+    access_key_id: {{aws_access_key_id}}
+    secret_access_key: {{aws_secret_access_key}}
 jobs:
 - name: go-template-engine
   public: true
@@ -48,3 +54,7 @@ jobs:
       tag: resource_version/version
       globs:
       - package/*gz
+  - put: s3
+    params:
+      file: package/*gz 
+      acl: public-read
