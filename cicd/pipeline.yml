@@ -26,15 +26,14 @@ resources:
     repository: {{git_repo}}
     access_token: {{github_token}}
 
-
 - name: s3
   type: s3
   source:
     bucket: mcpackages
-    regexp: go-template-engine/go-template-engine-(.*)-linux-amd64.tar.gz
     access_key_id: {{aws_access_key_id}}
     secret_access_key: {{aws_secret_access_key}}
     region_name: ap-southeast-2
+    versioned_file: resource_version/version
 
 jobs:
 - name: go-template-engine
