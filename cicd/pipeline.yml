@@ -18,5 +18,6 @@ jobs:
 - name: release
   public: true
   plan:
+  - get: go-repo
   - task: release
     file: go-repo/cicd/release.yml
