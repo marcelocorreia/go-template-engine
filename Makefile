@@ -48,13 +48,9 @@ clean:
 package:
 	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
 	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
-	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make clean deps lint test build tar
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); ls -l dist; cp -Rv dist ../
+	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make clean deps lint test build tar; ls -l
 .PHONY: package
 
-list:
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); ls -l
-.PHONY: list
 
 tar:
 	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist
