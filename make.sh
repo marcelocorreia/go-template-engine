@@ -5,5 +5,4 @@ cd $dir
 
 make $1
 
-cd $dir
 
