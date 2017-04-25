@@ -13,7 +13,8 @@ pipeline:
 		-n -p $(APP) \
 		-c cicd/pipeline.yml \
 		-l $(HOME)/.ssh/ci-credentials.yml \
-		-v git_repo_url=git@github.com:$(NAMESPACE)/$(APP).git
+		-v git_repo_url=git@github.com:$(NAMESPACE)/$(APP).git \
+		-v git_repo=$(APP)
 
 	fly -t dev unpause-pipeline -p $(APP)
 
