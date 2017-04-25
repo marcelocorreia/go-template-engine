@@ -23,7 +23,7 @@ resources:
   type: github-release
   source:
     user: {{github_user}}
-    repository: {{git_repo}}
+    repository: {{git_repo_url}}
     access_token: {{github_token}}
 
 jobs:
