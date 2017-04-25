@@ -19,6 +19,13 @@ resources:
     private_key: {{git_private_key}}
     username: {{github_user}}
 
+- name: github_release
+  type: github-release
+  source:
+    user: {{github_user}}
+    repository: {{git_repo}}
+    access_token: {{github_token}}
+
 jobs:
 - name: go-template-engine
   public: true
@@ -35,4 +42,10 @@ jobs:
   - put: resource_version
     params:
       file: resource_version/version
-
+  - put: github_release
+    params:
+      name: resource_version/version
+      tag: resource_version/version
+      body: go_repo/README.md
+      globs:
+      - package/*gz
