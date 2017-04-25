@@ -11,7 +11,7 @@ inputs:
 - name: go-repo
 
 outputs:
-- name: dist
+- name: package
 
 run:
   path: go-repo/make.sh

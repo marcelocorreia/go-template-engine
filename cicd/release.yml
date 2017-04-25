@@ -9,7 +9,7 @@ image_resource:
 
 inputs:
 - name: go-repo
-- name: dist
+- name: package
 
 run:
   path: go-repo/cicd/show_files.sh
