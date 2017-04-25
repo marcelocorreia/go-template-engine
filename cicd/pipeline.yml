@@ -9,7 +9,7 @@ resources:
     username: {{github_user}}
 
 jobs:
-- name: package
+- name: go-template-engine
   public: true
   plan:
   - get: go-repo
