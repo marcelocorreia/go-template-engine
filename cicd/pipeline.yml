@@ -32,10 +32,10 @@ jobs:
     file: go-repo/cicd/build.yml
   - task: release
     file: go-repo/cicd/release.yml
-  - put: resource_version
+  - put: version-branch
     params:
       file: resource_version/version
-  - put: resource_version
+  - put: master-branch-version
     params:
       file: go_repo/version
 
