@@ -1,12 +1,12 @@
 ---
 resources:
-  - name: go-repo
-    type: git
-    source:
-      uri: {{git_repo_url}}
-      branch: master
-      private_key: {{git_private_key}}
-      username: {{github_user}}
+- name: go-repo
+  type: git
+  source:
+    uri: {{git_repo_url}}
+    branch: master
+    private_key: {{git_private_key}}
+    username: {{github_user}}
 
 jobs:
 - name: job-pass-files
