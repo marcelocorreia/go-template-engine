@@ -1,61 +1,61 @@
 ---
 resources:
-- name: go-repo
-  type: git
-  source:
-    uri: {{git_repo_url}}
-    branch: master
-    private_key: {{git_private_key}}
-    username: {{github_user}}
+  - name: go-repo
+    type: git
+    source:
+      uri: {{git_repo_url}}
+      branch: master
+      private_key: {{git_private_key}}
+      username: {{github_user}}
 
-- name: resource_version
-  type: semver
-  source:
-    driver: git
-    initial_version: 0.0.0
-    uri: {{git_repo_url}}
-    branch: version
-    file: version
-    private_key: {{git_private_key}}
-    username: {{github_user}}
+  - name: resource_version
+    type: semver
+    source:
+      driver: git
+      initial_version: 0.0.0
+      uri: {{git_repo_url}}
+      branch: version
+      file: version
+      private_key: {{git_private_key}}
+      username: {{github_user}}
 
-- name: github_release
-  type: github-release
-  source:
-    user: {{github_user}}
-    repository: {{git_repo}}
-    access_token: {{github_token}}
+  - name: github_release
+    type: github-release
+    source:
+      user: {{github_user}}
+      repository: {{git_repo}}
+      access_token: {{github_token}}
 
-- name: s3
-  type: s3
-  source:
-    bucket: mcpackages
-    access_key_id: {{aws_access_key_id}}
-    secret_access_key: {{aws_secret_access_key}}
-    region_name: ap-southeast-2
-    versioned_file: resource_version/version
+  - name: s3
+    type: s3
+    source:
+      bucket: mcpackages
+      access_key_id: {{aws_access_key_id}}
+      secret_access_key: {{aws_secret_access_key}}
+      region_name: ap-southeast-2
+      versioned_file: resource_version/version
 
 jobs:
-- name: go-template-engine
-  public: true
-  plan:
-  - get: go-repo
-    trigger: true
-  - put: resource_version
-    params:
-      bump: patch
-  - task: build
-    file: go-repo/cicd/build.yml
-  - put: resource_version
-    params:
-      file: resource_version/version
-  - put: github_release
-    params:
-      name: resource_version/version
-      tag: resource_version/version
-      globs:
-      - package/*gz
-  - put: s3
-    params:
-      file: package/go-template-engine-*-linux-amd64.tar.gz
-      acl: public-read
+  - name: go-template-engine
+    public: true
+    plan:
+    - get: go-repo
+      trigger: true
+    - put: resource_version
+      params:
+        bump: patch
+    - task: build
+      file: go-repo/cicd/build.yml
+    - put: resource_version
+      params:
+        file: resource_version/version
+    - put: github_release
+      params:
+        name: resource_version/version
+        tag: resource_version/version
+        globs:
+        - package/*gz
+    - put: s3
+      params:
+        file: package/go-template-engine-*-linux-amd64.tar.gz
+        acl: public-read
