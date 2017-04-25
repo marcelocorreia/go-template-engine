@@ -34,6 +34,7 @@ resources:
     access_key_id: {{aws_access_key_id}}
     secret_access_key: {{aws_secret_access_key}}
     region_name: ap-southeast-2
+
 jobs:
 - name: go-template-engine
   public: true
@@ -45,8 +46,6 @@ jobs:
       bump: patch
   - task: build
     file: go-repo/cicd/build.yml
-  - task: release
-    file: go-repo/cicd/release.yml
   - put: resource_version
     params:
       file: resource_version/version
