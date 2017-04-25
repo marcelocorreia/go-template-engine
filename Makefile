@@ -49,7 +49,7 @@ package:
 	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
 	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
 	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make clean deps lint test build tar
-	cp -Rv /go/src/github.com/$(NAMESPACE)/$(APP)/dist ./package
+	cp -Rv /go/src/github.com/$(NAMESPACE)/$(APP)/dist ../package
 .PHONY: package
 
 
