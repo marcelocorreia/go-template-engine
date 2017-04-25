@@ -46,6 +46,5 @@ jobs:
     params:
       name: resource_version/version
       tag: resource_version/version
-      body: go_repo/README.md
       globs:
       - package/*gz
