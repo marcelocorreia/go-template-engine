@@ -5,4 +5,5 @@ cd $dir
 
 make $1
 
-cp -Rv dist/ ../
+cd $dir
+
