@@ -33,7 +33,7 @@ resources:
       access_key_id: {{aws_access_key_id}}
       secret_access_key: {{aws_secret_access_key}}
       region_name: ap-southeast-2
-      regexp: {{s3_regex}}
+      regexp: '{{s3_regex}}'
 
 jobs:
   - name: package
