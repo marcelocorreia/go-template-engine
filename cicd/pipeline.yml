@@ -33,10 +33,10 @@ resources:
       access_key_id: {{aws_access_key_id}}
       secret_access_key: {{aws_secret_access_key}}
       region_name: ap-southeast-2
-      regexp: '{{s3_regex}}'
+      regexp: go-template-engine/go-template-engine-(.*).tar.gz
 
 jobs:
-  - name: package
+  - name: go-template-engine
     public: true
     plan:
     - get: go-repo
