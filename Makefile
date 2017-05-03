@@ -1,7 +1,6 @@
 include env.mk
 
 pipeline:
-	git add . ; git commit -m "lazy dev"; git push
 	fly -t dev set-pipeline \
 		-n -p $(APP) \
 		-c cicd/pipeline.yml \
