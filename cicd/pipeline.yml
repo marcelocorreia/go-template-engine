@@ -66,8 +66,8 @@ jobs:
               http://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
       passed:
         - put: resource_version
-              params:
-                bump: patch
+          params:
+            bump: patch
 
         - put: github_release
           params:
