@@ -1,4 +1,11 @@
 ---
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest
+
 resources:
   - name: go-repo-master
     type: git
@@ -43,6 +50,10 @@ resources:
       region_name: ap-southeast-2
       regexp: go-template-engine/go-template-engine-(.*).tar.gz
 
+  - name: slack-alert
+    type: slack-notification
+    source:
+      url: {{slack_webook}}
 
 jobs:
   - name: integration
@@ -73,3 +84,9 @@ jobs:
       params:
         file: package/*.tar.gz
         acl: public-read
+    - put: slack-alert
+      params:
+        channel: '#ci'
+        text: |
+          {{git_repo}} has a new build. Check it out at:
+          http://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
