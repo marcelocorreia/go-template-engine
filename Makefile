@@ -9,10 +9,10 @@ pipeline:
 		-v git_repo=$(APP)
 
 	fly -t dev unpause-pipeline -p $(APP)
-
-	fly -t dev trigger-job -j $(APP)/go-template-engine
-
-	fly -t dev watch -j $(APP)/go-template-engine
+#
+#	fly -t dev trigger-job -j $(APP)/go-template-engine
+#
+#	fly -t dev watch -j $(APP)/go-template-engine
 .PHONY: pipeline
 
 
