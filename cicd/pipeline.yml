@@ -51,7 +51,7 @@ jobs:
     - get: go-repo-dev
       trigger: true
     - task: build
-      file: go-repo/cicd/build.yml
+      file: go-repo-dev/cicd/build.yml
 
   - name: release
     public: true
@@ -59,7 +59,7 @@ jobs:
     - get: go-repo-master
       trigger: true
     - task: build
-      file: go-repo/cicd/build.yml
+      file: go-repo-master/cicd/build.yml
     - put: resource_version
       params:
         bump: patch
