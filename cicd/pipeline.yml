@@ -1,10 +1,18 @@
 ---
 resources:
-  - name: go-repo
+  - name: go-repo-master
     type: git
     source:
       uri: {{git_repo_url}}
       branch: master
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
+  - name: go-repo-dev
+    type: git
+    source:
+      uri: {{git_repo_url}}
+      branch: dev
       private_key: {{git_private_key}}
       username: {{github_user}}
 
@@ -40,7 +48,7 @@ jobs:
   - name: integration
     public: true
     plan:
-    - get: go-repo
+    - get: go-repo-dev
       trigger: true
     - task: build
       file: go-repo/cicd/build.yml
@@ -48,7 +56,8 @@ jobs:
   - name: release
     public: true
     plan:
-    - get: go-repo
+    - get: go-repo-master
+      trigger: true
     - task: build
       file: go-repo/cicd/build.yml
     - put: resource_version
