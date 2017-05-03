@@ -50,10 +50,10 @@ resources:
       region_name: ap-southeast-2
       regexp: go-template-engine/go-template-engine-(.*).tar.gz
 
-   - name: slack-alert
-      type: slack-notification
-      source:
-        url: https://hooks.slack.com/services/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
+  - name: slack-alert
+    type: slack-notification
+    source:
+      url: https://hooks.slack.com/services/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
 
 jobs:
   - name: integration
