@@ -5,6 +5,7 @@ resource_types:
     source:
       repository: cfcommunity/slack-notification-resource
       tag: latest
+
 resources:
   - name: go-repo-master
     type: git
@@ -48,6 +49,7 @@ resources:
       secret_access_key: {{aws_secret_access_key}}
       region_name: ap-southeast-2
       regexp: go-template-engine/go-template-engine-(.*).tar.gz
+
    - name: slack-alert
       type: slack-notification
       source:
@@ -86,5 +88,5 @@ jobs:
       params:
         channel: '#ci'
         text: |
-          {{container_name}} has a new build. Check it out at:
+          {{git_repo}} has a new build. Check it out at:
           http://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
