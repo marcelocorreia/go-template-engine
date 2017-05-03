@@ -1,4 +1,11 @@
 ---
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest
+
 resources:
   - name: go-repo
     type: git
@@ -35,27 +42,41 @@ resources:
       region_name: ap-southeast-2
       regexp: go-template-engine/go-template-engine-(.*).tar.gz
 
+  - name: slack-alert
+    type: slack-notification
+    source:
+      url: {{slack_webook}}
+
 jobs:
   - name: go-template-engine
     public: true
     plan:
     - get: go-repo
       trigger: true
-    - put: resource_version
-      params:
-        bump: patch
+
+
     - task: build
       file: go-repo/cicd/build.yml
-    - put: resource_version
-      params:
-        file: resource_version/version
-    - put: github_release
-      params:
-        name: resource_version/version
-        tag: resource_version/version
-        globs:
-        - package/*gz
-    - put: s3
-      params:
-        file: package/*.tar.gz
-        acl: public-read
+      on_failure:
+        - put: slack-alert
+          params:
+            channel: '#ci'
+            text: |
+              The build had a result. Check it out at:
+              http://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+      passed:
+        - put: resource_version
+              params:
+                bump: patch
+
+        - put: github_release
+          params:
+            name: resource_version/version
+            tag: resource_version/version
+            globs:
+            - package/*gz
+
+        - put: s3
+          params:
+            file: package/*.tar.gz
+            acl: public-read
