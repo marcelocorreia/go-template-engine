@@ -1,6 +1,7 @@
 include env.mk
 
 pipeline:
+	git add .; git commit -m "Pipeline WIP"; git push
 	fly -t dev set-pipeline \
 		-n -p $(APP) \
 		-c cicd/pipeline.yml \
@@ -10,13 +11,10 @@ pipeline:
 
 	fly -t dev unpause-pipeline -p $(APP)
 #
-#	fly -t dev trigger-job -j $(APP)/go-template-engine
+#	fly -t dev trigger-job -j $(APP)/test
 #
 #	fly -t dev watch -j $(APP)/go-template-engine
 .PHONY: pipeline
-
-
-default: deps
 
 lint:
 	@go fmt -x $$(glide nv)
@@ -28,23 +26,42 @@ deps:
 
 build:
 	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
-.PHONY: _build
+.PHONY: build
 
 test:
 	go test $$(glide nv)
 .PHONY: test
 
+
 clean:
 	rm -rf ./bin/* ./dist/*
 .PHONY: clean
 
-package:
-	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
-	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
-	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make clean deps lint test build tar
+# Concourse targets
+_deps: _prepare
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); glide install
+.PHONY: _deps
+
+
+_build: _prepare _deps
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
+.PHONY: _build
+
+_test:
+	cd /go/src/github.com/$(NAMESPACE)/$(APP);	go test $$(glide nv)
+.PHONY: _test
+
+_clean:
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); rm -rf ./bin/* ./dist/*
+.PHONY: _clean
+
+package: package
+	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
 	cp -Rv /go/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
 .PHONY: package
 
+_prepare:
+	@[ -f /go/src/github.com/$(NAMESPACE)/$(APP) ] && echo /go/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP); rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
 
 tar:
 	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist

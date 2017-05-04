@@ -1,4 +1,3 @@
----
 resource_types:
   - name: slack-notification
     type: docker-image
@@ -57,15 +56,21 @@ resources:
 
 jobs:
   - name: integration
+    serial: true
     public: true
     plan:
     - get: go-repo-dev
       trigger: true
-    - task: build
-      file: go-repo-dev/cicd/build-dev.yml
+    - task: test
+      file: go-repo-dev/cicd/go-test.yml
+      on_success:
+        task: integration
+        file: go-repo-dev/cicd/go-build.yml
+
 
   - name: release
     public: true
+    serial: true
     plan:
     - get: go-repo-master
       trigger: true
