@@ -77,9 +77,9 @@ jobs:
     - task: build
       file: go-repo-dev/cicd/go-build.yml
       params:
-         - make_args: [build]
-         - job_output: package
-         - job_input: go-repo-dev
+        make_args: [build]
+        job_output: package
+        job_input: go-repo-dev
 
   - name: release
     public: true
