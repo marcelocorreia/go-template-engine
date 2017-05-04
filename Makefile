@@ -29,9 +29,9 @@ deps:
 
 build:
 	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
-.PHONY: _build
+.PHONY: build
 
-test:
+test: prepare
 	go test $$(glide nv)
 .PHONY: test
 
@@ -39,13 +39,14 @@ clean:
 	rm -rf ./bin/* ./dist/*
 .PHONY: clean
 
-package:
-	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
-	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
+package: prepare
 	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
 	cp -Rv /go/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
 .PHONY: package
 
+prepare:
+	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
+	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
 
 tar:
 	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist
