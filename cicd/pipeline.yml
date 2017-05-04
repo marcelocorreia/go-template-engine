@@ -67,7 +67,6 @@ jobs:
         task: integration
         file: go-repo-dev/cicd/go-build.yml
 
-
   - name: release
     public: true
     serial: true
