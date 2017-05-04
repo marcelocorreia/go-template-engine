@@ -8,11 +8,11 @@ image_resource:
     tag: 'latest'
 
 inputs:
-- name: go-repo-dev
+- name: {{job_input}}
 
 outputs:
-- name: package
+- name: {{job_output}}
 
 run:
   path: go-repo-dev/make.sh
-  args: [package]
+  args: {{make_args}}

@@ -62,7 +62,11 @@ jobs:
     - get: go-repo-dev
       trigger: true
     - task: build
-      file: go-repo-dev/cicd/build-dev.yml
+      file: go-repo-dev/cicd/go-build.yml
+      params:
+         - make_args: [deps,lint,test]
+         - job_output: package
+         - job_input: go-repo-dev
 
   - name: release
     public: true
