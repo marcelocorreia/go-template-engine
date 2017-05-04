@@ -70,9 +70,9 @@ jobs:
     serial: true
     plan:
     - get: go-repo-dev
+      passed: [test]
     - task: build
       file: go-repo-dev/cicd/go-build.yml
-      passed: [test]
 
   - name: release
     public: true
