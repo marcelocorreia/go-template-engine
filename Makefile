@@ -16,18 +16,15 @@ pipeline:
 #	fly -t dev watch -j $(APP)/go-template-engine
 .PHONY: pipeline
 
-
-default: deps
-
 lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint
 
-deps: prepare
+deps:
 	glide install
 .PHONY: deps
 
-build: prepare deps
+build:
 	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
 .PHONY: build
 
@@ -35,16 +32,35 @@ test:
 	go test $$(glide nv)
 .PHONY: test
 
+
 clean:
 	rm -rf ./bin/* ./dist/*
 .PHONY: clean
 
-package: prepare
+# Concourse targets
+_deps:
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); glide install
+.PHONY: _deps
+
+
+_build: _prepare _deps
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
+.PHONY: _build
+
+_test:
+	cd /go/src/github.com/$(NAMESPACE)/$(APP);	go test $$(glide nv)
+.PHONY: _test
+
+_clean:
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); rm -rf ./bin/* ./dist/*
+.PHONY: _clean
+
+package: package
 	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
 	cp -Rv /go/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
 .PHONY: package
 
-prepare:
+_prepare:
 	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
 	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
 

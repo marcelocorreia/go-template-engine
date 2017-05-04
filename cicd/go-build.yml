@@ -15,4 +15,4 @@ outputs:
 
 run:
   path: go-repo-dev/make.sh
-  args: [build]
+  args: [_build]
