@@ -64,7 +64,10 @@ jobs:
     - task: build
       file: go-repo-dev/cicd/go-build.yml
       params:
-        make_args: [deps,lint,test]
+        make_args:
+          - deps
+          - lint
+          - test
         job_output: package
         job_input: go-repo-dev
 
