@@ -8,7 +8,7 @@ image_resource:
     tag: 'latest'
 
 inputs:
-- name: {{job_input}}
+- name: go-repo-dev
 
 outputs:
 - name: {{job_output}}

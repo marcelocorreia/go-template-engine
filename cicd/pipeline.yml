@@ -15,7 +15,7 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
-  - name: go_repo_dev
+  - name: go-repo-dev
     type: git
     source:
       uri: {{git_repo_url}}
@@ -59,31 +59,27 @@ jobs:
   - name: test
     public: true
     plan:
-    - get: go_repo_dev
+    - get: go-repo-dev
       trigger: true
     - task: build
-      file: go_repo_dev/cicd/go-build.yml
+      file: go-repo-dev/cicd/go-build.yml
       params:
-        job_input: go_repo_dev
+        job_input: "go-repo-dev"
         job_output: package
-        make_args:
-          - deps
-          - lint
-          - test
+        make_args: [deps, lint, test]
 
   - name: build
     public: true
     passed: [test]
     plan:
-    - get: go_repo_dev
+    - get: go-repo-dev
       trigger: true
     - task: build
-      file: go_repo_dev/cicd/go-build.yml
+      file: go-repo-dev/cicd/go-build.yml
       params:
-        make_args:
-          - build
+        make_args: [build]
         job_output: package
-        job_input: go_repo_dev
+        job_input: go-repo-dev
 
   - name: release
     public: true
