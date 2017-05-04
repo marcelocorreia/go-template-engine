@@ -67,7 +67,6 @@ jobs:
 
   - name: build
     public: true
-    serial: true
     plan:
     - get: go-repo-dev
       passed: [test]
