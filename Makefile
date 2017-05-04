@@ -55,7 +55,7 @@ _clean:
 	cd /go/src/github.com/$(NAMESPACE)/$(APP); rm -rf ./bin/* ./dist/*
 .PHONY: _clean
 
-package: package
+package: _prepare
 	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
 	cp -Rv /go/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
 .PHONY: package
