@@ -70,8 +70,6 @@ jobs:
     serial: true
     passed: [test]
     plan:
-    - get: go-repo-dev
-      trigger: true
     - task: build
       file: go-repo-dev/cicd/go-build.yml
       params: { make_args: [build], job_output: package, job_input: go-repo-dev}
