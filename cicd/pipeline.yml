@@ -1,4 +1,3 @@
----
 resource_types:
   - name: slack-notification
     type: docker-image
