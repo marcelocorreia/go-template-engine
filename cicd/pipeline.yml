@@ -57,19 +57,17 @@ resources:
 
 jobs:
   - name: test
+    serial: true
     public: true
     plan:
     - get: go-repo-dev
       trigger: true
     - task: build
-      file: go-repo-dev/cicd/go-build.yml
-      params:
-        job_input: "go-repo-dev"
-        job_output: package
-        make_args: [deps, lint, test]
+      file: go-repo-dev/cicd/go-test.yml
 
   - name: build
     public: true
+    serial: true
     passed: [test]
     plan:
     - get: go-repo-dev
@@ -80,6 +78,7 @@ jobs:
 
   - name: release
     public: true
+    serial: true
     plan:
     - get: go-repo-master
       trigger: true
