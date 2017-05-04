@@ -65,7 +65,7 @@ jobs:
     - task: test
       file: go-repo-dev/cicd/go-test.yml
 
-  - name: build
+  - name: integration
     plan:
     - aggregate:
       - get: go-repo-dev
