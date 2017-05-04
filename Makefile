@@ -27,7 +27,7 @@ deps: prepare
 	glide install
 .PHONY: deps
 
-build:
+build: prepare deps
 	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
 .PHONY: build
 
