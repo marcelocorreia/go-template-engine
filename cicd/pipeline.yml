@@ -62,7 +62,7 @@ jobs:
     plan:
     - get: go-repo-dev
       trigger: true
-    - task: build
+    - task: test
       file: go-repo-dev/cicd/go-test.yml
 
   - name: build

@@ -23,7 +23,7 @@ lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint
 
-deps:
+deps: prepare
 	glide install
 .PHONY: deps
 
@@ -31,7 +31,7 @@ build:
 	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
 .PHONY: build
 
-test: prepare
+test:
 	go test $$(glide nv)
 .PHONY: test
 
