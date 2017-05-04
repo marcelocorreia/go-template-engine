@@ -65,14 +65,14 @@ jobs:
     - task: test
       file: go-repo-dev/cicd/go-test.yml
     on_success:
-      - name: build
-        public: true
-        serial: true
-        passed: [test]
-        plan:
-        - get: go-repo-dev
-        - task: build
-          file: go-repo-dev/cicd/go-build.yml
+      name: build
+      public: true
+      serial: true
+      passed: [test]
+      plan:
+      - get: go-repo-dev
+      - task: build
+        file: go-repo-dev/cicd/go-build.yml
 
   - name: release
     public: true
