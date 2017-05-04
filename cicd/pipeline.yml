@@ -55,7 +55,7 @@ resources:
       url: {{slack_webook}}
 
 jobs:
-  - name: test
+  - name: integration
     serial: true
     public: true
     plan:
