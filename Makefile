@@ -1,6 +1,7 @@
 include env.mk
 
 pipeline:
+	git add .; git commit -m "Pipeline WIP"; git push
 	fly -t dev set-pipeline \
 		-n -p $(APP) \
 		-c cicd/pipeline.yml \
@@ -10,7 +11,7 @@ pipeline:
 
 	fly -t dev unpause-pipeline -p $(APP)
 #
-	fly -t dev trigger-job -j $(APP)/go-template-engine
+	fly -t dev trigger-job -j $(APP)/test
 #
 #	fly -t dev watch -j $(APP)/go-template-engine
 .PHONY: pipeline
