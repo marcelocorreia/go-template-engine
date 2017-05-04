@@ -60,8 +60,9 @@ jobs:
     serial: true
     public: true
     plan:
-    - get: go-repo-dev
-      trigger: true
+    - aggregate:
+      - get: go-repo-dev
+        trigger: true
     - task: test
       file: go-repo-dev/cicd/go-test.yml
 
