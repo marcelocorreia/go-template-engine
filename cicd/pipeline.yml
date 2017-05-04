@@ -70,8 +70,8 @@ jobs:
     passed: [test]
     plan:
       - aggregate:
-        - get: go-repo-dev
-          passed: [test]
+          - get: go-repo-dev
+            passed: [test]
     - task: build
       file: go-repo-dev/cicd/go-build.yml
 
