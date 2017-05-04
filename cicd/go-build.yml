@@ -13,6 +13,11 @@ inputs:
 outputs:
 - name: {{job_output}}
 
+params:
+  job_input: {{job_input}}
+  job_output: {{job_output}}
+  make_args: {{make_args}}
+
 run:
   path: go-repo-dev/make.sh
   args: {{make_args}}
