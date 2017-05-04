@@ -38,7 +38,7 @@ clean:
 .PHONY: clean
 
 # Concourse targets
-_deps:
+_deps: _prepare
 	cd /go/src/github.com/$(NAMESPACE)/$(APP); glide install
 .PHONY: _deps
 
@@ -61,8 +61,7 @@ package: package
 .PHONY: package
 
 _prepare:
-	mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
-	rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
+	@[ -f /go/src/github.com/$(NAMESPACE)/$(APP) ] && echo /go/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP); rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
 
 tar:
 	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist
