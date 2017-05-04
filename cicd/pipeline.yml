@@ -69,8 +69,9 @@ jobs:
     public: true
     passed: [test]
     plan:
-    - get: go-repo-dev
-      passed: [test]
+      - aggregate:
+        - get: go-repo-dev
+          passed: [test]
     - task: build
       file: go-repo-dev/cicd/go-build.yml
 
