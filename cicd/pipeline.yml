@@ -70,7 +70,7 @@ jobs:
     - aggregate:
       - get: go-repo-dev
         passed: [test]
-        trigger: true
+        trigger: false
     - task: build
       file: go-repo-dev/cicd/go-build.yml
 
