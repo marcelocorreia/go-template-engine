@@ -69,18 +69,18 @@ jobs:
     on_failure:
       put: slack-alert
       params:
-          channel: '#ci'
-          icon_emoji: ':concourse:'
-          text: |
-          :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+        channel: '#ci'
+        icon_emoji: ':concourse:'
+        text: |
+        :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
     on_success:
       put: slack-alert
       params:
-          channel: '#ci'
-          icon_emoji: ':concourse:'
-          text: |
-          :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
-          always_notify: true
+        channel: '#ci'
+        icon_emoji: ':concourse:'
+        text: |
+        :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+        always_notify: true
   - name: release
     public: true
     serial: true
