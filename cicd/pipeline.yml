@@ -6,7 +6,7 @@ resource_types:
       tag: latest
 
 resources:
-  - name: go-repo-master
+  - name: gte-repo-master
     type: git
     source:
       uri: {{git_repo_url}}
@@ -14,7 +14,7 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
-  - name: go-repo-dev
+  - name: gte-repo-dev
     type: git
     source:
       uri: {{git_repo_url}}
@@ -59,13 +59,13 @@ jobs:
     serial: true
     public: true
     plan:
-    - get: go-repo-dev
+    - get: gte-repo-dev
       trigger: true
     - task: test
-      file: go-repo-dev/cicd/go-test.yml
+      file: gte-repo-dev/cicd/go-test.yml
       on_success:
         task: integration
-        file: go-repo-dev/cicd/go-build.yml
+        file: gte-repo-dev/cicd/go-build.yml
     on_failure:
       put: slack-alert
       params:
@@ -80,10 +80,10 @@ jobs:
     public: true
     serial: true
     plan:
-    - get: go-repo-master
+    - get: gte-repo-master
       trigger: true
     - task: build
-      file: go-repo-master/cicd/build-master.yml
+      file: gte-repo-master/cicd/build-master.yml
     - put: resource_version
       params:
         bump: patch

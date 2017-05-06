@@ -16,6 +16,10 @@ pipeline:
 #	fly -t dev watch -j $(APP)/go-template-engine
 .PHONY: pipeline
 
+pipeline-destroy:
+	fly -t dev destroy-pipeline -p $(APP)
+.PHONY: pipeline-destroy
+
 lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint
