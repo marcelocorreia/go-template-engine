@@ -68,7 +68,7 @@ jobs:
           file: gte-repo-dev/cicd/gte-build.yml
       - put: resource_version
         params:
-          bump: minor
+          bump: patch
       - put: github_release
         params:
           name: resource_version/version
