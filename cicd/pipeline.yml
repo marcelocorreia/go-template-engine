@@ -66,13 +66,13 @@ jobs:
       on_success:
         task: integration
         file: go-repo-dev/cicd/go-build.yml
-      on_failure:
-        - put: slack-alert
-            params:
-                channel: '#project-ci'
-                icon_emoji: ':concourse:'
-                text: |
-                :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+    on_failure:
+      put: slack-alert
+        params:
+            channel: '#project-ci'
+            icon_emoji: ':concourse:'
+            text: |
+            :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
   - name: release
     public: true
     serial: true
