@@ -11,7 +11,7 @@ pipeline:
 
 	fly -t dev unpause-pipeline -p $(APP)
 #
-#	fly -t dev trigger-job -j $(APP)/test
+	fly -t dev trigger-job -j $(APP)/integration
 #
 #	fly -t dev watch -j $(APP)/go-template-engine
 .PHONY: pipeline
