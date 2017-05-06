@@ -73,6 +73,13 @@ jobs:
           icon_emoji: ':concourse:'
           text: |
           :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+    on_success:
+      put: slack-alert
+      params:
+          channel: '#ci'
+          icon_emoji: ':concourse:'
+          text: |
+          :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
   - name: release
     public: true
     serial: true
