@@ -8,11 +8,11 @@ image_resource:
     tag: 'latest'
 
 inputs:
-- name: gte-repo-dev
+- name: gte-repo-master
 
 outputs:
 - name: package
 
 run:
-  path: gte-repo-dev/make.sh
-  args: [_package]
+  path: gte-repo-master/make.sh
+  args: [package]
