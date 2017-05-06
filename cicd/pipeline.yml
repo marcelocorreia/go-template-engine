@@ -98,6 +98,7 @@ jobs:
       params:
         name: resource_version/version
         tag: resource_version/version
+        body: gte-repo-master/README.md
         globs:
         - package/*gz
     - put: s3
