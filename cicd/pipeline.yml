@@ -72,15 +72,10 @@ jobs:
         channel: '#ci'
         icon_emoji: ':concourse:'
         text: |
-          :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* falied!
+          :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+          Check it out at:
           https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
-    on_success:
-      put: slack-alert
-      params:
-        channel: '#ci'
-        text: |
-          :white_check_mark: Build $BUILD_NAME. *$BUILD_JOB_NAME* succeed!
-          https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+
   - name: release
     public: true
     serial: true
@@ -102,9 +97,20 @@ jobs:
       params:
         file: package/*.tar.gz
         acl: public-read
-    - put: slack-alert
+    on_failure:
+      put: slack-alert
+      params:
+        channel: '#ci'
+        icon_emoji: ':concourse:'
+        text: |
+          :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+          Check it out at:
+          https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+    on_success:
+      put: slack-alert
       params:
         channel: '#ci'
         text: |
           :white_check_mark: $BUILD_PIPELINE_NAME has a new release.
+          Check it out at:
           https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
