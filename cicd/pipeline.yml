@@ -80,6 +80,7 @@ jobs:
           icon_emoji: ':concourse:'
           text: |
           :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+          always_notify: true
   - name: release
     public: true
     serial: true
