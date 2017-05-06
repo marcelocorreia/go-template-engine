@@ -92,7 +92,7 @@ jobs:
     - get: gte-repo-master
       trigger: true
     - task: build
-      file: gte-repo-master/cicd/build-master.yml
+      file: gte-repo-master/cicd/get-release.yml
     - put: resource_version
       params:
         bump: minor
