@@ -59,13 +59,20 @@ jobs:
     serial: true
     public: true
     plan:
-    - get: gte-repo-dev
-      trigger: true
-    - task: test
-      file: gte-repo-dev/cicd/go-test.yml
-      on_success:
-        task: integration
-        file: gte-repo-dev/cicd/go-build.yml
+      - get: gte-repo-dev
+        trigger: true
+      - task: test
+        file: gte-repo-dev/cicd/gte-test.yml
+        on_success:
+          task: integration
+          file: gte-repo-dev/cicd/gte-build.yml
+      - put: resource_version
+        params:
+          bump: minor
+      - put: github_release
+        params:
+          name: resource_version/version
+          tag: resource_version/version
     on_failure:
       put: slack-alert
       params:
@@ -86,7 +93,7 @@ jobs:
       file: gte-repo-master/cicd/build-master.yml
     - put: resource_version
       params:
-        bump: patch
+        bump: minor
     - put: github_release
       params:
         name: resource_version/version
