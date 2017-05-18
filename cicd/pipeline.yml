@@ -1,3 +1,4 @@
+#
 resource_types:
   - name: slack-notification
     type: docker-image
@@ -5,6 +6,7 @@ resource_types:
       repository: cfcommunity/slack-notification-resource
       tag: latest
 
+#
 resources:
   - name: gte-repo-master
     type: git
@@ -90,7 +92,7 @@ jobs:
     - get: gte-repo-master
       trigger: true
     - task: build
-      file: gte-repo-master/cicd/build-master.yml
+      file: gte-repo-master/cicd/get-release.yml
     - put: resource_version
       params:
         bump: minor
