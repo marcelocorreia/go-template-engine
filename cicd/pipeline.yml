@@ -91,7 +91,7 @@ jobs:
     plan:
     - get: gte-repo-master
       trigger: true
-    - task: build
+    - task: release
       file: gte-repo-master/cicd/gte-release.yml
     - put: resource_version
       params:
