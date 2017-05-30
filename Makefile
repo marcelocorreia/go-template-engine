@@ -1,6 +1,9 @@
 include env.mk
 
-pipeline:
+git-push:
+	git add . ; git commit -m "updating pipeline"; git push
+
+pipeline: git-push
 	git add .; git commit -m "Pipeline WIP"; git push
 	fly -t dev set-pipeline \
 		-n -p $(APP) \
