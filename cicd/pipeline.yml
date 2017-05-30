@@ -71,10 +71,6 @@ jobs:
       - put: resource_version
         params:
           bump: patch
-      - put: github_release
-        params:
-          name: resource_version/version
-          tag: resource_version/version
     on_failure:
       put: slack-alert
       params:
