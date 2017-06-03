@@ -50,7 +50,7 @@ _deps: _prepare
 
 
 _build: _prepare _deps
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
+	cd /go/src/github.com/$(NAMESPACE)/$(APP); GOOS=darwin GOARCH=amd64 go build -o $(OUTPUT_FILE)
 .PHONY: _build
 
 _test:
