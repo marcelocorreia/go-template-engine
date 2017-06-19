@@ -22,6 +22,9 @@ pipeline-destroy:
 	fly -t dev destroy-pipeline -p $(APP)
 .PHONY: pipeline-destroy
 
+pipeline-login:
+	fly -t dev login -n dev -c https://ci.correia.io
+
 lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint
@@ -73,3 +76,9 @@ tar:
 	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist
 	tar -cvzf ./dist/$(APP)-linux-amd64.tar.gz -C ./bin .
 .PHONY: tar
+
+create-make:
+	echo '#!/usr/bin/env bash\n' > make.sh
+	echo 'dir=$$(dirname $$0)' >> make.sh
+	echo 'cd $$dir' >> make.sh
+	echo 'make $$1' >> make.sh
