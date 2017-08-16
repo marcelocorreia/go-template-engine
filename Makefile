@@ -34,7 +34,8 @@ deps:
 .PHONY: deps
 
 build:
-	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
+	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)-linux-amd64
+	GOOS=darwin GOARCH=amd64 go build -o $(OUTPUT_FILE)-darwin-amd64
 .PHONY: build
 
 test:
@@ -70,7 +71,7 @@ package: _prepare
 .PHONY: package
 
 _prepare:
-	@[ -f /go/src/github.com/$(NAMESPACE)/$(APP) ] && echo /go/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP); rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
+	@[ -f /go/src/github.com/$(NAMESPACE)/$(APP) ] && echo /go/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
 
 tar:
 	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist
@@ -82,3 +83,6 @@ create-make:
 	echo 'dir=$$(dirname $$0)' >> make.sh
 	echo 'cd $$dir' >> make.sh
 	echo 'make $$1' >> make.sh
+
+version:
+	@git show version:version
