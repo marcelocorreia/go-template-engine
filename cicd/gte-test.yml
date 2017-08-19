@@ -15,4 +15,4 @@ outputs:
 
 run:
   path: gte-repo-dev/make.sh
-  args: [_deps, _lint, _test]
+  args:  [_test]
