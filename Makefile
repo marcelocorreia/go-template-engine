@@ -42,36 +42,35 @@ test:
 	go test $$(glide nv)
 .PHONY: test
 
-
 clean:
 	rm -rf ./bin/* ./dist/*
 .PHONY: clean
 
 # Concourse targets
 _deps: _prepare
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); glide install
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); glide install
 .PHONY: _deps
 
 
 _build: _prepare _deps
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); GOOS=darwin GOARCH=amd64 go build -o $(OUTPUT_FILE)
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); GOOS=darwin GOARCH=amd64 go build -o $(OUTPUT_FILE)
 .PHONY: _build
 
 _test: _prepare
-	cd /go/src/github.com/$(NAMESPACE)/$(APP);	go test $$(glide nv)
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP);	go test $$(glide nv)
 .PHONY: _test
 
 _clean:
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); rm -rf ./bin/* ./dist/*
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); rm -rf ./bin/* ./dist/*
 .PHONY: _clean
 
 package: _prepare
-	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
-	cp -Rv /go/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
+	cp -Rv $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
 .PHONY: package
 
 _prepare:
-	@[ -f /go/src/github.com/$(NAMESPACE)/$(APP) ] && echo /go/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP)
+	@[ -f $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) ] && echo $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP)
 
 tar:
 	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist
