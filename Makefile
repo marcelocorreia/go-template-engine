@@ -22,6 +22,9 @@ pipeline-destroy:
 	fly -t dev destroy-pipeline -p $(APP)
 .PHONY: pipeline-destroy
 
+pipeline-login:
+	fly -t dev login -n dev -c https://ci.correia.io
+
 lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint
@@ -31,13 +34,13 @@ deps:
 .PHONY: deps
 
 build:
-	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
+	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)-linux-amd64
+	GOOS=darwin GOARCH=amd64 go build -o $(OUTPUT_FILE)-darwin-amd64
 .PHONY: build
 
 test:
 	go test $$(glide nv)
 .PHONY: test
-
 
 clean:
 	rm -rf ./bin/* ./dist/*
@@ -45,31 +48,40 @@ clean:
 
 # Concourse targets
 _deps: _prepare
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); glide install
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); glide install
 .PHONY: _deps
 
 
 _build: _prepare _deps
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); GOOS=darwin GOARCH=amd64 go build -o $(OUTPUT_FILE)
 .PHONY: _build
 
-_test:
-	cd /go/src/github.com/$(NAMESPACE)/$(APP);	go test $$(glide nv)
+_test: _prepare
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP);	go test $$(glide nv)
 .PHONY: _test
 
 _clean:
-	cd /go/src/github.com/$(NAMESPACE)/$(APP); rm -rf ./bin/* ./dist/*
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); rm -rf ./bin/* ./dist/*
 .PHONY: _clean
 
 package: _prepare
-	cd /go/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
-	cp -Rv /go/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
+	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
+	cp -Rv $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
 .PHONY: package
 
 _prepare:
-	@[ -f /go/src/github.com/$(NAMESPACE)/$(APP) ] && echo /go/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p /go/src/github.com/$(NAMESPACE)/$(APP); rsync -avz --exclude 'vendor' ./* /go/src/github.com/$(NAMESPACE)/$(APP)/
+	@[ -f $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) ] && echo $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP)
 
 tar:
 	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist
 	tar -cvzf ./dist/$(APP)-linux-amd64.tar.gz -C ./bin .
 .PHONY: tar
+
+create-make:
+	echo '#!/usr/bin/env bash\n' > make.sh
+	echo 'dir=$$(dirname $$0)' >> make.sh
+	echo 'cd $$dir' >> make.sh
+	echo 'make $$1' >> make.sh
+
+version:
+	@git show version:version
