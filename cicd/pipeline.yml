@@ -76,7 +76,10 @@ jobs:
       params:
         channel: '#ci'
         text: |
-          :warning: ($BUILD_PIPELINE_NAME)($BUILD_TASK_NAME) Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+          :danger: Error
+          Pipeline $BUILD_PIPELINE_NAME
+          Build $BUILD_NAME
+          Job: *$BUILD_JOB_NAME*
           Check it out at:
           https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
