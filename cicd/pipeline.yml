@@ -76,7 +76,7 @@ jobs:
       params:
         channel: '#ci'
         text: |
-          :bomb: $BUILD_PIPELINE_NAME
+          :skull_and_crossbones: $BUILD_PIPELINE_NAME
           Build $BUILD_NAME
           Job: *$BUILD_JOB_NAME*
           Check it out at:
