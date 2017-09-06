@@ -107,13 +107,15 @@ jobs:
       put: slack-alert
       params:
         channel: '#ci'
+        icon_emoji: ':concourse:'
         text: |
-          :warning: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+          :warning: $PIPELINE: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
           Check it out at:
           https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
     on_success:
       put: slack-alert
       params:
+        icon_emoji: ':concourse:'
         channel: '#ci'
         text: |
           :white_check_mark: $BUILD_PIPELINE_NAME has a new release.
