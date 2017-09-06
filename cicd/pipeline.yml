@@ -109,7 +109,7 @@ jobs:
         channel: '#ci'
         icon_emoji: ':warning:'
         text: |
-          :warning: ($PIPELINE_NAME): Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
+          :warning: ($PIPELINE_NAME) -> (Build $BUILD_NAME). *$BUILD_JOB_NAME* failed!
           Check it out at:
           https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
     on_success:
