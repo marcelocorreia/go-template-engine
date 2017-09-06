@@ -26,15 +26,19 @@ func TestTemplateVars(t *testing.T) {
 func TestTemplateJson(t *testing.T) {
 
 	fmt.Println("Running Test with JSON file...")
+	fmt.Println("===================================================")
 
 	file, _ := ioutil.ReadFile("test_fixtures/vars.json")
 
 	var varsJson interface{}
 	json.Unmarshal(file, &varsJson)
 	outJson, _ := ParseTemplateFile("test_fixtures/README.md.tpl", varsJson)
-	//assert.Contains(t, out, []string{"# Blitzkrieg Bop","Hey ho, let's go"})
+	assert.Contains(t, outJson, "Blitzkrieg Bop")
+	assert.Contains(t, outJson, "The kids are losing their minds")
 	assert.Contains(t, outJson, "Hey ho, let's go")
 
+	fmt.Println(outJson)
+	fmt.Println("===================================================")
 	fmt.Println("Finished Test with JSON file...\n")
 
 }

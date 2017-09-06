@@ -65,6 +65,7 @@ _clean:
 .PHONY: _clean
 
 package: _prepare
+	@[ -f ./package ] && echo dist folder found, skipping creation || mkdir -p ./package
 	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
 	cp -Rv $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
 .PHONY: package
