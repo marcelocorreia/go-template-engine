@@ -107,7 +107,7 @@ jobs:
       put: slack-alert
       params:
         channel: '#ci'
-        icon_emoji: ':concourse:'
+        icon_emoji: ':warning:'
         text: |
           :warning: $PIPELINE: Build $BUILD_NAME. *$BUILD_JOB_NAME* failed!
           Check it out at:
@@ -115,7 +115,6 @@ jobs:
     on_success:
       put: slack-alert
       params:
-        icon_emoji: ':concourse:'
         channel: '#ci'
         text: |
           :white_check_mark: $BUILD_PIPELINE_NAME has a new release.
