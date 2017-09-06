@@ -75,9 +75,9 @@ jobs:
       put: slack-alert
       params:
         channel: '#ci'
-        icon_emoji: ':concourse:'
+        icon_emoji: ':skull_and_crossbones:'
         text: |
-          :skull_and_crossbones: $BUILD_PIPELINE_NAME
+          :bomb: $BUILD_PIPELINE_NAME
           Build $BUILD_NAME
           Job: *$BUILD_JOB_NAME*
           Check it out at:
