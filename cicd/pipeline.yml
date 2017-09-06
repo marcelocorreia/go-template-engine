@@ -117,6 +117,8 @@ jobs:
       params:
         channel: '#ci'
         text: |
-          :white_check_mark: $BUILD_PIPELINE_NAME has a new release.
+          :skull_and_crossbones: $BUILD_PIPELINE_NAME
+          Build $BUILD_NAME
+          Job: *$BUILD_JOB_NAME*
           Check it out at:
           https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
