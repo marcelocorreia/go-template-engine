@@ -76,8 +76,7 @@ jobs:
       params:
         channel: '#ci'
         text: |
-          :danger: Error
-          Pipeline $BUILD_PIPELINE_NAME
+          :warning: $BUILD_PIPELINE_NAME
           Build $BUILD_NAME
           Job: *$BUILD_JOB_NAME*
           Check it out at:
