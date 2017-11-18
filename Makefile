@@ -1,7 +1,5 @@
 include env.mk pipeline.mk ci.mk
 
-default: deps
-
 lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint

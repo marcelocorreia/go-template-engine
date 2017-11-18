@@ -1,4 +1,3 @@
-include env.mk
 
 _build:
 	@$(call ci_make,lint build GOOS=linux)
@@ -12,7 +11,7 @@ _release:
 	ls -lR
 	ls -lR ../
 
-prepare:
+_prepare:
 	@echo $(GOPATH) - $(shell pwd)
 	@mkdir -p /go/src/$(NAMESPACE)/$(APP_NAME)/dist
 	@cp -R * /go/src/$(NAMESPACE)/$(APP_NAME)/
