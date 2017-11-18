@@ -2,9 +2,6 @@ include env.mk
 
 
 
-#fly_login:
-#	fly -t dev login -n dev -c https://ci.correia.io
-
 git-push:
 	git add . ; git commit -m "updating pipeline"; git push
 
