@@ -1,0 +1,42 @@
+---
+resources:
+  - name: git-repo-dev
+    type: git
+    source:
+      uri: {{git_repo_url}}
+      branch: dev
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
+  - name: git-repo-master
+    type: git
+    source:
+      uri: {{git_repo_url}}
+      branch: master
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
+
+jobs:
+  - name: integration
+    serial: true
+    public: true
+    plan:
+    - get: git-repo-dev
+      trigger: true
+    - task: ci
+      file: git-repo-dev/ci/integration.yml
+      params:
+        MAKE_TARGETS: _prepare _test _build
+
+  - name: release
+    serial: true
+    public: true
+    plan:
+    - get: git-repo-master
+      trigger: true
+    - task: ci
+      file: git-repo-master/ci/release.yml
+      params:
+        MAKE_TARGETS: _prepare _release
+

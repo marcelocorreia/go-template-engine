@@ -1,29 +1,6 @@
-include env.mk
+include env.mk pipeline.mk ci.mk
 
-git-push:
-	git add . ; git commit -m "updating pipeline"; git push
-
-pipeline: git-push
-	git add .; git commit -m "Pipeline WIP"; git push
-	fly -t dev set-pipeline \
-		-n -p $(APP) \
-		-c cicd/pipeline.yml \
-		-l $(HOME)/.ssh/ci-credentials.yml \
-		-v git_repo_url=git@github.com:$(NAMESPACE)/$(APP).git \
-		-v git_repo=$(APP)
-
-	fly -t dev unpause-pipeline -p $(APP)
-
-#
-#	fly -t dev watch -j $(APP)/go-template-engine
-.PHONY: pipeline
-
-pipeline-destroy:
-	fly -t dev destroy-pipeline -p $(APP)
-.PHONY: pipeline-destroy
-
-pipeline-login:
-	fly -t dev login -n dev -c https://ci.correia.io
+default: deps
 
 lint:
 	@go fmt -x $$(glide nv)
@@ -33,56 +10,39 @@ deps:
 	glide install
 .PHONY: deps
 
-build:
-	GOOS=linux GOARCH=amd64 go build -o $(OUTPUT_FILE)-linux-amd64
-	GOOS=darwin GOARCH=amd64 go build -o $(OUTPUT_FILE)-darwin-amd64
-.PHONY: build
-
 test:
-	go test $$(glide nv)
+	go test $$(glide nv) -v
 .PHONY: test
 
-clean:
-	rm -rf ./bin/* ./dist/*
-.PHONY: clean
+clean_full: clean_bin clean_dist
 
-# Concourse targets
-_deps: _prepare
-	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); glide install
-.PHONY: _deps
+clean_bin:
+	rm -rf ./bin/*
+
+clean_dist:
+	rm -rf ./dist/*
+
+release: clean_full
+	make package GOOS=linux VERSION=$(VERSION)
+	make package GOOS=darwin VERSION=$(VERSION)
+	make package GOOS=windows VERSION=$(VERSION)
+	make clean_bin
+	pwd
+	cp README.md ../package/README.md
+	ls -l
+	ls -l ../
 
 
-_build: _prepare _deps
-	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); GOOS=darwin GOARCH=amd64 go build -o $(OUTPUT_FILE)
-.PHONY: _build
+build:
+	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),tardis)
 
-_test: _prepare
-	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP);	go test $$(glide nv)
-.PHONY: _test
+package: clean_bin lint test build
+	 $(call package,$(APP_NAME),$(GOOS),$(GOARCH),$(VERSION))
 
-_clean:
-	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP); rm -rf ./bin/* ./dist/*
-.PHONY: _clean
+define package
+	tar -cvzf ./dist/$1-$2-$3-$4.tar.gz -C ./bin .
+endef
 
-package: _prepare
-	@[ -f ./package ] && echo dist folder found, skipping creation || mkdir -p ./package
-	cd $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) ; GOPATH=/go make deps lint test build tar
-	cp -Rv $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP)/dist/* ../package/
-.PHONY: package
-
-_prepare:
-	@[ -f $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) ] && echo $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP) folder found, skipping creation || mkdir -p $(GOPATH)/src/github.com/$(NAMESPACE)/$(APP)
-
-tar:
-	@[ -f ./dist ] && echo dist folder found, skipping creation || mkdir -p ./dist
-	tar -cvzf ./dist/$(APP)-linux-amd64.tar.gz -C ./bin .
-.PHONY: tar
-
-create-make:
-	echo '#!/usr/bin/env bash\n' > make.sh
-	echo 'dir=$$(dirname $$0)' >> make.sh
-	echo 'cd $$dir' >> make.sh
-	echo 'make $$1' >> make.sh
-
-version:
-	@git show version:version
+define build
+	$1 go build -o ./bin/$2 -ldflags "-X main.VERSION=$(VERSION)" -v
+endef
