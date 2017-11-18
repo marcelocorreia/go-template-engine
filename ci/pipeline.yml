@@ -27,7 +27,7 @@ jobs:
     - task: ci
       file: git-repo-dev/ci/integration.yml
       params:
-        MAKE_TARGETS: _prepare _build
+        MAKE_TARGETS: prepare _build
 
   - name: release
     serial: true
@@ -38,5 +38,5 @@ jobs:
     - task: ci
       file: git-repo-master/ci/release.yml
       params:
-        MAKE_TARGETS: _prepare _release
+        MAKE_TARGETS: prepare _release
 
