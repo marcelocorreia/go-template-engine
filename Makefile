@@ -27,16 +27,12 @@ release: clean_full
 	make package GOOS=darwin VERSION=$(VERSION)
 	make package GOOS=windows VERSION=$(VERSION)
 	make clean_bin
-	pwd
-	cp README.md ../package/README.md
-	ls -l
-	ls -l ../
 
 
 build:
 	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),tardis)
 
-package: clean_bin lint test build
+package: clean_bin lint build
 	 $(call package,$(APP_NAME),$(GOOS),$(GOARCH),$(VERSION))
 
 define package
