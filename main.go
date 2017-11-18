@@ -22,7 +22,7 @@ var (
 )
 
 func main() {
-	theGreatfulDead()
+	theGracefulDeath()
 	kingpin.Parse()
 
 	template_engine.ParseTemplateFile(*templateFile, *templateVars)
@@ -64,7 +64,7 @@ func main() {
 	}
 }
 
-func theGreatfulDead() {
+func theGracefulDeath() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	signal.Notify(c, syscall.SIGTERM)
