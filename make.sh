@@ -2,8 +2,8 @@
 
 VERSION=dev
 
-if [[ -f ../resource-version/version ]];then
-    VERSION=$(cat ../resource-version/version)
+if [[ -f resource-version/version ]];then
+    VERSION=$(cat resource-version/version)
     echo VERSION=$VERSION
 fi
 
