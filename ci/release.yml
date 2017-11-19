@@ -12,6 +12,7 @@ inputs:
 
 outputs:
 - name: output
+- name: resource-version
 
 params:
   MAKE_TARGETS:
