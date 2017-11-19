@@ -1,5 +1,5 @@
-#_build:
-#	@$(call ci_make,lint build GOOS=linux)
+build:
+	@$(call ci_make,lint build GOOS=linux)
 #
 #_test:
 #	@$(call ci_make,lint test GOOS=linux)
