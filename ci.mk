@@ -7,15 +7,15 @@ _prepare:
 _build:
 	@$(call ci_make,lint build GOOS=linux)
 
-#build:
-#	@$(call ci_make,lint build GOOS=linux)
-#
-#_test:
-#	@$(call ci_make,lint test GOOS=linux)
-#
-#_release:
-#	@$(call ci_make,release)
-#
+build:
+	@$(call ci_make,lint build GOOS=linux)
+
+_test:
+	@$(call ci_make,lint test GOOS=linux)
+
+_release:
+	@$(call ci_make,release)
+
 
 lint:
 	@go fmt -x $$(glide nv)
