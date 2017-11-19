@@ -11,7 +11,7 @@ inputs:
 - name: git-repo-dev
 
 outputs:
-- name: package
+- name: output
 
 params:
   MAKE_TARGETS:
