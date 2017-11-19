@@ -22,4 +22,5 @@ define ci_make
     		make $1
 	echo "*** $1::End ***"
 	echo ""
+	cd -
 endef

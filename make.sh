@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-
-ls -lR ../
-
 VERSION=dev
-
 
 if [[ -f resource_version/version ]];then
     VERSION=$(cat resource_version/version)
