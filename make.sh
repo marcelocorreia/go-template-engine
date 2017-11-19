@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-VERSION=$(cat resource-version/number)
+ls -l ./
+ls -l ../
 
 VERSION=dev
 
