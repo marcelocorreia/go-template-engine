@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-VERSION=$(cat resource_version/number)
+VERSION=$(cat resource-version/number)
 
-#VERSION=dev
-#
-#
-#if [[ -f resource-version/version ]];then
-#    VERSION=$(cat resource-version/version)
-#    echo VERSION=$VERSION
-#fi
+VERSION=dev
+
+
+if [[ -f resource-version/version ]];then
+    VERSION=$(cat resource-version/version)
+fi
+
+echo VERSION=$VERSION
 
 dir=$(dirname $0)
 
