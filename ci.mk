@@ -11,7 +11,7 @@ _build:
 _test:
 	@$(call ci_make,lint test GOOS=linux)
 
-_release:
+_release: _validate-version
 	@$(call ci_make,release)
 
 

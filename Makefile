@@ -21,7 +21,7 @@ clean_bin:
 clean_dist:
 	rm -rf ./dist/*
 
-release: clean_full _validate-version
+release: clean_full
 	make package GOOS=linux VERSION=$(VERSION)
 	make package GOOS=darwin VERSION=$(VERSION)
 	make package GOOS=windows VERSION=$(VERSION)
