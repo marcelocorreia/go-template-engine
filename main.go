@@ -52,10 +52,15 @@ func main() {
 			ct.Foreground(ct.Red, false)
 			fmt.Println("Error: running template.\n", err)
 			ct.ResetColor()
+			fmt.Println(err)
 			os.Exit(1)
 		}
 		if *templateVarsFileOutput != "" {
-			ioutil.WriteFile(*templateVarsFileOutput, []byte(out), 0755)
+			err = ioutil.WriteFile(*templateVarsFileOutput, []byte(out), 0755)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
 		} else {
 			ct.Foreground(ct.Black, false)
 			fmt.Println(out)
