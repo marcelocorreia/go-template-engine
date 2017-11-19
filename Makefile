@@ -1,4 +1,4 @@
-include env.mk pipeline.mk
+include env.mk
 merda:
 	@echo "MERDA"
 	@echo " MERDA"
