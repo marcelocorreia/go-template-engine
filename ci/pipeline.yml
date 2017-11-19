@@ -49,5 +49,5 @@ jobs:
           tag: resource_version/version
           body: git-repo-master/README.md
           globs:
-              - git-repo-master/dist/*tar.gz
+              - output/*tar.gz
 
