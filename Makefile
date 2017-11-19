@@ -1,5 +1,8 @@
 include env.mk ci.mk pipeline.mk
 
+merda:
+	echo "merda"
+
 lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint
