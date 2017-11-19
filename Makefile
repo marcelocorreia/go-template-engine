@@ -1,4 +1,4 @@
-include env.mk
+include env.mk ci.mk
 merda:
 	@echo "MERDA"
 	@echo " MERDA"
