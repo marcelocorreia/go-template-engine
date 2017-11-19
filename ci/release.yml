@@ -15,6 +15,7 @@ outputs:
 
 params:
   MAKE_TARGETS:
+  VERSION:
 
 run:
   path: git-repo-master/make.sh

@@ -41,6 +41,7 @@ jobs:
         file: git-repo-master/ci/release.yml
         params:
           MAKE_TARGETS: _prepare _release
+          VERSION: resource-version/version
 
       - put: github-release
         params:
