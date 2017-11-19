@@ -34,22 +34,11 @@ resources:
       repository: {{git_repo_name}}
       access_token: {{github_token}}
 jobs:
-  - name: integration
-    serial: true
-    public: true
-    plan:
-    - get: git-repo-dev
-      trigger: true
-    - task: ci
-      file: git-repo-dev/ci/integration.yml
-      params:
-        MAKE_TARGETS: prepare _build
-
   - name: release
     serial: true
     public: true
     plan:
-      - put: resource-version
+      - get: resource-version
         params:
           bump: patch
 
