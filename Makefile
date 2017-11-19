@@ -26,7 +26,10 @@ release: clean_full
 	make package GOOS=darwin VERSION=$(VERSION)
 	make package GOOS=windows VERSION=$(VERSION)
 	make clean_bin
-	pwd
+	echo "<><><><><><><<><>"
+	echo "<><><><><><><<><>"
+	echo "<><><><><><><<><>"
+	$(shell pwd)
 	ls -lR ./
 
 build:
