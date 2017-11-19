@@ -9,10 +9,10 @@ image_resource:
 
 inputs:
 - name: git-repo-master
+- name: resource_version
 
 outputs:
 - name: output
-- name: resource_version
 
 params:
   MAKE_TARGETS:
