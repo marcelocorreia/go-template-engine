@@ -34,7 +34,7 @@ jobs:
       - get: git-repo-master
         trigger: true
 
-      - put: resource-version
+      - get: resource-version
         params:
           bump: patch
 
@@ -43,6 +43,8 @@ jobs:
         params:
           MAKE_TARGETS: _prepare _release
           VERSION: resource-version
+
+      - put: resource-version
 
       - put: github-release
         params:
