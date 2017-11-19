@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-echo VERSION
+echo ${VERSION}
 #VERSION=dev
 #
 #
