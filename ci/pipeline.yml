@@ -35,7 +35,7 @@ jobs:
 
       - put: resource_version
         params:
-          bump: major
+          bump: minor
 
       - task: ci
         file: git-repo-master/ci/release.yml
