@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-ls -l ./
-ls -l ../
+
+ls -lR ../
 
 VERSION=dev
 
