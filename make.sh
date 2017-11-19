@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 VERSION=dev
+pwd
+ls -l
+ls -l ../
 
 if [[ -f resource-version/version ]];then
     VERSION=$(cat resource-version/version)
