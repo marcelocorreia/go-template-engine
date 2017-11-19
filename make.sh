@@ -2,9 +2,8 @@
 
 VERSION=dev
 pwd
-ls -l
-ls -l ../
-ls -l ../../
+ls -lR ../
+
 
 if [[ -f resource-version/version ]];then
     VERSION=$(cat resource-version/version)
