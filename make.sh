@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-ls -l
-echo ${VERSION}
+VERSION=$(cat resource_version/number)
+
 #VERSION=dev
 #
 #
