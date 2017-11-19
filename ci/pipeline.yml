@@ -1,13 +1,5 @@
 ---
 resources:
-  - name: git-repo-dev
-    type: git
-    source:
-      uri: {{git_repo_url}}
-      branch: dev
-      private_key: {{git_private_key}}
-      username: {{github_user}}
-
   - name: git-repo-master
     type: git
     source:
