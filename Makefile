@@ -35,6 +35,7 @@ package: clean_bin lint build
 	 $(call package,$(APP_NAME),$(GOOS),$(GOARCH),$(VERSION))
 
 define package
+	echo "Creating Package $(shell pwd)/dist/$1-$2-$3-$4.tar.gz"
 	tar -cvzf ./dist/$1-$2-$3-$4.tar.gz -C ./bin .
 endef
 
