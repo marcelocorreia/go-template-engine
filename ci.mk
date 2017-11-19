@@ -1,5 +1,5 @@
-build:
-	@$(call ci_make,lint build GOOS=linux)
+#build:
+#	@$(call ci_make,lint build GOOS=linux)
 #
 #_test:
 #	@$(call ci_make,lint test GOOS=linux)
@@ -12,14 +12,13 @@ _prepare:
 	@mkdir -p /go/src/$(NAMESPACE)/$(APP_NAME)/dist
 	@cp -R * /go/src/$(NAMESPACE)/$(APP_NAME)/
 	@$(call ci_make,deps)
-#
 
 lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint
 
 deps:
-	glide install
+	@glide install
 .PHONY: deps
 
 define ci_make
