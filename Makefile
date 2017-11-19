@@ -21,12 +21,11 @@ clean_bin:
 clean_dist:
 	rm -rf ./dist/*
 
-release: clean_full
+release: clean_full _validate-version
 	make package GOOS=linux VERSION=$(VERSION)
 	make package GOOS=darwin VERSION=$(VERSION)
 	make package GOOS=windows VERSION=$(VERSION)
 	make clean_bin
-
 
 build:
 	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),tardis)
@@ -42,3 +41,8 @@ endef
 define build
 	$1 go build -o ./bin/$2 -ldflags "-X main.VERSION=$(VERSION)" -v
 endef
+
+_validate-version:
+ifndef VERSION
+	$(error VERSION is required)
+endif
