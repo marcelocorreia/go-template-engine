@@ -38,5 +38,5 @@ jobs:
     - task: ci
       file: git-repo-master/ci/release.yml
       params:
-        MAKE_TARGETS: prepare _release
+        MAKE_TARGETS: _release
 

@@ -4,11 +4,8 @@ _build:
 _test:
 	@$(call ci_make,lint test GOOS=linux)
 
-_release:
+_release: _prepare
 	@$(call ci_make,release)
-	pwd
-	ls -lR
-	ls -lR ../
 
 _prepare:
 	@echo $(GOPATH) - $(shell pwd)
