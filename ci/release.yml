@@ -18,4 +18,5 @@ params:
   VERSION:
 
 run:
-  path: git-repo-master/make.sh
+  path: ls
+  args: -l
