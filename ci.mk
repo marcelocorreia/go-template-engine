@@ -13,7 +13,8 @@ _test:
 
 _release: _validate-version
 	@$(call ci_make,release)
-	cp $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME)/*tar.gz output/
+	pwd
+	cp $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME)/dist/*tar.gz output/
 
 define ci_make
 	echo ""
