@@ -1,4 +1,3 @@
-
 fly_login:
 	fly -t dev login -n dev -c https://ci.correia.io
 
@@ -16,7 +15,6 @@ pipeline:
 		-l ci/properties.yml
 
 	fly -t dev unpause-pipeline -p $(APP_NAME)
-
 .PHONY: pipeline
 
 pipeline-destroy:

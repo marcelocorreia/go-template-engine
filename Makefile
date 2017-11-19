@@ -1,4 +1,4 @@
-include env.mk  ci.mk
+include env.mk ci.mk pipeline.mk
 
 lint:
 	@go fmt -x $$(glide nv)

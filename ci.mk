@@ -1,4 +1,3 @@
-
 _build:
 	@$(call ci_make,lint build GOOS=linux)
 
