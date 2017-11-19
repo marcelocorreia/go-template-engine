@@ -34,7 +34,7 @@ jobs:
       - get: git-repo-master
         trigger: true
 
-      - get: resource-version
+      - put: resource-version
         params:
           bump: patch
 
