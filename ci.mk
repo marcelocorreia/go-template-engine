@@ -1,5 +1,5 @@
-#build:
-#	@$(call ci_make,lint build GOOS=linux)
+build:
+	@$(call ci_make,lint build GOOS=linux)
 #
 #_test:
 #	@$(call ci_make,lint test GOOS=linux)
@@ -13,6 +13,15 @@ _prepare:
 	@cp -R * /go/src/$(NAMESPACE)/$(APP_NAME)/
 	@$(call ci_make,deps)
 #
+
+lint:
+	@go fmt -x $$(glide nv)
+.PHONY: lint
+
+deps:
+	glide install
+.PHONY: deps
+
 define ci_make
 	echo ""
 	echo "*** $1::Begin ***"
