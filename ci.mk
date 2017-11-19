@@ -4,7 +4,7 @@ _build:
 _test:
 	@$(call ci_make,lint test GOOS=linux)
 
-_release: _prepare deps
+_release:
 	@$(call ci_make,release)
 
 _prepare:
