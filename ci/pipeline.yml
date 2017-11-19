@@ -52,17 +52,20 @@ jobs:
       - put: resource-version
         params:
           bump: patch
+
+      - get: git-repo-master
+        trigger: true
+
+      - task: ci
+        file: git-repo-master/ci/release.yml
+        params:
+          MAKE_TARGETS: _prepare _release
+
       - put: github-release
         params:
           name: resource-version/version
           tag: resource-version/version
           body: git-repo-master/README.md
           globs:
-              - git-repo-dev/dist/*.tgz
-    - get: git-repo-master
-      trigger: true
-    - task: ci
-      file: git-repo-master/ci/release.yml
-      params:
-        MAKE_TARGETS: _prepare _release
+              - git-repo-master/dist/*tar.gz
 
