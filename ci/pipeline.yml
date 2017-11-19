@@ -28,7 +28,6 @@ resources:
       
 jobs:
   - name: release
-    serial: true
     public: true
 
     plan:
