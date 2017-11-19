@@ -28,7 +28,7 @@ release: clean_full
 	make clean_bin
 
 build:
-	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),tardis)
+	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),$(APP_NAME))
 
 package: clean_bin lint build
 	 $(call package,$(APP_NAME),$(GOOS),$(GOARCH),$(VERSION))
