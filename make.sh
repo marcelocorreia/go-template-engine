@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-
+ls -l
 echo ${VERSION}
 #VERSION=dev
 #
@@ -12,4 +12,4 @@ echo ${VERSION}
 
 dir=$(dirname $0)
 
-make -C ${dir} ${MAKE_TARGETS} VERSION=$VERSION
+#make -C ${dir} ${MAKE_TARGETS} VERSION=$VERSION
