@@ -8,7 +8,7 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
-  - name: resource-version
+  - name: resource_version
     type: semver
     source:
       driver: git
@@ -28,13 +28,12 @@ resources:
 
 jobs:
   - name: release
-    serial: true
     public: true
     plan:
       - get: git-repo-master
         trigger: true
 
-      - put: resource-version
+      - put: resource_version
         params:
           bump: patch
 
@@ -42,12 +41,12 @@ jobs:
         file: git-repo-master/ci/release.yml
         params:
           MAKE_TARGETS: _prepare _release
-          VERSION: resource-version
+          VERSION: resource_version
 
       - put: github-release
         params:
-          name: resource-version/version
-          tag: resource-version/version
+          name: resource_version/version
+          tag: resource_version/version
           body: git-repo-master/README.md
           globs:
               - git-repo-master/dist/*tar.gz
