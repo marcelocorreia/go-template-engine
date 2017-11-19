@@ -3,6 +3,7 @@ _prepare:
 	@mkdir -p /go/src/$(NAMESPACE)/$(APP_NAME)/dist
 	@cp -R * /go/src/$(NAMESPACE)/$(APP_NAME)/
 	@$(call ci_make,deps)
+
 _build:
 	@$(call ci_make,lint build GOOS=linux)
 
