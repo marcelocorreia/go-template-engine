@@ -1,3 +1,4 @@
+include env.mk pipeline.mk
 merda:
 	@echo "MERDA"
 	@echo " MERDA"
