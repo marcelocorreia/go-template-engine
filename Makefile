@@ -26,13 +26,7 @@ release: clean_full
 	make package GOOS=darwin VERSION=$(VERSION)
 	make package GOOS=windows VERSION=$(VERSION)
 	make clean_bin
-	echo "<><><><><><><><><>"
-	pwd
-	echo "<><><><><><><><><>"
-	ls -lR ../
-	echo "<><><><><><><><><>"
-	ls -l /
-	echo "<><><><><><><><><>"
+
 build:
 	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),tardis)
 
