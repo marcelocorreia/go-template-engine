@@ -6,18 +6,26 @@ import (
 	"text/template"
 )
 
-func ParseTemplateFile(templateFile string, params interface{}) (string, error) {
+type Engine interface {
+	ParseTemplateFile(templateFile string, params interface{}) (string, error)
+	ParseTemplateString(templateString string, params interface{})(string, error)
+}
+
+type TemplateEngine struct {
+}
+
+func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interface{}) (string, error) {
 	tplFile, err := ioutil.ReadFile(templateFile)
 
 	if err != nil {
 		return "", err
 	}
 
-	r, err := ParseTemplateString(string(tplFile), params)
+	r, err := gte.ParseTemplateString(string(tplFile), params)
 	return r, nil
 }
 
-func ParseTemplateString(templateString string, params interface{}) (string, error) {
+func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) {
 	t := template.Must(template.New("letter").Parse(templateString))
 
 	var doc bytes.Buffer
