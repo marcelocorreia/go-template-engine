@@ -12,11 +12,12 @@ import (
 func TestParseTemplateString(t *testing.T) {
 
 	fmt.Println("Running Test with vars...\n\n")
-
+	var engine template_engine.Engine
+	engine = template_engine.TemplateEngine{}
 	params := make(map[string]string)
 	params["package_name"] = "Blitzkrieg Bop"
 	params["phrase1"] = "Hey ho, let's go"
-	out, _ := template_engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", params)
+	out, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", params)
 	assert.Contains(t, out, "# Blitzkrieg Bop")
 	assert.Contains(t, out, "Hey ho, let's go")
 
@@ -25,7 +26,8 @@ func TestParseTemplateString(t *testing.T) {
 }
 
 func TestTemplateJson(t *testing.T) {
-
+	var engine template_engine.Engine
+	engine = template_engine.TemplateEngine{}
 	fmt.Println("Running Test with JSON file...")
 	fmt.Println("===================================================")
 
@@ -33,7 +35,7 @@ func TestTemplateJson(t *testing.T) {
 
 	var varsJson interface{}
 	json.Unmarshal(file, &varsJson)
-	outJson, _ := template_engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
+	outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
 	assert.Contains(t, outJson, "Blitzkrieg Bop")
 	assert.Contains(t, outJson, "The kids are losing their minds")
 	assert.Contains(t, outJson, "Hey ho, let's go")
@@ -46,15 +48,24 @@ func TestTemplateJson(t *testing.T) {
 func TestTemplateErrorJson(t *testing.T) {
 
 	fmt.Println("Running Testing throwing error...")
-
+	var engine template_engine.Engine
+	engine = template_engine.TemplateEngine{}
 	file, _ := ioutil.ReadFile("test_fixtures/vars.json-should-not-exist")
 
 	var varsJson interface{}
 	json.Unmarshal(file, &varsJson)
 
-	_, err := template_engine.ParseTemplateFile("should-not-exist.tpl", varsJson)
+	_, err := engine.ParseTemplateFile("should-not-exist.tpl", varsJson)
 	assert.Error(t, err)
 
 	fmt.Println("Finished Testing throwing error...\n")
 
+}
+
+func TestTemplateEngine_VariablesFileMerge(t *testing.T) {
+	var engine template_engine.Engine
+	engine = template_engine.TemplateEngine{}
+	files := []string{"test_fixtures/combo1.yml","test_fixtures/combo2.yml"}
+	out,_:=engine.VariablesFileMerge(files)
+	fmt.Println(out)
 }

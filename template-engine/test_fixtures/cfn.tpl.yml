@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: VPC's sample
+
+Resources: {{range .network.vpcs}}{{$vpc_name := .name}}
+  {{.name}}:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      CidrBlock: {{.cidr}}
+      Tags:
+        - Key: Application
+          Value: !Ref 'AWS::StackName'
+{{range .subnets}}
+  {{.name}}:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref {{$vpc_name}}
+      CidrBlock: {{.cidr}}
+      Tags:
+        - Key: Application
+          Value: !Ref 'AWS::StackName'
+{{end}}{{end}}
+Outputs: {{range .network.vpcs}}
+  {{.name}}:
+    Description: VPC ID of {{.name}}
+    Value: !Ref {{.name}}
+{{range .subnets}}
+  PrivateSubnet:
+    Description: Subnet ID of {{.name}}
+    Value: !Ref {{.name}}
+{{end}}
+{{end}}

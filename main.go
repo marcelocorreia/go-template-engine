@@ -15,23 +15,27 @@ import (
 )
 
 var (
-	templateFile           = kingpin.Flag("source", "Template Source File").Short('s').Required().String()
-	templateVars           = kingpin.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
-	templateVarsFile       = kingpin.Flag("var-file", "Variables File").String()
-	templateVarsFileOutput = kingpin.Flag("output", "File output full path").Short('o').String()
+	app                    = kingpin.New("go-template-engine", "")
+	templateFile           = app.Flag("source", "Template Source File").Short('s').Required().String()
+	templateVars           = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
+	templateVarsFile       = app.Flag("var-file", "Variables File").String()
+	templateVarsFileOutput = app.Flag("output", "File output full path").Short('o').String()
 )
 
 func main() {
 	theGracefulDeath()
-	kingpin.Parse()
-
-	template_engine.ParseTemplateFile(*templateFile, *templateVars)
+	kingpin.MustParse(app.Parse(os.Args[1:]))
+	var engine template_engine.Engine
+	engine = template_engine.TemplateEngine{}
+	engine.ParseTemplateFile(*templateFile, *templateVars)
 	if *templateVarsFile != "" {
-		file, _ := ioutil.ReadFile(*templateVarsFile)
 		var varsFile interface{}
+
+		file, _ := ioutil.ReadFile(*templateVarsFile)
 
 		if strings.HasSuffix(*templateVarsFile, ".json") {
 			err := json.Unmarshal(file, &varsFile)
+			fmt.Println(&varsFile)
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
@@ -42,12 +46,10 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
-
 			}
-
 		}
 
-		out, err := template_engine.ParseTemplateFile(*templateFile, varsFile)
+		out, err := engine.ParseTemplateFile(*templateFile, varsFile)
 		if err != nil {
 			ct.Foreground(ct.Red, false)
 			fmt.Println("Error: running template.\n", err)
@@ -68,6 +70,8 @@ func main() {
 		ct.ResetColor()
 	}
 }
+
+
 
 func theGracefulDeath() {
 	c := make(chan os.Signal, 1)
