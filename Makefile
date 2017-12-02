@@ -1,6 +1,5 @@
 include env.mk ci.mk pipeline.mk
 
-
 lint:
 	@go fmt -x $$(glide nv)
 .PHONY: lint
@@ -21,22 +20,8 @@ clean_bin:
 clean_dist:
 	rm -rf ./dist/*
 
-release: clean_full
-	make package GOOS=linux VERSION=$(VERSION)
-	make package GOOS=darwin VERSION=$(VERSION)
-	make package GOOS=windows VERSION=$(VERSION)
-	make clean_bin
-
 build:
 	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),$(APP_NAME))
-
-package: clean_bin lint build
-	 $(call package,$(APP_NAME),$(GOOS),$(GOARCH),$(VERSION))
-
-define package
-	echo "Creating Package $(shell pwd)/dist/$1-$2-$3-$4.tar.gz"
-	tar -cvzf ./dist/$1-$2-$3-$4.tar.gz -C ./bin .
-endef
 
 define build
 	$1 go build -o ./bin/$2 -ldflags "-X main.VERSION=$(VERSION)" -v
@@ -46,3 +31,22 @@ _validate-version:
 ifndef VERSION
 	$(error VERSION is required)
 endif
+
+package: clean_dist
+	@gox -ldflags "-X main.VERSION=$(VERSION)" \
+		--arch amd64 --arch arm \
+		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(VERSION)/{{.Dir}}
+.PHONY: package
+
+DISTDIRS=$(shell ls dist/)
+release: package
+	for dir in $(DISTDIRS) ; do \
+       cd dist/$$dir/; \
+       tar -cvzf ../$$dir.tar.gz * ; \
+       cd -;\
+       rm -rf dist/$$dir/;\
+    done
+.PHONY: release
+
+get-version:
+	@git checkout version -- version && cat version && rm version
