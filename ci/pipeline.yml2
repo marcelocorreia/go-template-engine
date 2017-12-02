@@ -1,4 +1,4 @@
----
+git ---
 resources:
   - name: git-repo-master
     type: git

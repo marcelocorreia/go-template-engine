@@ -270,6 +270,13 @@ They're all reved up and ready to go
 Tommy & Dee Dee Ramone
 ```
 
+#### Simple vars passed on call
+```bash
+$> go-template-engine --source template-engine/test_fixtures/simple.txt.tpl \
+    --var easy=simple \
+    --var who=we
+```
+
 ## Development
 
 ```bash

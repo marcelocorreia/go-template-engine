@@ -48,5 +48,8 @@ release: package
     done
 .PHONY: release
 
+brew-shasum:
+	sha
+
 get-version:
 	@git checkout version -- version && cat version && rm version
