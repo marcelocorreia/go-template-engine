@@ -47,7 +47,6 @@ jobs:
         params:
           name: resource_version/version
           tag: resource_version/version
-          body: git-repo-master/README.md
           globs:
               - output/*tar.gz
 
