@@ -16,17 +16,25 @@ import (
 
 var (
 	app                    = kingpin.New("go-template-engine", "")
-	templateFile           = app.Flag("source", "Template Source File").Short('s').Required().String()
+	templateFile           = app.Flag("source", "Template Source File").Short('s').String()
 	templateVars           = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
 	templateVarsFile       = app.Flag("var-file", "Variables File").String()
 	templateVarsFileOutput = app.Flag("output", "File output full path").Short('o').String()
+	versionFlag = app.Flag("version","App Version").Short('v').Bool()
+	VERSION string
 )
 
 func main() {
 	theGracefulDeath()
+
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 	var engine template_engine.Engine
 	engine = template_engine.TemplateEngine{}
+
+	if(*versionFlag){
+		fmt.Println(VERSION)
+		os.Exit(0)
+	}
 
 	if *templateVarsFile != "" {
 		var varsFile interface{}
