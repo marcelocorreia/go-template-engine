@@ -2,13 +2,13 @@ package template_engine
 
 import (
 	"bytes"
-	"io/ioutil"
-	"text/template"
-	"strings"
 	"encoding/json"
 	"fmt"
-	"os"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"os"
+	"strings"
+	"text/template"
 )
 
 type Engine interface {
@@ -47,10 +47,9 @@ func (gte TemplateEngine) ParseTemplateString(templateString string, params inte
 func (gte TemplateEngine) VariablesFileMerge(varsFile []string) (string, error) {
 	var payload string
 
-
 	for _, payload := range varsFile {
 
-		output,_ := loadVarsIntoStruct(payload)
+		output, _ := loadVarsIntoStruct(payload)
 
 		fmt.Println(output)
 	}
@@ -78,5 +77,5 @@ func loadVarsIntoStruct(ffile string) (string, error) {
 
 	}
 
-	return varsFile.(string) , nil
+	return varsFile.(string), nil
 }

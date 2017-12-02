@@ -40,7 +40,7 @@ jobs:
       - task: ci
         file: git-repo-master/ci/release.yml
         params:
-          MAKE_TARGETS: _prepare _release
+          MAKE_TARGETS: _prepare deps _release
           VERSION: resource_version
 
       - put: github-release
