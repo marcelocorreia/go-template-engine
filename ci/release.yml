@@ -11,7 +11,7 @@ inputs:
 - name: git-repo-master
 - name: app-resource-version
 - name: homebrew-repo
-- name: homebrew-resource-version
+
 
 outputs:
 - name: output
