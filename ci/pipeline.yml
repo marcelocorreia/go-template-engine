@@ -51,12 +51,12 @@ jobs:
     build_logs_to_retain: 10
     serial: true
     plan:
-    - get: git-repo-dev
-      trigger: true
-    - task: ci
-      file: git-repo-dev/ci/integration.yml
-      params:
-        MAKE_TARGETS: _prepare _test _build
+      - get: git-repo-dev
+        trigger: true
+      - task: ci
+        file: git-repo-dev/ci/integration.yml
+        params:
+          MAKE_TARGETS: _prepare _test _build
     on_failure:
       put: slack-alert
       params:
