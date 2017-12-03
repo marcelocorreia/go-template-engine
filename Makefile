@@ -37,7 +37,9 @@ ifndef FILE
 endif
 
 build_all: clean_dist
-	@gox -ldflags "-X main.VERSION=$(VERSION)" \
+	@gox \
+		-parallel 2 \
+		-ldflags "-X main.VERSION=$(VERSION)" \
 		--arch amd64 \
 		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(VERSION)/{{.Dir}}
 .PHONY: build_all
