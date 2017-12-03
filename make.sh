@@ -9,7 +9,7 @@ if [[ -f app-resource-version/version ]];then
     VERSION=$(cat app-resource-version/version)
 fi
 
-echo VERSION=${VERSION}}
+echo VERSION=${VERSION}
 echo HOMEBREW_REPO_PATH=${HOMEBREW_REPO_PATH}
 
 
