@@ -54,7 +54,7 @@ package: build_all
     done
 .PHONY: package
 
-release: build_all package homebrew-tap
+release: build_all package
 
 homebrew-tap:
 	@go-template-engine \
