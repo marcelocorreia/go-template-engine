@@ -36,23 +36,24 @@ ifndef FILE
 	$(error FILE is required)
 endif
 
-package: clean_dist
+build_all: clean_dist
 	@gox -ldflags "-X main.VERSION=$(VERSION)" \
 		--arch amd64 --arch arm \
 		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(VERSION)/{{.Dir}}
-.PHONY: package
+.PHONY: build_all
+
 
 DISTDIRS=$(shell ls dist/)
-release: package
+package: build_all
 	for dir in $(DISTDIRS) ; do \
        cd dist/$$dir/; \
        tar -cvzf ../$$dir.tar.gz * ; \
        cd -;\
        rm -rf dist/$$dir/;\
     done
-.PHONY: release
+.PHONY: package
 
-
+release: build_all package homebrew-tap
 
 homebrew-tap:
 	@go-template-engine \
@@ -60,7 +61,7 @@ homebrew-tap:
         --var dist_file=$(HOMEBREW_BINARY) \
         --var version=$(VERSION) \
         --var hash_sum=$(HOMEBREW_BINARY_SUM) \
-        > homebrew-repo/go-template-engine.rb
+        > $(HOMEBREW_REPO_PATH)/go-template-engine.rb
 #	@cd /tmp/brew-repo && ls -l && pwd && git push
 
 get-version:
