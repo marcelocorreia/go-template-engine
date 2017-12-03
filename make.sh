@@ -10,7 +10,7 @@ if [[ -f app-resource-version/version ]];then
 fi
 
 echo VERSION=${VERSION}}
-echo HOMEBREW_REPO_PATH=${HOMEBREW_REPO_PATH}}
+echo HOMEBREW_REPO_PATH=${HOMEBREW_REPO_PATH}
 
 
 make -C ${dir} ${MAKE_TARGETS} VERSION=$VERSION
