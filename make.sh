@@ -9,5 +9,4 @@ if [[ -f app-resource-version/version ]];then
     VERSION=$(cat app-resource-version/version)
 fi
 
-
 make -C ${dir} ${MAKE_TARGETS} VERSION=$VERSION
