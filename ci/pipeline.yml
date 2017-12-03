@@ -53,7 +53,7 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
-  - name: github-release
+  - name: github_release
     type: github-release
     source:
       user: {{github_user}}
