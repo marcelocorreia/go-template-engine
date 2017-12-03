@@ -1,4 +1,11 @@
 ---
+resource_types:
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest
+
 resources:
   - name: git-repo-master
     type: git
@@ -34,6 +41,11 @@ resources:
       repository: {{git_repo_name}}
       access_token: {{github_token}}
 
+  - name: slack-alert
+    type: slack-notification
+    source:
+      url: {{slack_webook}}
+
 jobs:
   - name: integration
     build_logs_to_retain: 10
@@ -45,6 +57,15 @@ jobs:
       file: git-repo-dev/ci/integration.yml
       params:
         MAKE_TARGETS: _prepare _test _build
+    on_failure:
+      put: slack-alert
+      params:
+        channel: '#ci'
+        text: |
+          Build $BUILD_NAME. *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* failed!
+          Check it out at:
+          https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+
 
   - name: release
     build_logs_to_retain: 10
@@ -69,4 +90,20 @@ jobs:
           tag: resource_version/version
           globs:
               - output/*tar.gz
+    on_failure:
+      put: slack-alert
+      params:
+        channel: '#ci'
+        text: |
+          Build $BUILD_NAME. *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* failed!
+          Check it out at:
+          https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
+    on_success:
+      put: slack-alert
+      params:
+        channel: '#ci'
+        text: |
+          :white_check_mark: *$BUILD_PIPELINE_NAME/$BUILD_JOB_NAME* has a new release.
+          Check it out at:
+          https://concourse-ci.correia.io/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME
 
