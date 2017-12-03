@@ -119,8 +119,6 @@ jobs:
         params:
           name: go-template-engine
           tag: app-resource-version/version
-          globs:
-              - output/*tar.gz
 
 
     on_failure:
