@@ -108,6 +108,17 @@ jobs:
           globs:
               - output/*zip
 
+      - task: ci
+        file: git-repo-master/ci/release.yml
+        params:
+          MAKE_TARGETS: homebrew-tap
+
+      - put: homebrew-repo
+
+      - put: homebrew-github-release
+        params:
+          name: go-template-engine
+          tag: app-resource-version/version
 
 
     on_failure:
