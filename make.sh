@@ -2,11 +2,9 @@
 
 VERSION=dev
 
-if [[ -f resource_version/version ]];then
-    VERSION=$(cat resource_version/version)
+if [[ -f app-resource-version/version ]];then
+    VERSION=$(cat app-resource-version/version)
 fi
-
-echo VERSION=$VERSION
 
 dir=$(dirname $0)
 
