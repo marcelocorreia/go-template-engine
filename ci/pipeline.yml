@@ -107,7 +107,8 @@ jobs:
               - output/*tar.gz
 
       - get: homebrew-repo
-        passed: [app-github-release]
+        passed: [ app-github-release ]
+
       - task: ci
         file: git-repo-master/ci/release.yml
         params:
