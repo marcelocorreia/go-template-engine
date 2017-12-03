@@ -1,4 +1,4 @@
-fly_login:
+fly-login:
 	fly -t dev login -n dev -c https://ci.correia.io
 
 git-push:

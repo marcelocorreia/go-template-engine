@@ -20,8 +20,8 @@ var (
 	templateVars           = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
 	templateVarsFile       = app.Flag("var-file", "Variables File").String()
 	templateVarsFileOutput = app.Flag("output", "File output full path").Short('o').String()
-	versionFlag = app.Flag("version","App Version").Short('v').Bool()
-	VERSION string
+	versionFlag            = app.Flag("version", "App Version").Short('v').Bool()
+	VERSION                string
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 	var engine template_engine.Engine
 	engine = template_engine.TemplateEngine{}
 
-	if(*versionFlag){
+	if *versionFlag {
 		fmt.Println(VERSION)
 		os.Exit(0)
 	}
@@ -66,8 +66,6 @@ func main() {
 			os.Exit(1)
 		}
 		output(out)
-
-		ct.ResetColor()
 	} else {
 		out, err := engine.ParseTemplateFile(*templateFile, *templateVars)
 		if err != nil {
@@ -82,7 +80,8 @@ func main() {
 	}
 }
 
-func output(out string){
+func output(out string) {
+	ct.ResetColor()
 	if *templateVarsFileOutput != "" {
 		err := ioutil.WriteFile(*templateVarsFileOutput, []byte(out), 0755)
 		if err != nil {

@@ -9,7 +9,9 @@ image_resource:
 
 inputs:
 - name: git-repo-master
-- name: resource_version
+- name: app-resource-version
+- name: homebrew-repo
+- name: homebrew-resource-version
 
 outputs:
 - name: output
