@@ -2,9 +2,9 @@ require 'formula'
 
 class GoTemplateEngine < Formula
   homepage 'https://github.com/marcelocorreia/go-template-engine'
-  url 'https://github.com/marcelocorreia/go-template-engine/releases/download/{{.version}}/go-template-engine-darwin-amd64-{{.version}}.tar.gz'
+  url 'https://github.com/marcelocorreia/go-template-engine/releases/download/{{.version}}/{{.dist_file}}'
   version '{{.version}}'
-  sha256 '{{.sha256sum}}'
+  sha256 '{{.hash_sum}}'
 
   depends_on :arch => :x86_64
 
@@ -16,3 +16,5 @@ class GoTemplateEngine < Formula
     system "#{bin}/go-template-engine"
   end
 end
+
+

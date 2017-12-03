@@ -62,10 +62,3 @@ func TestTemplateErrorJson(t *testing.T) {
 
 }
 
-func TestTemplateEngine_VariablesFileMerge(t *testing.T) {
-	var engine template_engine.Engine
-	engine = template_engine.TemplateEngine{}
-	files := []string{"test_fixtures/combo1.yml", "test_fixtures/combo2.yml"}
-	out, _ := engine.VariablesFileMerge(files)
-	fmt.Println(out)
-}
