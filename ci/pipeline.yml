@@ -106,7 +106,7 @@ jobs:
           name: app-resource-version/version
           tag: app-resource-version/version
           globs:
-              - output/*tar.gz
+              - output/*zip
 
       - task: ci
         file: git-repo-master/ci/release.yml

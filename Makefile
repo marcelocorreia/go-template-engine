@@ -38,7 +38,6 @@ endif
 
 build_all: clean_dist
 	@gox \
-		-parallel 2 \
 		-ldflags "-X main.VERSION=$(VERSION)" \
 		--arch amd64 \
 		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(VERSION)/{{.Dir}}
@@ -49,7 +48,7 @@ DISTDIRS=$(shell ls dist/)
 package: build_all
 	for dir in $(DISTDIRS) ; do \
        cd dist/$$dir/; \
-       tar -cvzf ../$$dir.tar.gz * ; \
+       zip ../$$dir.zip * ; \
        cd -;\
        rm -rf dist/$$dir/;\
     done
