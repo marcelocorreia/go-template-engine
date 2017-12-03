@@ -4,9 +4,9 @@ Based on Golang templates text SDK.
 
 ## TLDR;
 
-- Accepts JSON and YAML variable file
+- Accepts JSON and YAML variables file
 - Lookup on file extension and parses accordingly, accepts **.json .yml .yaml** extensions
-- These example are pretty vanilla, go templates are actually pretty powerful, check the links for more info.
+- These examples are pretty vanilla, go templates are actually pretty powerful, check the links for more info.
     - [https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/07.4.html](https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/07.4.html)
     - [https://golang.org/pkg/text/template/](https://golang.org/pkg/text/template/)
 
