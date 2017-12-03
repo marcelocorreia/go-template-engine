@@ -13,4 +13,4 @@ WORKDIR=$(GOPATH)/src/$(NAMESPACE)/$(REPO_NAME)
 HOMEBREW_REPO=git@github.com:marcelocorreia/homebrew-taps.git
 HOMEBREW_BINARY=dist/$(APP_NAME)-darwin-amd64-$(VERSION).tar.gz
 HOMEBREW_BINARY_SUM=$(shell sha256sum $(HOMEBREW_BINARY) | awk '{print $$1}')
-HOMEBREW_REPO_PATH=../homebrew-repo
+HOMEBREW_REPO_PATH=?../homebrew-repo

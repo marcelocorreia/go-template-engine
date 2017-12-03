@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-VERSION=dev
-pwd
+dir=$(dirname $0)
 
-ls -lR
+VERSION=dev
+HOMEBREW_REPO_PATH=${dir}/../homebrew-repo
 
 if [[ -f app-resource-version/version ]];then
     VERSION=$(cat app-resource-version/version)
 fi
 
-dir=$(dirname $0)
 
 make -C ${dir} ${MAKE_TARGETS} VERSION=$VERSION
