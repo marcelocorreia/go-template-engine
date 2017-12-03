@@ -54,13 +54,6 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
-  - name: homebrew-github-release
-    type: github-release
-    source:
-      user: {{github_user}}
-      repository: {{homebrew_repo_name}}
-      access_token: {{github_token}}
-
 jobs:
   - name: integration
     build_logs_to_retain: 10
