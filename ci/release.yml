@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: marcelocorreia/go-glide-builder
+    repository: 290901122349.dkr.ecr.ap-southeast-2.amazonaws.com/correia.io/winston
     tag: 'latest'
 
 inputs:
