@@ -19,6 +19,7 @@ outputs:
 params:
   MAKE_TARGETS:
   VERSION:
+  HOMEBREW_REPO_PATH:
 
 run:
   path: git-repo-master/make.sh

@@ -92,7 +92,6 @@ jobs:
         file: git-repo-master/ci/release.yml
         params:
           MAKE_TARGETS: _prepare deps _release
-          VERSION: app-resource-version
 
       - put: app-github-release
         params:
