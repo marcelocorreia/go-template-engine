@@ -34,7 +34,7 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
-  - name: github-release
+  - name: app-github-release
     type: github-release
     source:
       user: {{github_user}}
@@ -84,7 +84,7 @@ jobs:
           MAKE_TARGETS: _prepare deps _release
           VERSION: app-resource-version
 
-      - put: github-release
+      - put: app-github-release
         params:
           name: app-resource-version/version
           tag: app-resource-version/version
