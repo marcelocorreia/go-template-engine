@@ -8,6 +8,14 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
+  - name: git-repo-dev
+    type: git
+    source:
+      uri: {{git_repo_url}}
+      branch: dev
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
   - name: resource_version
     type: semver
     source:
@@ -27,8 +35,20 @@ resources:
       access_token: {{github_token}}
 
 jobs:
+  - name: integration
+    build_logs_to_retain: 10
+    serial: true
+    plan:
+    - get: git-repo-dev
+      trigger: true
+    - task: ci
+      file: git-repo-dev/ci/integration.yml
+      params:
+        MAKE_TARGETS: _prepare _test _build
+
   - name: release
-    public: true
+    build_logs_to_retain: 10
+    serial: true
     plan:
       - get: git-repo-master
         trigger: true
