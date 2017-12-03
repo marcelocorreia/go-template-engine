@@ -31,6 +31,10 @@ _validate-version:
 ifndef VERSION
 	$(error VERSION is required)
 endif
+_validate-file:
+ifndef FILE
+	$(error FILE is required)
+endif
 
 package: clean_dist
 	@gox -ldflags "-X main.VERSION=$(VERSION)" \
@@ -48,8 +52,20 @@ release: package
     done
 .PHONY: release
 
-brew-shasum:
-	sha
+
+
+homebrew-tap:
+	@echo $(HOMEBREW_BINARY)
+	@git clone $(HOMEBREW_REPO) /tmp/brew-repo
+	@./bin/go-template-engine \
+		--source ci/go-template-engine.rb \
+        --var dist_file=$(HOMEBREW_BINARY) \
+        --var version=$(VERSION) \
+        --var hash_sum=$(HOMEBREW_BINARY_SUM) \
+        > /tmp/brew-repo/go-template-engine.rb
+	@cd /tmp/brew-repo && ls -l && pwd && git push
 
 get-version:
-	@git checkout version -- version && cat version && rm version
+	@git checkout origin/version -- version && \
+		cat version && \
+		rm version

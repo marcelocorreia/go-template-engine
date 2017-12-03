@@ -66,8 +66,6 @@ func main() {
 			os.Exit(1)
 		}
 		output(out)
-
-		ct.ResetColor()
 	} else {
 		out, err := engine.ParseTemplateFile(*templateFile, *templateVars)
 		if err != nil {
@@ -83,6 +81,7 @@ func main() {
 }
 
 func output(out string) {
+	ct.ResetColor()
 	if *templateVarsFileOutput != "" {
 		err := ioutil.WriteFile(*templateVarsFileOutput, []byte(out), 0755)
 		if err != nil {

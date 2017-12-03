@@ -23,12 +23,31 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
-  - name: resource_version
+  - name: homebrew-repo
+    type: git
+    source:
+      uri: {{homebrew_repo_url}}
+      branch: master
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
+  - name: app-resource-version
     type: semver
     source:
       driver: git
       initial_version: 0.0.0
       uri: {{git_repo_url}}
+      branch: version
+      file: version
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
+  - name: homebrew-resource-version
+    type: semver
+    source:
+      driver: git
+      initial_version: 0.0.0
+      uri: {{homebrew_repo_url}}
       branch: version
       file: version
       private_key: {{git_private_key}}
@@ -74,7 +93,7 @@ jobs:
       - get: git-repo-master
         trigger: true
 
-      - put: resource_version
+      - put: app-resource-version
         params:
           bump: minor
 
@@ -82,14 +101,23 @@ jobs:
         file: git-repo-master/ci/release.yml
         params:
           MAKE_TARGETS: _prepare deps _release
-          VERSION: resource_version
+          VERSION: app-resource-version
 
       - put: github-release
         params:
-          name: resource_version/version
-          tag: resource_version/version
+          name: app-resource-version/version
+          tag: app-resource-version/version
           globs:
               - output/*tar.gz
+      - get: homebrew-repo
+        passed: github-release
+      - task: homebrew-tap
+        file: git-repo-master/ci/release.yml
+        params:
+          MAKE_TARGETS: homebrew-tap
+          VERSION: app-resource-version
+      - put: homebrew-repo
+
     on_failure:
       put: slack-alert
       params:
