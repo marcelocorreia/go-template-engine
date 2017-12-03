@@ -89,6 +89,8 @@ jobs:
       - get: git-repo-master
         trigger: true
 
+      - get: homebrew-repo
+
       - put: app-resource-version
         params:
           bump: minor
@@ -105,8 +107,6 @@ jobs:
           tag: app-resource-version/version
           globs:
               - output/*tar.gz
-
-      - get: homebrew-repo
 
       - task: ci
         file: git-repo-master/ci/release.yml
