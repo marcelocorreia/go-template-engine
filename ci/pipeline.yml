@@ -101,7 +101,7 @@ jobs:
 
       - put: s3
         params:
-          file: output/*zip
+          file: output/(.*).zip
           acl: public-read
 
     on_failure:
