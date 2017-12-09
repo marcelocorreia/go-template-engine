@@ -51,10 +51,6 @@ func (gte TemplateEngine) VariablesFileMerge(varsFile []string) (string, error) 
 	return payload, nil
 }
 
-func (gte TemplateEngine) LoadVars(varsFile []string) (string, error) {
-	text.te
-	return payload, nil
-}
 
 func loadVarsIntoStruct(ffile string) (interface{}, error) {
 	var varsFile interface{}

@@ -1,16 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/daviddengcn/go-colortext"
-	"github.com/marcelocorreia/go-template-engine/template-engine"
 	"gopkg.in/alecthomas/kingpin.v2"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 )
 
