@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
+
 )
 
 func TestParseTemplateString(t *testing.T) {
@@ -45,6 +46,7 @@ func TestTemplateJson(t *testing.T) {
 	fmt.Println("Finished Test with JSON file...\n")
 
 }
+
 func TestTemplateErrorJson(t *testing.T) {
 
 	fmt.Println("Running Testing throwing error...")
@@ -60,5 +62,16 @@ func TestTemplateErrorJson(t *testing.T) {
 
 	fmt.Println("Finished Testing throwing error...\n")
 
+}
+
+func TestTemplateEngine_LoadVars(t *testing.T) {
+	var engine template_engine.Engine
+	engine = template_engine.TemplateEngine{}
+	//payload,_ := ioutil.ReadFile("/go/src/github.com/marcelocorreia/go-template-engine/ci/pipeline.yml")
+	ooo,err:=engine.LoadVars([]string{"/go/src/github.com/marcelocorreia/go-template-engine/ci/properties.yml"})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(ooo)
 }
 

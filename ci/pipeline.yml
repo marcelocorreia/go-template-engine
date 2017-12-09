@@ -46,13 +46,14 @@ resources:
     source:
       url: {{slack_webook}}
 
-  - name: homebrew-repo
-    type: git
+  - name: s3
+    type: s3
     source:
-      uri: {{homebrew_repo_url}}
-      branch: master
-      private_key: {{git_private_key}}
-      username: {{github_user}}
+      bucket: {{s3_bucket}}
+      access_key_id: {{aws_access_key_id}}
+      secret_access_key: {{aws_secret_access_key}}
+      region_name: ap-southeast-2
+      regexp: (.*).zip
 
 jobs:
   - name: integration
@@ -82,8 +83,6 @@ jobs:
       - get: git-repo-master
         trigger: true
 
-      - get: homebrew-repo
-
       - put: app-resource-version
         params:
           bump: minor
@@ -100,7 +99,10 @@ jobs:
           globs:
               - output/*zip
 
-
+      - put: s3
+        params:
+          file: output/*.zip
+          acl: public-read
 
     on_failure:
       put: slack-alert

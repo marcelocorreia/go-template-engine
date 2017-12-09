@@ -28,57 +28,60 @@ func main() {
 	theGracefulDeath()
 
 	kingpin.MustParse(app.Parse(os.Args[1:]))
-	var engine template_engine.Engine
-	engine = template_engine.TemplateEngine{}
+	//var engine template_engine.Engine
+	//engine = template_engine.TemplateEngine{}
 
-	if *versionFlag {
-		fmt.Println(VERSION)
-		os.Exit(0)
-	}
 
-	if *templateVarsFile != "" {
-		var varsFile interface{}
+	//if *versionFlag {
+	//	fmt.Println(VERSION)
+	//	os.Exit(0)
+	//}
+	//
+	//if *templateVarsFile != "" {
+	//	var varsFile interface{}
+	//
+	//	file, _ := ioutil.ReadFile(*templateVarsFile)
+	//
+	//	if strings.HasSuffix(*templateVarsFile, ".json") {
+	//		err := json.Unmarshal(file, &varsFile)
+	//		fmt.Println(&varsFile)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//			os.Exit(1)
+	//
+	//		}
+	//	} else if strings.HasSuffix(*templateVarsFile, ".yaml") || strings.HasSuffix(*templateVarsFile, ".yml") {
+	//		err := yaml.Unmarshal(file, &varsFile)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//			os.Exit(1)
+	//		}
+	//	}
+	//
+	//	out, err := engine.ParseTemplateFile(*templateFile, varsFile)
+	//	if err != nil {
+	//		ct.Foreground(ct.Red, false)
+	//		fmt.Println("Error: running template.\n", err)
+	//		ct.ResetColor()
+	//		fmt.Println(err)
+	//		os.Exit(1)
+	//	}
+	//	output(out)
+	//} else {
+	//	out, err := engine.ParseTemplateFile(*templateFile, *templateVars)
+	//	if err != nil {
+	//		ct.Foreground(ct.Red, false)
+	//		fmt.Println("Error: running template.\n", err)
+	//		ct.ResetColor()
+	//		fmt.Println(err)
+	//		os.Exit(1)
+	//	}
+	//	output(out)
 
-		file, _ := ioutil.ReadFile(*templateVarsFile)
-
-		if strings.HasSuffix(*templateVarsFile, ".json") {
-			err := json.Unmarshal(file, &varsFile)
-			fmt.Println(&varsFile)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-
-			}
-		} else if strings.HasSuffix(*templateVarsFile, ".yaml") || strings.HasSuffix(*templateVarsFile, ".yml") {
-			err := yaml.Unmarshal(file, &varsFile)
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-		}
-
-		out, err := engine.ParseTemplateFile(*templateFile, varsFile)
-		if err != nil {
-			ct.Foreground(ct.Red, false)
-			fmt.Println("Error: running template.\n", err)
-			ct.ResetColor()
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		output(out)
-	} else {
-		out, err := engine.ParseTemplateFile(*templateFile, *templateVars)
-		if err != nil {
-			ct.Foreground(ct.Red, false)
-			fmt.Println("Error: running template.\n", err)
-			ct.ResetColor()
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		output(out)
-
-	}
+	//}
 }
+
+
 
 func output(out string) {
 	ct.ResetColor()
