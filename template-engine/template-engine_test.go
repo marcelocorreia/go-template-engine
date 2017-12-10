@@ -82,6 +82,6 @@ func TestPrepareOutputDirectory(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	engine.PrepareOutputDirectory(dir, tmpDir)
+	engine.PrepareOutputDirectory(dir, tmpDir,[]string{})
 	os.RemoveAll(tmpDir)
 }
