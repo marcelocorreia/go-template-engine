@@ -1,0 +1,46 @@
+---
+resources:
+  - name: git-repo-master
+    type: git
+    source:
+      uri: {{.git_repo_url}}
+      branch: master
+      private_key: {{.git_private_key}}
+      username: {{.github_user}}
+`
+jobs:
+  - name: terraform-apply
+    serial: true
+    build_logs_to_retain: 10
+    plan:
+      - get: git-repo-master
+      - task: make deploy
+        file: git-repo-master/ci/make.yml
+        params:
+          AWS_ACCESS_KEY_ID: {{.aws_access_key_id}}
+          AWS_SECRET_ACCESS_KEY: {{.aws_secret_access_key}}
+          MAKE_TARGET: tf-deploy
+
+  - name: terraform-plan
+    serial: true
+    build_logs_to_retain: 10
+    plan:
+      - get: git-repo-master
+      - task: make tf-plan
+        file: git-repo-master/ci/make.yml
+        params:
+          AWS_ACCESS_KEY_ID: {{.aws_access_key_id}}
+          AWS_SECRET_ACCESS_KEY: {{.aws_secret_access_key}}
+          MAKE_TARGET: tf-plan
+
+  - name: terraform-state
+    serial: true
+    build_logs_to_retain: 10
+    plan:
+      - get: git-repo-master
+      - task: make state list
+        file: git-repo-master/ci/make.yml
+        params:
+          AWS_ACCESS_KEY_ID: {{.aws_access_key_id}}
+          AWS_SECRET_ACCESS_KEY: {{.aws_secret_access_key}}
+          MAKE_TARGET: tf-state-list

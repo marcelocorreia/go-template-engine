@@ -24,7 +24,7 @@ build:
 	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),$(APP_NAME))
 
 define build
-	$1 go build -ldflags "-X main.VERSION=dev" -v
+	$1 go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=dev" -v
 endef
 
 _validate-version:
