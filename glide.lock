@@ -1,11 +1,9 @@
-hash: 9ef323eea28450a81a24a1b57502dc0380b8d9957a706d519eaa1621f9f962e7
-updated: 2017-12-09T14:45:16.974657863+11:00
+hash: 4920f54d6bcf90d754a91078cd0d886842a78c17f036347c089dc7f3d63b65a7
+updated: 2017-12-11T18:28:46.062551797+11:00
 imports:
 - name: github.com/alecthomas/template
   version: a0175ee3bccc567396460bf5acd36800cb10c49c
   repo: https://github.com/alecthomas/template
-  subpackages:
-  - parse
 - name: github.com/alecthomas/units
   version: 2efee857e7cfd4f3d0138cc3cbb1b4966962b93a
   repo: https://github.com/alecthomas/units
@@ -14,21 +12,8 @@ imports:
   repo: https://github.com/davecgh/go-spew
   subpackages:
   - spew
-- name: github.com/daviddengcn/go-colortext
-  version: 805cee6e0d43c72ba1d4e3275965ff41e0da068a
-  repo: https://github.com/daviddengcn/go-colortext
 - name: github.com/hashicorp/hcl
   version: 99ce73d4fe576449f7a689d4fc2b2ad09a86bdaa
-  subpackages:
-  - hcl/ast
-  - hcl/parser
-  - hcl/printer
-  - hcl/scanner
-  - hcl/strconv
-  - hcl/token
-  - json/parser
-  - json/scanner
-  - json/token
 - name: github.com/pmezard/go-difflib
   version: 792786c7400a136282c1664665ae0a8db921c6c2
   repo: https://github.com/pmezard/go-difflib

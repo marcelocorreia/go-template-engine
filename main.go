@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/daviddengcn/go-colortext"
 	"github.com/marcelocorreia/go-template-engine/template-engine"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"io/ioutil"
@@ -30,12 +29,21 @@ func main() {
 	}
 
 	var varsBundle interface{}
+	var jobVars interface{}
 
-	varsBundle, _ = engine.VariablesFileMerge(*templateVarsFile)
+	varsBundle, _ = engine.VariablesFileMerge(*templateVarsFile, *templateVars)
 	jobVars, err := engine.LoadVars(varsBundle.(string))
 	if err != nil {
-		handleErrorExit("Eita:", err)
+		handleErrorExit("Error:", err)
 	}
+
+	render(jobVars, engine)
+
+	os.Exit(0)
+
+}
+
+func render(jobVars interface{}, engine template_engine.Engine) {
 	if info, err := os.Stat(*templateFile); err == nil && info.IsDir() {
 		engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir)
 	} else {
@@ -45,30 +53,20 @@ func main() {
 		}
 		output(out)
 	}
-
-	ct.ResetColor()
-	os.Exit(0)
-
 }
-
 func handleErrorExit(msg string, err error) {
-	ct.Foreground(ct.Red, false)
 	fmt.Println(msg, err)
-	ct.ResetColor()
 	os.Exit(1)
 }
 
 func output(out string) {
-	ct.ResetColor()
 	if *templateFileOutput != "" {
 		err := ioutil.WriteFile(*templateFileOutput, []byte(out), 0755)
 		if err != nil {
 			handleErrorExit("Error writing file to " + *templateFileOutput, err)
 		}
 	} else {
-		ct.Foreground(ct.Green, false)
 		fmt.Println(out)
-		ct.ResetColor()
 	}
 }
 

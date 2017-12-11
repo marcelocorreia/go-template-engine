@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
-	"github.com/daviddengcn/go-colortext"
 	"bufio"
 	"github.com/marcelocorreia/go-template-engine/utils"
 )
@@ -59,7 +58,7 @@ func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 	return varsFile, nil
 }
 
-func (gte TemplateEngine) VariablesFileMerge(varsFile []string) (string, error) {
+func (gte TemplateEngine) VariablesFileMerge(varsFile []string, extra_vars map[string]string) (string, error) {
 	tmpFile, err := ioutil.TempFile("/tmp", "vars")
 	if err != nil {
 		return "", err
@@ -71,6 +70,10 @@ func (gte TemplateEngine) VariablesFileMerge(varsFile []string) (string, error) 
 		}
 		tmpFile.Write(content)
 		tmpFile.WriteString("\n")
+	}
+
+	for k, v := range extra_vars {
+		tmpFile.WriteString(fmt.Sprintf("%s: %s\n",k,v))
 	}
 	tmpFile.Close()
 	cleanFile, err := cleanYamlFile(tmpFile.Name())
@@ -108,7 +111,6 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 	list, err := gte.GetFileList(sourceDir, false, exclusions)
 
 	if err != nil {
-		ct.Foreground(ct.Yellow, true)
 		fmt.Println("Error processing:", sourceDir)
 		panic(err)
 	}
@@ -191,3 +193,5 @@ func output(out string, templateFileOutput string) (error) {
 	}
 	return nil
 }
+
+///go/src/github.com/marcelocorreia/go-template-engine/bin/go-template-engine --source ci/go-template-engine.rb             --var dist_file=dist/go-template-engine-darwin-amd64-1.39.0.zip             --var version=1.39.0             --var hash_sum=123             > /Users/marcelo/IdeaProjects/tardis/homebrew-taps/go-template-engine.rb

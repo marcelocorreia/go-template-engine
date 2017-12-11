@@ -11,9 +11,6 @@ import:
   repo: https://github.com/davecgh/go-spew
   subpackages:
   - spew
-- package: github.com/daviddengcn/go-colortext
-  version: 805cee6e0d43c72ba1d4e3275965ff41e0da068a
-  repo: https://github.com/daviddengcn/go-colortext
 - package: github.com/pmezard/go-difflib
   version: 792786c7400a136282c1664665ae0a8db921c6c2
   repo: https://github.com/pmezard/go-difflib
