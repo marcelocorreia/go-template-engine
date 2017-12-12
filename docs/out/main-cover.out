@@ -1,0 +1,17 @@
+mode: set
+github.com/marcelocorreia/go-template-engine/main.go:22.13,26.18 3 0
+github.com/marcelocorreia/go-template-engine/main.go:31.2,36.16 5 0
+github.com/marcelocorreia/go-template-engine/main.go:40.2,42.12 2 0
+github.com/marcelocorreia/go-template-engine/main.go:26.18,29.3 2 0
+github.com/marcelocorreia/go-template-engine/main.go:36.16,38.3 1 0
+github.com/marcelocorreia/go-template-engine/main.go:46.65,47.69 1 0
+github.com/marcelocorreia/go-template-engine/main.go:47.69,49.3 1 0
+github.com/marcelocorreia/go-template-engine/main.go:49.3,51.17 2 0
+github.com/marcelocorreia/go-template-engine/main.go:54.3,54.14 1 0
+github.com/marcelocorreia/go-template-engine/main.go:51.17,53.4 1 0
+github.com/marcelocorreia/go-template-engine/main.go:57.45,60.2 2 0
+github.com/marcelocorreia/go-template-engine/main.go:62.25,63.31 1 0
+github.com/marcelocorreia/go-template-engine/main.go:63.31,65.17 2 0
+github.com/marcelocorreia/go-template-engine/main.go:65.17,67.4 1 0
+github.com/marcelocorreia/go-template-engine/main.go:68.3,70.3 1 0
+github.com/marcelocorreia/go-template-engine/main.go:73.42,78.2 3 0

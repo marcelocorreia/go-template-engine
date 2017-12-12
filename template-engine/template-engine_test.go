@@ -51,7 +51,7 @@ func TestTemplateErrorJson(t *testing.T) {
 
 func TestTemplateEngine_VariablesFileMerge(t *testing.T) {
 	engine := *getEngine()
-	out, _ := engine.VariablesFileMerge([]string{"test_fixtures/bb.yml", "/go/src/github.com/marcelocorreia/go-template-engine/defaults.yml"})
+	out, _ := engine.VariablesFileMerge([]string{"test_fixtures/bb.yml", "/go/src/github.com/marcelocorreia/go-template-engine/defaults.yml"},getParams())
 	fmt.Println(out)
 	comboVars, _ := ioutil.ReadFile(out)
 	fmt.Println(string(comboVars))
@@ -84,4 +84,11 @@ func TestPrepareOutputDirectory(t *testing.T) {
 	}
 	engine.PrepareOutputDirectory(dir, tmpDir,[]string{})
 	os.RemoveAll(tmpDir)
+}
+
+func getParams()(map[string]string){
+	params:= make(map[string]string)
+	params["hey"]="Ho"
+	params["Lets"]= "go"
+	return params
 }
