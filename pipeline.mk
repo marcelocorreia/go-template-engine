@@ -14,7 +14,6 @@ pipeline:
 		-l ci/properties.yml
 
 	fly -t dev unpause-pipeline -p $(APP_NAME)
-	fly -t dev trigger-job -j $(APP_NAME)/release
 .PHONY: pipeline
 
 pipeline-destroy:
