@@ -6,7 +6,6 @@ git-push:
 
 pipeline-full: git-push pipeline
 
-
 pipeline:
 	fly -t dev set-pipeline \
 		-n -p $(APP_NAME) \
