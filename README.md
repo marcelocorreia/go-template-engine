@@ -6,17 +6,28 @@ Based on Golang templates text SDK.
 
 - Accepts JSON and YAML variables file
 - Lookup on file extension and parses accordingly, accepts **.json .yml .yaml** extensions
+- If --source points to a directory, it will run recursively, keeping the directory structure.
+- Accepts multiple variables files, merging them. YAML only. (It will override duplicated variables if the exits in more than one file)
 - These examples are pretty vanilla, go templates are actually pretty powerful, check the links for more info.
     - [https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/07.4.html](https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/07.4.html)
     - [https://golang.org/pkg/text/template/](https://golang.org/pkg/text/template/)
 
-### Install
-Mac OS
-```bash
-$> brew tap marcelocorreia/homebrew-taps
-   brew install go-template-engine
+### Options
 ```
-Other Systems Download latest binary from [https://github.com/marcelocorreia/go-template-engine/releases](https://github.com/marcelocorreia/go-template-engine/releases)
+$> go-template-engine --help
+  usage: go-template-engine --source=SOURCE [<flags>]
+
+  Flags:
+        --help                   Show context-sensitive help (also try --help-long and --help-man).
+    -s, --source=SOURCE          Template Source File
+        --var=VAR ...            Params & Variables. Example --var hey=ho --var lets=go
+        --var-file=VAR-FILE ...  Variables File
+        --exclude-dir=EXCLUDE-DIR ...
+                                 Variables File
+    -o, --output=OUTPUT          File output full path
+    -v, --version                App Version
+```
+
 ### Usage
 files in the examples are located at template-engine/test_fixtures/
 ```
@@ -28,6 +39,15 @@ $> go-template-engine --source template-engine/test_fixtures/cfn.tpl.yml \
         --var-file template-engine/test_fixtures/cfn-vars.json \
         --output cfn.yml
 ```
+
+### Install
+Mac OS
+```bash
+$> brew tap marcelocorreia/homebrew-taps
+   brew install go-template-engine
+```
+Other Systems Download latest binary from [https://github.com/marcelocorreia/go-template-engine/releases](https://github.com/marcelocorreia/go-template-engine/releases)
+
 
 ### Examples
 
@@ -294,4 +314,5 @@ outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
 
 
 ### TODO's
-- [ ] Accept multiple variable files
+- [x] Accept multiple variable files
+- [x] Recursive processing
