@@ -173,12 +173,12 @@ func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir str
 		os.Exit(1)
 	}
 
-	utils.CreateNewDirectory(targetDir)
+	utils.CreateNewDirectoryIfNil(targetDir)
 	files, _ := ioutil.ReadDir(sourceDir)
 	for _, d := range files {
 		if !utils.StringInSlice(d.Name(), exclusions) {
 			if info, err := os.Stat(sourceDir + "/" + d.Name()); err == nil && info.IsDir() {
-				utils.CreateNewDirectory(targetDir + "/" + d.Name())
+				utils.CreateNewDirectoryIfNil(targetDir + "/" + d.Name())
 			}
 		}
 	}

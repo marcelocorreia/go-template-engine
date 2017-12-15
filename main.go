@@ -17,6 +17,7 @@ var (
 	templateFileOutput   = app.Flag("output", "File output full path").Short('o').String()
 	versionFlag          = app.Flag("version", "App Version").Short('v').Bool()
 	VERSION              string
+
 )
 
 func main() {

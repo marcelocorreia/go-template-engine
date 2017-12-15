@@ -121,7 +121,7 @@ func Exists(path string) (bool, error) {
 	return true, err
 }
 
-func CreateNewDirectory(path string) (error) {
+func CreateNewDirectoryIfNil(path string) (error) {
 	exists, _ := Exists(path)
 	if !exists {
 		os.MkdirAll(path, 00750)
