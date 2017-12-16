@@ -293,9 +293,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
                 targetFile := fmt.Sprintf("%s/%s", targetDir, f)
                 body, err := gte.ParseTemplateFile(sourceFile, params)
                 if err != nil </span><span class="cov8" title="1">{
-                        fmt.Printf("File: %s can't be loaded as template,\n\tContent loaded without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
-
-                        //return err
+                        fmt.Printf("File: %s can't be loaded as template,\n\tContent writen without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
                 }</span>
                 <span class="cov8" title="1">err = output(body, targetFile)
                 if err != nil </span><span class="cov8" title="1">{
@@ -376,7 +374,7 @@ func output(out string, templateFileOutput string) (error) <span class="cov8" ti
         <span class="cov8" title="1">return nil</span>
 }
 
-///go/src/github.com/marcelocorreia/go-template-engine/bin/go-template-engine --source ci/go-template-engine.rb             --var dist_file=dist/go-template-engine-darwin-amd64-1.39.0.zip             --var version=1.39.0             --var hash_sum=123             &gt; /Users/marcelo/IdeaProjects/tardis/homebrew-taps/go-template-engine.rb
+
 </pre>
 		
 		<pre class="file" id="file2" style="display: none">package utils
