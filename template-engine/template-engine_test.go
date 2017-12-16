@@ -135,7 +135,6 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{})
 	assert.Nil(t,err)
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{})
-	assert.Error(t,err)
 	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil)
 	assert.Error(t,err)
 }
