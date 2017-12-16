@@ -104,7 +104,7 @@ func main() <span class="cov0" title="0">{
         varsBundle, _ = engine.VariablesFileMerge(*templateVarsFile, *templateVars)
         jobVars, err := engine.LoadVars(varsBundle.(string))
         if err != nil </span><span class="cov0" title="0">{
-                handleErrorExit("Error:", err)
+                handleErrorExit(err,"Error:")
         }</span>
 
         <span class="cov0" title="0">render(jobVars, engine)
@@ -115,16 +115,19 @@ func main() <span class="cov0" title="0">{
 
 func render(jobVars interface{}, engine template_engine.Engine) <span class="cov0" title="0">{
         if info, err := os.Stat(*templateFile); err == nil &amp;&amp; info.IsDir() </span><span class="cov0" title="0">{
-                engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir)
-        }</span><span class="cov0" title="0"> else {
+                err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir)
+                if err != nil </span><span class="cov0" title="0">{
+                        handleErrorExit(err, fmt.Sprintf("Error Processing templates @ dir: %s\n", *templateFile))
+                }</span>
+        }<span class="cov0" title="0"> else {
                 out, err := engine.ParseTemplateFile(*templateFile, jobVars)
                 if err != nil </span><span class="cov0" title="0">{
-                        handleErrorExit("Error running template.\n", err)
+                        handleErrorExit(err, "Error running template.\n")
                 }</span>
                 <span class="cov0" title="0">output(out)</span>
         }
 }
-func handleErrorExit(msg string, err error) <span class="cov0" title="0">{
+func handleErrorExit(err error, msg string) <span class="cov0" title="0">{
         fmt.Println(msg, err)
         os.Exit(1)
 }</span>
@@ -133,7 +136,7 @@ func output(out string) <span class="cov0" title="0">{
         if *templateFileOutput != "" </span><span class="cov0" title="0">{
                 err := ioutil.WriteFile(*templateFileOutput, []byte(out), 0755)
                 if err != nil </span><span class="cov0" title="0">{
-                        handleErrorExit("Error writing file to " + *templateFileOutput, err)
+                        handleErrorExit(err,"Error writing file to " + *templateFileOutput)
                 }</span>
         }<span class="cov0" title="0"> else {
                 fmt.Println(out)

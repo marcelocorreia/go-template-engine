@@ -256,7 +256,7 @@ func Exists(path string) (bool, error) <span class="cov0" title="0">{
         <span class="cov0" title="0">return true, err</span>
 }
 
-func CreateNewDirectory(path string) (error) <span class="cov0" title="0">{
+func CreateNewDirectoryIfNil(path string) (error) <span class="cov0" title="0">{
         exists, _ := Exists(path)
         if !exists </span><span class="cov0" title="0">{
                 os.MkdirAll(path, 00750)

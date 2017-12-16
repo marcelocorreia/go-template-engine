@@ -17,7 +17,6 @@ var (
 	templateFileOutput   = app.Flag("output", "File output full path").Short('o').String()
 	versionFlag          = app.Flag("version", "App Version").Short('v').Bool()
 	VERSION              string
-
 )
 
 func main() {
@@ -35,7 +34,7 @@ func main() {
 	varsBundle, _ = engine.VariablesFileMerge(*templateVarsFile, *templateVars)
 	jobVars, err := engine.LoadVars(varsBundle.(string))
 	if err != nil {
-		handleErrorExit("Error:", err)
+		handleErrorExit(err,"Error:")
 	}
 
 	render(jobVars, engine)
@@ -46,16 +45,19 @@ func main() {
 
 func render(jobVars interface{}, engine template_engine.Engine) {
 	if info, err := os.Stat(*templateFile); err == nil && info.IsDir() {
-		engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir)
+		err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir)
+		if err != nil {
+			handleErrorExit(err, fmt.Sprintf("Error Processing templates @ dir: %s\n", *templateFile))
+		}
 	} else {
 		out, err := engine.ParseTemplateFile(*templateFile, jobVars)
 		if err != nil {
-			handleErrorExit("Error running template.\n", err)
+			handleErrorExit(err, "Error running template.\n")
 		}
 		output(out)
 	}
 }
-func handleErrorExit(msg string, err error) {
+func handleErrorExit(err error, msg string) {
 	fmt.Println(msg, err)
 	os.Exit(1)
 }
@@ -64,7 +66,7 @@ func output(out string) {
 	if *templateFileOutput != "" {
 		err := ioutil.WriteFile(*templateFileOutput, []byte(out), 0755)
 		if err != nil {
-			handleErrorExit("Error writing file to " + *templateFileOutput, err)
+			handleErrorExit(err,"Error writing file to " + *templateFileOutput)
 		}
 	} else {
 		fmt.Println(out)

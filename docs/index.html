@@ -54,27 +54,23 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/marcelocorreia/go-template-engine/machine_io/machine_io.go (26.2%)</option>
+				<option value="file0">github.com/marcelocorreia/go-template-engine/main.go (0.0%)</option>
 				
-				<option value="file1">github.com/marcelocorreia/go-template-engine/machine_io/machine_output.go (75.0%)</option>
+				<option value="file1">github.com/marcelocorreia/go-template-engine/template-engine/engine.go (96.3%)</option>
 				
-				<option value="file2">github.com/marcelocorreia/go-template-engine/main.go (0.0%)</option>
+				<option value="file2">github.com/marcelocorreia/go-template-engine/utils/crypt.go (0.0%)</option>
 				
-				<option value="file3">github.com/marcelocorreia/go-template-engine/template-engine/engine.go (37.9%)</option>
+				<option value="file3">github.com/marcelocorreia/go-template-engine/utils/fileutils.go (0.0%)</option>
 				
-				<option value="file4">github.com/marcelocorreia/go-template-engine/utils/crypt.go (0.0%)</option>
+				<option value="file4">github.com/marcelocorreia/go-template-engine/utils/gzip.go (0.0%)</option>
 				
-				<option value="file5">github.com/marcelocorreia/go-template-engine/utils/fileutils.go (0.0%)</option>
+				<option value="file5">github.com/marcelocorreia/go-template-engine/utils/input.go (0.0%)</option>
 				
-				<option value="file6">github.com/marcelocorreia/go-template-engine/utils/gzip.go (0.0%)</option>
+				<option value="file6">github.com/marcelocorreia/go-template-engine/utils/math.go (0.0%)</option>
 				
-				<option value="file7">github.com/marcelocorreia/go-template-engine/utils/input.go (0.0%)</option>
+				<option value="file7">github.com/marcelocorreia/go-template-engine/utils/string-utils.go (0.0%)</option>
 				
-				<option value="file8">github.com/marcelocorreia/go-template-engine/utils/math.go (0.0%)</option>
-				
-				<option value="file9">github.com/marcelocorreia/go-template-engine/utils/string-utils.go (0.0%)</option>
-				
-				<option value="file10">github.com/marcelocorreia/go-template-engine/utils/tar.go (0.0%)</option>
+				<option value="file8">github.com/marcelocorreia/go-template-engine/utils/tar.go (0.0%)</option>
 				
 				</select>
 			</div>
@@ -88,139 +84,7 @@
 		</div>
 		<div id="content">
 		
-		<pre class="file" id="file0" style="display: none">package machine_io
-
-import (
-        "encoding/json"
-        "fmt"
-        "gopkg.in/yaml.v2"
-        "os"
-        jsonParser "github.com/hashicorp/hcl/json/parser"
-        "github.com/hashicorp/hcl/hcl/printer"
-        "github.com/hashicorp/hcl"
-)
-
-type MachineIO interface {
-        Json2Yaml(content string) (string, error)
-        Yaml2Json(content string) (string, error)
-        Json2Hcl(content string) (string, error)
-        Hcl2Json(content string) (string, error)
-        JsonOutput(obj interface{}) (string, error)
-        YamlOutput(obj interface{}) (string, error)
-}
-
-type Converter struct {}
-
-type Envelope struct {
-        Type string
-        Msg  interface{}
-}
-
-func (c Converter) Yaml2Hcl(content string) (string, error) <span class="cov0" title="0">{
-        json,err:=c.Yaml2Json(content)
-        if err != nil </span><span class="cov0" title="0">{
-                return "",err
-        }</span>
-        <span class="cov0" title="0">fmt.Println(json)
-        return "",nil</span>
-}
-
-func (c Converter) Json2Hcl(content string) (string, error) <span class="cov0" title="0">{
-        input := []byte(content)
-
-        ast, err := jsonParser.Parse([]byte(input))
-
-        if err != nil </span><span class="cov0" title="0">{
-                return "", fmt.Errorf("unable to parse JSON: %s", err)
-        }</span>
-
-        <span class="cov0" title="0">err = printer.Fprint(os.Stdout, ast)
-
-        if err != nil </span><span class="cov0" title="0">{
-                return "", fmt.Errorf("unable to print HCL: %s", err)
-        }</span>
-
-        <span class="cov0" title="0">return "", nil</span>
-}
-
-func (c Converter) Hcl2JSON(content string) (string, error) <span class="cov0" title="0">{
-        input := []byte(content)
-        var v interface{}
-        err := hcl.Unmarshal(input, &amp;v)
-        json, err := json.MarshalIndent(v, "", "  ")
-
-        if err != nil </span><span class="cov0" title="0">{
-                return "", fmt.Errorf("unable to marshal json: %s", err)
-        }</span>
-
-        <span class="cov0" title="0">return string(json), nil</span>
-}
-
-func (c Converter) Json2Yaml(content string) (string, error) <span class="cov8" title="1">{
-        var body interface{}
-        err := json.Unmarshal([]byte(content), &amp;body)
-        if err != nil </span><span class="cov0" title="0">{
-                return "", err
-        }</span>
-        <span class="cov8" title="1">out, err := yaml.Marshal(body)
-        if err != nil </span><span class="cov0" title="0">{
-                return "", err
-        }</span>
-        <span class="cov8" title="1">return string(out), nil</span>
-}
-
-func (c Converter) Yaml2Json(content string) (string, error) <span class="cov8" title="1">{
-        body := make(map[string]interface{})
-        err := yaml.Unmarshal([]byte(content), &amp;body)
-
-        out, err := json.Marshal(body)
-        if err != nil </span><span class="cov8" title="1">{
-                return "", err
-        }</span>
-        <span class="cov0" title="0">return string(out), nil</span>
-}
-
-func (c Converter) JsonOutput(obj interface{}) (string, error) <span class="cov0" title="0">{
-        out, err := json.MarshalIndent(obj, "", " ")
-        if err != nil </span><span class="cov0" title="0">{
-                return "", err
-        }</span>
-        <span class="cov0" title="0">return string(out), nil</span>
-}
-
-func (c Converter) YamlOutput(obj interface{}) (string, error) <span class="cov0" title="0">{
-        out, err := yaml.Marshal(obj)
-        if err != nil </span><span class="cov0" title="0">{
-                return "", nil
-        }</span>
-        <span class="cov0" title="0">return string(out), nil</span>
-}
-</pre>
-		
-		<pre class="file" id="file1" style="display: none">package machine_io
-
-import (
-        "encoding/json"
-        "gopkg.in/yaml.v2"
-)
-
-func JsonOutput(obj interface{}) (string, error) <span class="cov8" title="1">{
-        out, err := json.MarshalIndent(obj, "", " ")
-        if err != nil </span><span class="cov0" title="0">{
-                return "", nil
-        }</span>
-        <span class="cov8" title="1">return string(out), nil</span>
-}
-
-func YamlOutput(obj interface{}) (string, error) <span class="cov8" title="1">{
-        out, err := yaml.Marshal(obj)
-        if err != nil </span><span class="cov0" title="0">{
-                return "", nil
-        }</span>
-        <span class="cov8" title="1">return string(out), nil</span>
-}</pre>
-		
-		<pre class="file" id="file2" style="display: none">package main
+		<pre class="file" id="file0" style="display: none">package main
 
 import (
         "fmt"
@@ -256,7 +120,7 @@ func main() <span class="cov0" title="0">{
         varsBundle, _ = engine.VariablesFileMerge(*templateVarsFile, *templateVars)
         jobVars, err := engine.LoadVars(varsBundle.(string))
         if err != nil </span><span class="cov0" title="0">{
-                handleErrorExit("Error:", err)
+                handleErrorExit(err,"Error:")
         }</span>
 
         <span class="cov0" title="0">render(jobVars, engine)
@@ -267,16 +131,19 @@ func main() <span class="cov0" title="0">{
 
 func render(jobVars interface{}, engine template_engine.Engine) <span class="cov0" title="0">{
         if info, err := os.Stat(*templateFile); err == nil &amp;&amp; info.IsDir() </span><span class="cov0" title="0">{
-                engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir)
-        }</span><span class="cov0" title="0"> else {
+                err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir)
+                if err != nil </span><span class="cov0" title="0">{
+                        handleErrorExit(err, fmt.Sprintf("Error Processing templates @ dir: %s\n", *templateFile))
+                }</span>
+        }<span class="cov0" title="0"> else {
                 out, err := engine.ParseTemplateFile(*templateFile, jobVars)
                 if err != nil </span><span class="cov0" title="0">{
-                        handleErrorExit("Error running template.\n", err)
+                        handleErrorExit(err, "Error running template.\n")
                 }</span>
                 <span class="cov0" title="0">output(out)</span>
         }
 }
-func handleErrorExit(msg string, err error) <span class="cov0" title="0">{
+func handleErrorExit(err error, msg string) <span class="cov0" title="0">{
         fmt.Println(msg, err)
         os.Exit(1)
 }</span>
@@ -285,7 +152,7 @@ func output(out string) <span class="cov0" title="0">{
         if *templateFileOutput != "" </span><span class="cov0" title="0">{
                 err := ioutil.WriteFile(*templateFileOutput, []byte(out), 0755)
                 if err != nil </span><span class="cov0" title="0">{
-                        handleErrorExit("Error writing file to " + *templateFileOutput, err)
+                        handleErrorExit(err,"Error writing file to " + *templateFileOutput)
                 }</span>
         }<span class="cov0" title="0"> else {
                 fmt.Println(out)
@@ -300,7 +167,7 @@ func getEngine() *template_engine.Engine <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file3" style="display: none">package template_engine
+		<pre class="file" id="file1" style="display: none">package template_engine
 
 import (
         "bytes"
@@ -314,6 +181,7 @@ import (
         "text/template"
         "bufio"
         "github.com/marcelocorreia/go-template-engine/utils"
+        "errors"
 )
 
 func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interface{}) (string, error) <span class="cov8" title="1">{
@@ -324,13 +192,18 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
         }</span>
 
         <span class="cov8" title="1">r, err := gte.ParseTemplateString(string(tplFile), params)
-        return r, nil</span>
+        if err != nil </span><span class="cov8" title="1">{
+                return r, err
+        }</span>
+        <span class="cov8" title="1">return r, nil</span>
 }
 
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) <span class="cov8" title="1">{
-        t := template.Must(template.New("letter").Parse(templateString))
-
-        var doc bytes.Buffer
+        t, err := template.New("letter").Parse(templateString)
+        if err != nil </span><span class="cov8" title="1">{
+                return templateString, err
+        }</span>
+        <span class="cov8" title="1">var doc bytes.Buffer
         errParse := t.Execute(&amp;doc, params)
 
         if errParse != nil </span><span class="cov0" title="0">{
@@ -341,31 +214,29 @@ func (gte TemplateEngine) ParseTemplateString(templateString string, params inte
         return resp, nil</span>
 }
 
-func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) <span class="cov0" title="0">{
+func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) <span class="cov8" title="1">{
         var varsFile interface{}
         file, _ := ioutil.ReadFile(filePath)
 
-        if strings.HasSuffix(filePath, ".json") </span><span class="cov0" title="0">{
+        if strings.HasSuffix(filePath, ".json") </span><span class="cov8" title="1">{
                 err := json.Unmarshal(file, &amp;varsFile)
                 fmt.Println(&amp;varsFile)
-                if err != nil </span><span class="cov0" title="0">{
-                        return "", err
+                if err != nil </span><span class="cov8" title="1">{
+                        return nil, err
                 }</span>
-        }<span class="cov0" title="0"> else if strings.HasSuffix(filePath, ".yaml") || strings.HasSuffix(filePath, ".yml") </span><span class="cov0" title="0">{
+        }<span class="cov8" title="1"> else if strings.HasSuffix(filePath, ".yaml") || strings.HasSuffix(filePath, ".yml") </span><span class="cov8" title="1">{
                 err := yaml.Unmarshal(file, &amp;varsFile)
-                if err != nil </span><span class="cov0" title="0">{
-                        return "", err
+                if err != nil </span><span class="cov8" title="1">{
+                        return nil, err
                 }</span>
         }
-        <span class="cov0" title="0">return varsFile, nil</span>
+        <span class="cov8" title="1">return varsFile, nil</span>
 }
 
 func (gte TemplateEngine) VariablesFileMerge(varsFile []string, extra_vars map[string]string) (string, error) <span class="cov8" title="1">{
-        tmpFile, err := ioutil.TempFile("/tmp", "vars")
-        if err != nil </span><span class="cov0" title="0">{
-                return "", err
-        }</span>
-        <span class="cov8" title="1">for _, file := range varsFile </span><span class="cov8" title="1">{
+        tmpFile, _ := ioutil.TempFile("/tmp", "vars")
+
+        for _, file := range varsFile </span><span class="cov8" title="1">{
                 content, err := ioutil.ReadFile(file)
                 if err != nil </span><span class="cov8" title="1">{
                         return "", err
@@ -374,69 +245,75 @@ func (gte TemplateEngine) VariablesFileMerge(varsFile []string, extra_vars map[s
                 tmpFile.WriteString("\n")</span>
         }
 
-        <span class="cov0" title="0">for k, v := range extra_vars </span><span class="cov0" title="0">{
-                tmpFile.WriteString(fmt.Sprintf("%s: %s\n",k,v))
+        <span class="cov8" title="1">for k, v := range extra_vars </span><span class="cov8" title="1">{
+                tmpFile.WriteString(fmt.Sprintf("%s: %s\n", k, v))
         }</span>
-        <span class="cov0" title="0">tmpFile.Close()
+        <span class="cov8" title="1">tmpFile.Close()
         cleanFile, err := cleanYamlFile(tmpFile.Name())
         if err != nil </span><span class="cov0" title="0">{
                 return "", err
         }</span>
-        <span class="cov0" title="0">os.Remove(tmpFile.Name())
+        <span class="cov8" title="1">os.Remove(tmpFile.Name())
         utils.CopyFile(cleanFile, cleanFile+".yml")
 
         return cleanFile + ".yml", nil</span>
 }
 
-func cleanYamlFile(file string) (string, error) <span class="cov0" title="0">{
+func cleanYamlFile(file string) (string, error) <span class="cov8" title="1">{
         tmpFile, err := ioutil.TempFile("/tmp", "vars")
         if err != nil </span><span class="cov0" title="0">{
                 return "", err
         }</span>
-        <span class="cov0" title="0">inFile, _ := os.Open(file)
+        <span class="cov8" title="1">inFile, _ := os.Open(file)
         defer inFile.Close()
         scanner := bufio.NewScanner(inFile)
         scanner.Split(bufio.ScanLines)
 
-        for scanner.Scan() </span><span class="cov0" title="0">{
+        for scanner.Scan() </span><span class="cov8" title="1">{
                 line := scanner.Text()
-                if !strings.HasPrefix(line, "---") &amp;&amp; len(line) &gt; 0 </span><span class="cov0" title="0">{
+                if !strings.HasPrefix(line, "---") &amp;&amp; len(line) &gt; 0 </span><span class="cov8" title="1">{
                         tmpFile.WriteString(line + "\n")
                 }</span>
         }
-        <span class="cov0" title="0">return tmpFile.Name(), nil</span>
+        <span class="cov8" title="1">return tmpFile.Name(), nil</span>
 }
 
-func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error) <span class="cov0" title="0">{
-        gte.PrepareOutputDirectory(sourceDir, targetDir, exclusions)
-
-        list, err := gte.GetFileList(sourceDir, false, exclusions)
+func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error) <span class="cov8" title="1">{
+        err := gte.PrepareOutputDirectory(sourceDir, targetDir, exclusions)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">list, err := gte.GetFileList(sourceDir, false, exclusions)
 
         if err != nil </span><span class="cov0" title="0">{
-                fmt.Println("Error processing:", sourceDir)
-                panic(err)</span>
-        }
-        <span class="cov0" title="0">for _, f := range list </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">for _, f := range list </span><span class="cov8" title="1">{
                 sourceFile := fmt.Sprintf("%s/%s", sourceDir, f)
                 targetFile := fmt.Sprintf("%s/%s", targetDir, f)
                 body, err := gte.ParseTemplateFile(sourceFile, params)
-                if err != nil </span><span class="cov0" title="0">{
-                        return err
+                if err != nil </span><span class="cov8" title="1">{
+                        fmt.Printf("File: %s can't be loaded as template,\n\tContent loaded without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
+
+                        //return err
                 }</span>
-                <span class="cov0" title="0">err = output(body, targetFile)
-                if err != nil </span><span class="cov0" title="0">{
+                <span class="cov8" title="1">err = output(body, targetFile)
+                if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
         }
 
-        <span class="cov0" title="0">return nil</span>
+        <span class="cov8" title="1">return nil</span>
 }
 
 func (gte TemplateEngine) GetFileList(dir string, fullPath bool, exclusions []string) ([]string, error) <span class="cov8" title="1">{
         var fileList *[]string
         fileList = &amp;[]string{}
-        files, _ := ioutil.ReadDir(dir)
-        for _, f := range files </span><span class="cov8" title="1">{
+        files, err := ioutil.ReadDir(dir)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">for _, f := range files </span><span class="cov8" title="1">{
                 if !utils.StringInSlice(f.Name(), exclusions) </span><span class="cov8" title="1">{
                         if info, err := os.Stat(dir + "/" + f.Name()); err == nil &amp;&amp; info.IsDir() </span><span class="cov8" title="1">{
                                 gte.getTempList(dir+"/"+f.Name(), fileList)
@@ -450,12 +327,12 @@ func (gte TemplateEngine) GetFileList(dir string, fullPath bool, exclusions []st
                 return *fileList, nil
         }</span>
 
-        <span class="cov0" title="0">list := []string{}
-        for _, f := range *fileList </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">list := []string{}
+        for _, f := range *fileList </span><span class="cov8" title="1">{
                 root := filepath.Base(dir)
                 list = append(list, strings.Replace(strings.Replace(f, dir, root, -1), root+"/", "", -1))
         }</span>
-        <span class="cov0" title="0">return list, nil</span>
+        <span class="cov8" title="1">return list, nil</span>
 }
 
 func (gte TemplateEngine) getTempList(dir string, fileList *[]string) <span class="cov8" title="1">{
@@ -470,17 +347,20 @@ func (gte TemplateEngine) getTempList(dir string, fileList *[]string) <span clas
 }
 
 func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error) <span class="cov8" title="1">{
-        if targetDir == "" </span><span class="cov0" title="0">{
-                fmt.Println("Error: output must be provided when source is a directory")
-                os.Exit(1)
+
+        if targetDir == "" </span><span class="cov8" title="1">{
+                return errors.New("output must be provided when source is a directory")
         }</span>
 
-        <span class="cov8" title="1">utils.CreateNewDirectory(targetDir)
-        files, _ := ioutil.ReadDir(sourceDir)
-        for _, d := range files </span><span class="cov0" title="0">{
-                if !utils.StringInSlice(d.Name(), exclusions) </span><span class="cov0" title="0">{
-                        if info, err := os.Stat(sourceDir + "/" + d.Name()); err == nil &amp;&amp; info.IsDir() </span><span class="cov0" title="0">{
-                                utils.CreateNewDirectory(targetDir + "/" + d.Name())
+        <span class="cov8" title="1">utils.CreateNewDirectoryIfNil(targetDir)
+        files, err := ioutil.ReadDir(sourceDir)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">for _, d := range files </span><span class="cov8" title="1">{
+                if !utils.StringInSlice(d.Name(), exclusions) </span><span class="cov8" title="1">{
+                        if info, err := os.Stat(sourceDir + "/" + d.Name()); err == nil &amp;&amp; info.IsDir() </span><span class="cov8" title="1">{
+                                utils.CreateNewDirectoryIfNil(targetDir + "/" + d.Name())
                         }</span>
                 }
         }
@@ -488,18 +368,18 @@ func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir str
         <span class="cov8" title="1">return nil</span>
 }
 
-func output(out string, templateFileOutput string) (error) <span class="cov0" title="0">{
+func output(out string, templateFileOutput string) (error) <span class="cov8" title="1">{
         err := ioutil.WriteFile(templateFileOutput, []byte(out), 0755)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
-        <span class="cov0" title="0">return nil</span>
+        <span class="cov8" title="1">return nil</span>
 }
 
 ///go/src/github.com/marcelocorreia/go-template-engine/bin/go-template-engine --source ci/go-template-engine.rb             --var dist_file=dist/go-template-engine-darwin-amd64-1.39.0.zip             --var version=1.39.0             --var hash_sum=123             &gt; /Users/marcelo/IdeaProjects/tardis/homebrew-taps/go-template-engine.rb
 </pre>
 		
-		<pre class="file" id="file4" style="display: none">package utils
+		<pre class="file" id="file2" style="display: none">package utils
 
 import (
         "crypto/aes"
@@ -552,7 +432,7 @@ func Base64Decrypt(key []byte, cryptoText string) (string, error) <span class="c
         return fmt.Sprintf("%s", ciphertext), nil</span>
 }</pre>
 		
-		<pre class="file" id="file5" style="display: none">package utils
+		<pre class="file" id="file3" style="display: none">package utils
 
 import (
         "os"
@@ -675,7 +555,7 @@ func Exists(path string) (bool, error) <span class="cov0" title="0">{
         <span class="cov0" title="0">return true, err</span>
 }
 
-func CreateNewDirectory(path string) (error) <span class="cov0" title="0">{
+func CreateNewDirectoryIfNil(path string) (error) <span class="cov0" title="0">{
         exists, _ := Exists(path)
         if !exists </span><span class="cov0" title="0">{
                 os.MkdirAll(path, 00750)
@@ -684,7 +564,7 @@ func CreateNewDirectory(path string) (error) <span class="cov0" title="0">{
 }
 </pre>
 		
-		<pre class="file" id="file6" style="display: none">package utils
+		<pre class="file" id="file4" style="display: none">package utils
 
 import (
         "compress/gzip"
@@ -740,7 +620,7 @@ func Gunzip(source, target string) error <span class="cov0" title="0">{
         return err</span>
 }</pre>
 		
-		<pre class="file" id="file7" style="display: none">package utils
+		<pre class="file" id="file5" style="display: none">package utils
 
 import (
         "fmt"
@@ -768,7 +648,7 @@ func QuestionF(format string, question ...string) string <span class="cov0" titl
 
 </pre>
 		
-		<pre class="file" id="file8" style="display: none">package utils
+		<pre class="file" id="file6" style="display: none">package utils
 
 import (
         "math"
@@ -789,7 +669,7 @@ func Round(val float64, roundOn float64, places int ) (newVal float64) <span cla
 }
 </pre>
 		
-		<pre class="file" id="file9" style="display: none">package utils
+		<pre class="file" id="file7" style="display: none">package utils
 
 import (
         "log"
@@ -854,7 +734,7 @@ func StringInSlice(a string, list []string) bool <span class="cov0" title="0">{
         <span class="cov0" title="0">return false</span>
 }</pre>
 		
-		<pre class="file" id="file10" style="display: none">package utils
+		<pre class="file" id="file8" style="display: none">package utils
 
 import (
         "os"

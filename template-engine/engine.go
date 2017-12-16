@@ -12,6 +12,7 @@ import (
 	"text/template"
 	"bufio"
 	"github.com/marcelocorreia/go-template-engine/utils"
+	"errors"
 )
 
 func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interface{}) (string, error) {
@@ -22,12 +23,17 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 	}
 
 	r, err := gte.ParseTemplateString(string(tplFile), params)
+	if err != nil {
+		return r, err
+	}
 	return r, nil
 }
 
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) {
-	t := template.Must(template.New("letter").Parse(templateString))
-
+	t, err := template.New("letter").Parse(templateString)
+	if err != nil {
+		return templateString, err
+	}
 	var doc bytes.Buffer
 	errParse := t.Execute(&doc, params)
 
@@ -47,22 +53,20 @@ func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 		err := json.Unmarshal(file, &varsFile)
 		fmt.Println(&varsFile)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 	} else if strings.HasSuffix(filePath, ".yaml") || strings.HasSuffix(filePath, ".yml") {
 		err := yaml.Unmarshal(file, &varsFile)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 	}
 	return varsFile, nil
 }
 
 func (gte TemplateEngine) VariablesFileMerge(varsFile []string, extra_vars map[string]string) (string, error) {
-	tmpFile, err := ioutil.TempFile("/tmp", "vars")
-	if err != nil {
-		return "", err
-	}
+	tmpFile, _ := ioutil.TempFile("/tmp", "vars")
+
 	for _, file := range varsFile {
 		content, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -73,7 +77,7 @@ func (gte TemplateEngine) VariablesFileMerge(varsFile []string, extra_vars map[s
 	}
 
 	for k, v := range extra_vars {
-		tmpFile.WriteString(fmt.Sprintf("%s: %s\n",k,v))
+		tmpFile.WriteString(fmt.Sprintf("%s: %s\n", k, v))
 	}
 	tmpFile.Close()
 	cleanFile, err := cleanYamlFile(tmpFile.Name())
@@ -106,20 +110,21 @@ func cleanYamlFile(file string) (string, error) {
 }
 
 func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error) {
-	gte.PrepareOutputDirectory(sourceDir, targetDir, exclusions)
-
+	err := gte.PrepareOutputDirectory(sourceDir, targetDir, exclusions)
+	if err != nil {
+		return err
+	}
 	list, err := gte.GetFileList(sourceDir, false, exclusions)
 
 	if err != nil {
-		fmt.Println("Error processing:", sourceDir)
-		panic(err)
+		return err
 	}
 	for _, f := range list {
 		sourceFile := fmt.Sprintf("%s/%s", sourceDir, f)
 		targetFile := fmt.Sprintf("%s/%s", targetDir, f)
 		body, err := gte.ParseTemplateFile(sourceFile, params)
 		if err != nil {
-			return err
+			fmt.Printf("File: %s can't be loaded as template,\n\tContent writen without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
 		}
 		err = output(body, targetFile)
 		if err != nil {
@@ -133,7 +138,10 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 func (gte TemplateEngine) GetFileList(dir string, fullPath bool, exclusions []string) ([]string, error) {
 	var fileList *[]string
 	fileList = &[]string{}
-	files, _ := ioutil.ReadDir(dir)
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return nil, err
+	}
 	for _, f := range files {
 		if !utils.StringInSlice(f.Name(), exclusions) {
 			if info, err := os.Stat(dir + "/" + f.Name()); err == nil && info.IsDir() {
@@ -168,13 +176,16 @@ func (gte TemplateEngine) getTempList(dir string, fileList *[]string) {
 }
 
 func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error) {
+
 	if targetDir == "" {
-		fmt.Println("Error: output must be provided when source is a directory")
-		os.Exit(1)
+		return errors.New("output must be provided when source is a directory")
 	}
 
 	utils.CreateNewDirectoryIfNil(targetDir)
-	files, _ := ioutil.ReadDir(sourceDir)
+	files, err := ioutil.ReadDir(sourceDir)
+	if err != nil {
+		return err
+	}
 	for _, d := range files {
 		if !utils.StringInSlice(d.Name(), exclusions) {
 			if info, err := os.Stat(sourceDir + "/" + d.Name()); err == nil && info.IsDir() {
@@ -194,4 +205,4 @@ func output(out string, templateFileOutput string) (error) {
 	return nil
 }
 
-///go/src/github.com/marcelocorreia/go-template-engine/bin/go-template-engine --source ci/go-template-engine.rb             --var dist_file=dist/go-template-engine-darwin-amd64-1.39.0.zip             --var version=1.39.0             --var hash_sum=123             > /Users/marcelo/IdeaProjects/tardis/homebrew-taps/go-template-engine.rb
+
