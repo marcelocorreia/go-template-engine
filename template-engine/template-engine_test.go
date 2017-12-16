@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"testing"
 	"os"
-	"github.com/marcelocorreia/go/utils"
+	"github.com/marcelocorreia/go-template-engine/utils"
 )
 
 func TestParseTemplateString(t *testing.T) {
