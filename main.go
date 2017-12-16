@@ -10,7 +10,7 @@ import (
 
 var (
 	app                  = kingpin.New("go-template-engine", "")
-	templateFile         = app.Flag("source", "Template Source File").Short('s').Required().String()
+	templateFile         = app.Flag("source", "Template Source File").Short('s').String()
 	templateVars         = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
 	templateVarsFile     = app.Flag("var-file", "Variables File").Strings()
 	templatesExcludesDir = app.Flag("exclude-dir", "Variables File").Strings()
@@ -21,6 +21,10 @@ var (
 
 func main() {
 	engine := *getEngine()
+	if len(os.Args) <=1{
+		kingpin.Usage()
+		os.Exit(1)
+	}
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	if *versionFlag {

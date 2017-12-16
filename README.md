@@ -31,11 +31,11 @@ $> go-template-engine --help
 ### Usage
 files in the examples are located at template-engine/test_fixtures/
 ```
-$> go-template-engine --source template-engine/test_fixtures/cfn.tpl.yml \
+$> go-template-engine run --source template-engine/test_fixtures/cfn.tpl.yml \
         --var-file template-engine/test_fixtures/cfn-vars.yml \
         --output cfn.yml
 
-$> go-template-engine --source template-engine/test_fixtures/cfn.tpl.yml \
+$> go-template-engine run --source template-engine/test_fixtures/cfn.tpl.yml \
         --var-file template-engine/test_fixtures/cfn-vars.json \
         --output cfn.yml
 ```
