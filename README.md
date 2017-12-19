@@ -6,6 +6,7 @@ Based on Golang templates text SDK.
 
 - Accepts JSON and YAML variables file
 - Lookup on file extension and parses accordingly, accepts **.json .yml .yaml** extensions
+- Custom variable delimeter can be set using flags. Default: Left='{{'' Right:'}}' Check help menu.
 - If --source points to a directory, it will run recursively, keeping the directory structure.
 - Accepts multiple variables files, merging them. YAML only. (It will override duplicated variables if the exits in more than one file)
 - These examples are pretty vanilla, go templates are actually pretty powerful, check the links for more info.
@@ -25,6 +26,8 @@ $> go-template-engine --help
         --exclude-dir=EXCLUDE-DIR ...
                                  Variables File
     -o, --output=OUTPUT          File output full path
+        --delim-left="{{"        Left Delimiter
+        --delim-right="}}"       Right Delimiter
     -v, --version                App Version
 ```
 
@@ -316,3 +319,4 @@ outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
 ### TODO's
 - [x] Accept multiple variable files
 - [x] Recursive processing
+- [x] Custom Delimeters
