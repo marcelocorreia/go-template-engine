@@ -54,7 +54,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/marcelocorreia/go-template-engine/template-engine/engine.go (96.3%)</option>
+				<option value="file0">github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go (96.5%)</option>
 				
 				</select>
 			</div>
@@ -85,6 +85,35 @@ import (
         "errors"
 )
 
+var DELIMS = []string{"{{", "}}"}
+
+type Engine interface {
+        ParseTemplateFile(templateFile string, params interface{}) (string, error)
+        ParseTemplateString(templateString string, params interface{}) (string, error)
+        VariablesFileMerge(varsFile []string, extra_vars map[string]string) (string, error)
+        LoadVars(filePath string) (interface{}, error)
+        ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error)
+        GetFileList(dir string, fullPath bool, exclusions []string) ([]string, error)
+        PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error)
+
+}
+
+type TemplateEngine struct {
+        Delims []string
+}
+
+func GetEngine(delims ...string) (*TemplateEngine, error) <span class="cov8" title="1">{
+        if len(delims) == 2</span><span class="cov8" title="1">{
+                DELIMS = delims
+        }</span>
+
+        <span class="cov8" title="1">engine := TemplateEngine{
+                Delims: DELIMS,
+        }
+
+        return &amp;engine, nil</span>
+}
+
 func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interface{}) (string, error) <span class="cov8" title="1">{
         tplFile, err := ioutil.ReadFile(templateFile)
 
@@ -100,7 +129,7 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 }
 
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) <span class="cov8" title="1">{
-        t, err := template.New("letter").Parse(templateString)
+        t, err := template.New("letter").Delims(gte.Delims[0], gte.Delims[1]).Parse(templateString)
         if err != nil </span><span class="cov8" title="1">{
                 return templateString, err
         }</span>
@@ -274,8 +303,6 @@ func output(out string, templateFileOutput string) (error) <span class="cov8" ti
         }</span>
         <span class="cov8" title="1">return nil</span>
 }
-
-
 </pre>
 		
 		</div>
