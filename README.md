@@ -6,7 +6,7 @@ Based on Golang templates text SDK.
 
 - Accepts JSON and YAML variables file
 - Lookup on file extension and parses accordingly, accepts **.json .yml .yaml** extensions
-- Custom variable delimeter can be set using flags. Default: Left='{{'' Right:'}}' Check help menu.
+- Custom variable delimeter can be set using flags. Default: {{ , }}. Left and Right respectively. Check help menu.
 - If --source points to a directory, it will run recursively, keeping the directory structure.
 - Accepts multiple variables files, merging them. YAML only. (It will override duplicated variables if the exits in more than one file)
 - These examples are pretty vanilla, go templates are actually pretty powerful, check the links for more info.
