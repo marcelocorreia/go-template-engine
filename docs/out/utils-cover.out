@@ -1,10 +1,4 @@
 mode: set
-github.com/marcelocorreia/go-template-engine/utils/tar.go:10.39,16.16 6 0
-github.com/marcelocorreia/go-template-engine/utils/tar.go:19.2,19.12 1 0
-github.com/marcelocorreia/go-template-engine/utils/tar.go:16.16,18.3 1 0
-github.com/marcelocorreia/go-template-engine/utils/tar.go:22.45,31.16 7 0
-github.com/marcelocorreia/go-template-engine/utils/tar.go:34.2,34.12 1 0
-github.com/marcelocorreia/go-template-engine/utils/tar.go:31.16,33.3 1 0
 github.com/marcelocorreia/go-template-engine/utils/crypt.go:13.61,17.16 3 0
 github.com/marcelocorreia/go-template-engine/utils/crypt.go:21.2,23.56 3 0
 github.com/marcelocorreia/go-template-engine/utils/crypt.go:27.2,30.59 3 0
@@ -91,3 +85,9 @@ github.com/marcelocorreia/go-template-engine/utils/string-utils.go:57.50,58.25 1
 github.com/marcelocorreia/go-template-engine/utils/string-utils.go:63.2,63.14 1 0
 github.com/marcelocorreia/go-template-engine/utils/string-utils.go:58.25,59.13 1 0
 github.com/marcelocorreia/go-template-engine/utils/string-utils.go:59.13,61.4 1 0
+github.com/marcelocorreia/go-template-engine/utils/tar.go:10.39,16.16 6 0
+github.com/marcelocorreia/go-template-engine/utils/tar.go:19.2,19.12 1 0
+github.com/marcelocorreia/go-template-engine/utils/tar.go:16.16,18.3 1 0
+github.com/marcelocorreia/go-template-engine/utils/tar.go:22.45,31.16 7 0
+github.com/marcelocorreia/go-template-engine/utils/tar.go:34.2,34.12 1 0
+github.com/marcelocorreia/go-template-engine/utils/tar.go:31.16,33.3 1 0

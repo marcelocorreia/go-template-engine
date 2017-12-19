@@ -15,17 +15,25 @@ var (
 	templateVarsFile     = app.Flag("var-file", "Variables File").Strings()
 	templatesExcludesDir = app.Flag("exclude-dir", "Variables File").Strings()
 	templateFileOutput   = app.Flag("output", "File output full path").Short('o').String()
+	delimLeft            = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
+	delimRight           = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
 	versionFlag          = app.Flag("version", "App Version").Short('v').Bool()
 	VERSION              string
 )
 
 func main() {
-	engine := *getEngine()
-	if len(os.Args) <=1{
+	if len(os.Args) <= 1 {
 		kingpin.Usage()
 		os.Exit(1)
 	}
+
 	kingpin.MustParse(app.Parse(os.Args[1:]))
+
+	var engine template_engine.Engine
+	engine, err := template_engine.GetEngine(*delimLeft, *delimRight)
+	if err != nil {
+		handleErrorExit(err,"Error Loading engine")
+	}
 
 	if *versionFlag {
 		fmt.Println(VERSION)
@@ -36,9 +44,9 @@ func main() {
 	var jobVars interface{}
 
 	varsBundle, _ = engine.VariablesFileMerge(*templateVarsFile, *templateVars)
-	jobVars, err := engine.LoadVars(varsBundle.(string))
+	jobVars, err = engine.LoadVars(varsBundle.(string))
 	if err != nil {
-		handleErrorExit(err,"Error:")
+		handleErrorExit(err, "Error:")
 	}
 
 	render(jobVars, engine)
@@ -70,16 +78,9 @@ func output(out string) {
 	if *templateFileOutput != "" {
 		err := ioutil.WriteFile(*templateFileOutput, []byte(out), 0755)
 		if err != nil {
-			handleErrorExit(err,"Error writing file to " + *templateFileOutput)
+			handleErrorExit(err, "Error writing file to " + *templateFileOutput)
 		}
 	} else {
 		fmt.Println(out)
 	}
-}
-
-func getEngine() *template_engine.Engine {
-	var engine template_engine.Engine
-	engine = template_engine.TemplateEngine{}
-
-	return &engine
 }

@@ -56,7 +56,7 @@
 				
 				<option value="file0">github.com/marcelocorreia/go-template-engine/main.go (0.0%)</option>
 				
-				<option value="file1">github.com/marcelocorreia/go-template-engine/template-engine/engine.go (96.3%)</option>
+				<option value="file1">github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go (96.5%)</option>
 				
 				<option value="file2">github.com/marcelocorreia/go-template-engine/utils/crypt.go (0.0%)</option>
 				
@@ -96,20 +96,32 @@ import (
 
 var (
         app                  = kingpin.New("go-template-engine", "")
-        templateFile         = app.Flag("source", "Template Source File").Short('s').Required().String()
+        templateFile         = app.Flag("source", "Template Source File").Short('s').String()
         templateVars         = app.Flag("var", "Params &amp; Variables. Example --var hey=ho --var lets=go").StringMap()
         templateVarsFile     = app.Flag("var-file", "Variables File").Strings()
         templatesExcludesDir = app.Flag("exclude-dir", "Variables File").Strings()
         templateFileOutput   = app.Flag("output", "File output full path").Short('o').String()
+        delimLeft            = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
+        delimRight           = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
         versionFlag          = app.Flag("version", "App Version").Short('v').Bool()
         VERSION              string
 )
 
 func main() <span class="cov0" title="0">{
-        engine := *getEngine()
-        kingpin.MustParse(app.Parse(os.Args[1:]))
+        if len(os.Args) &lt;= 1 </span><span class="cov0" title="0">{
+                kingpin.Usage()
+                os.Exit(1)
+        }</span>
 
-        if *versionFlag </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">kingpin.MustParse(app.Parse(os.Args[1:]))
+
+        var engine template_engine.Engine
+        engine, err := template_engine.GetEngine(*delimLeft, *delimRight)
+        if err != nil </span><span class="cov0" title="0">{
+                handleErrorExit(err,"Error Loading engine")
+        }</span>
+
+        <span class="cov0" title="0">if *versionFlag </span><span class="cov0" title="0">{
                 fmt.Println(VERSION)
                 os.Exit(0)
         }</span>
@@ -118,9 +130,9 @@ func main() <span class="cov0" title="0">{
         var jobVars interface{}
 
         varsBundle, _ = engine.VariablesFileMerge(*templateVarsFile, *templateVars)
-        jobVars, err := engine.LoadVars(varsBundle.(string))
+        jobVars, err = engine.LoadVars(varsBundle.(string))
         if err != nil </span><span class="cov0" title="0">{
-                handleErrorExit(err,"Error:")
+                handleErrorExit(err, "Error:")
         }</span>
 
         <span class="cov0" title="0">render(jobVars, engine)
@@ -152,19 +164,12 @@ func output(out string) <span class="cov0" title="0">{
         if *templateFileOutput != "" </span><span class="cov0" title="0">{
                 err := ioutil.WriteFile(*templateFileOutput, []byte(out), 0755)
                 if err != nil </span><span class="cov0" title="0">{
-                        handleErrorExit(err,"Error writing file to " + *templateFileOutput)
+                        handleErrorExit(err, "Error writing file to " + *templateFileOutput)
                 }</span>
         }<span class="cov0" title="0"> else {
                 fmt.Println(out)
         }</span>
 }
-
-func getEngine() *template_engine.Engine <span class="cov0" title="0">{
-        var engine template_engine.Engine
-        engine = template_engine.TemplateEngine{}
-
-        return &amp;engine
-}</span>
 </pre>
 		
 		<pre class="file" id="file1" style="display: none">package template_engine
@@ -184,6 +189,35 @@ import (
         "errors"
 )
 
+var DELIMS = []string{"{{", "}}"}
+
+type Engine interface {
+        ParseTemplateFile(templateFile string, params interface{}) (string, error)
+        ParseTemplateString(templateString string, params interface{}) (string, error)
+        VariablesFileMerge(varsFile []string, extra_vars map[string]string) (string, error)
+        LoadVars(filePath string) (interface{}, error)
+        ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error)
+        GetFileList(dir string, fullPath bool, exclusions []string) ([]string, error)
+        PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error)
+
+}
+
+type TemplateEngine struct {
+        Delims []string
+}
+
+func GetEngine(delims ...string) (*TemplateEngine, error) <span class="cov8" title="1">{
+        if len(delims) == 2</span><span class="cov8" title="1">{
+                DELIMS = delims
+        }</span>
+
+        <span class="cov8" title="1">engine := TemplateEngine{
+                Delims: DELIMS,
+        }
+
+        return &amp;engine, nil</span>
+}
+
 func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interface{}) (string, error) <span class="cov8" title="1">{
         tplFile, err := ioutil.ReadFile(templateFile)
 
@@ -199,7 +233,7 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 }
 
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) <span class="cov8" title="1">{
-        t, err := template.New("letter").Parse(templateString)
+        t, err := template.New("letter").Delims(gte.Delims[0], gte.Delims[1]).Parse(templateString)
         if err != nil </span><span class="cov8" title="1">{
                 return templateString, err
         }</span>
@@ -373,8 +407,6 @@ func output(out string, templateFileOutput string) (error) <span class="cov8" ti
         }</span>
         <span class="cov8" title="1">return nil</span>
 }
-
-
 </pre>
 		
 		<pre class="file" id="file2" style="display: none">package utils
