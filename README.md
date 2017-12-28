@@ -1,17 +1,22 @@
 # go-template-engine GTE
 
+![LOGO](docs/images/gte-logo.png)
+
 Based on Golang templates text SDK.
 
 ## TLDR;
 
-- Accepts JSON and YAML variables file
+- Added static file include. Tag {{staticInclude "path/to/file.txt"}}
+- Accepts JSON and YAML variables files
 - Lookup on file extension and parses accordingly, accepts **.json .yml .yaml** extensions
 - Custom variable delimeter can be set using flags. Default: {{ , }}. Left and Right respectively. Check help menu.
-- If --source points to a directory, it will run recursively, keeping the directory structure.
+- If --source points to a directory, it will run recursively, keeping the directory structure. Good for scaffolding
 - Accepts multiple variables files, merging them. YAML only. (It will override duplicated variables if the exits in more than one file)
 - These examples are pretty vanilla, go templates are actually pretty powerful, check the links for more info.
     - [https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/07.4.html](https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/07.4.html)
     - [https://golang.org/pkg/text/template/](https://golang.org/pkg/text/template/)
+- Can be extended
+    - ```$> go get github.com/marcelocorreia/go-template-engine/template-engine```
 
 ### Options
 ```

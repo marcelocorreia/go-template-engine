@@ -25,15 +25,23 @@ type Engine interface {
 	ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error)
 	GetFileList(dir string, fullPath bool, exclusions []string) ([]string, error)
 	PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error)
-
+	//staticInclude(name string,sourceFile string)(error)
 }
 
 type TemplateEngine struct {
 	Delims []string
 }
 
+func (gte TemplateEngine) staticInclude(sourceFile string) (string) {
+	body, err := ioutil.ReadFile(sourceFile)
+	if err != nil {
+		return fmt.Sprintf("ERROR including file: %s\n", sourceFile)
+	}
+	return string(body)
+}
+
 func GetEngine(delims ...string) (*TemplateEngine, error) {
-	if len(delims) == 2{
+	if len(delims) == 2 {
 		DELIMS = delims
 	}
 
@@ -59,7 +67,16 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 }
 
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) {
-	t, err := template.New("letter").Delims(gte.Delims[0], gte.Delims[1]).Parse(templateString)
+	funcMap := template.FuncMap{
+		"staticInclude": func(path string) string { return gte.staticInclude(path) },
+	}
+
+	//tpl := template.Must(template.New("main").Funcs(funcMap).ParseGlob("*.html"))
+	//tplVars := map[string]string {
+	//	"Title": "Hello world",
+	//	"Content": "Hi there",
+	//}
+	t, err := template.New("letter").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Parse(templateString)
 	if err != nil {
 		return templateString, err
 	}

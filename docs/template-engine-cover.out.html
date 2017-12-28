@@ -54,7 +54,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go (96.5%)</option>
+				<option value="file0">github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go (95.8%)</option>
 				
 				</select>
 			</div>
@@ -95,15 +95,23 @@ type Engine interface {
         ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error)
         GetFileList(dir string, fullPath bool, exclusions []string) ([]string, error)
         PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error)
-
+        //staticInclude(name string,sourceFile string)(error)
 }
 
 type TemplateEngine struct {
         Delims []string
 }
 
+func (gte TemplateEngine) staticInclude(sourceFile string) (string) <span class="cov8" title="1">{
+        body, err := ioutil.ReadFile(sourceFile)
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Sprintf("ERROR including file: %s\n", sourceFile)
+        }</span>
+        <span class="cov8" title="1">return string(body)</span>
+}
+
 func GetEngine(delims ...string) (*TemplateEngine, error) <span class="cov8" title="1">{
-        if len(delims) == 2</span><span class="cov8" title="1">{
+        if len(delims) == 2 </span><span class="cov8" title="1">{
                 DELIMS = delims
         }</span>
 
@@ -129,7 +137,16 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 }
 
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) <span class="cov8" title="1">{
-        t, err := template.New("letter").Delims(gte.Delims[0], gte.Delims[1]).Parse(templateString)
+        funcMap := template.FuncMap{
+                "staticInclude": func(path string) string </span><span class="cov8" title="1">{ return gte.staticInclude(path) }</span>,
+        }
+
+        //tpl := template.Must(template.New("main").Funcs(funcMap).ParseGlob("*.html"))
+        //tplVars := map[string]string {
+        //        "Title": "Hello world",
+        //        "Content": "Hi there",
+        //}
+        <span class="cov8" title="1">t, err := template.New("letter").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Parse(templateString)
         if err != nil </span><span class="cov8" title="1">{
                 return templateString, err
         }</span>
