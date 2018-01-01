@@ -26,6 +26,7 @@ type Engine interface {
 	GetFileList(dir string, fullPath bool, dirExclusions []string, fileExclusions []string) ([]string, error)
 	PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error)
 	staticInclude(sourceFile string) (string)
+	replace(input, from, to string) string
 }
 
 type TemplateEngine struct {
@@ -38,6 +39,10 @@ func (gte TemplateEngine) staticInclude(sourceFile string) (string) {
 		return fmt.Sprintf("ERROR including file: %s\n", sourceFile)
 	}
 	return string(body)
+}
+
+func (gte TemplateEngine) replace(input, from, to string) string {
+	return strings.Replace(input, from, to, -1)
 }
 
 func GetEngine(delims ...string) (*TemplateEngine, error) {
@@ -69,6 +74,7 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) {
 	funcMap := template.FuncMap{
 		"staticInclude": func(path string) string { return gte.staticInclude(path) },
+		"replace":       func(input, from, to string) string { return gte.replace(input, from, to) },
 	}
 
 	t, err := template.New("letter").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Parse(templateString)
@@ -155,7 +161,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 	if err != nil {
 		return err
 	}
-	list, err := gte.GetFileList(sourceDir, false, dirExclusions,fileExclusions)
+	list, err := gte.GetFileList(sourceDir, false, dirExclusions, fileExclusions)
 
 	if err != nil {
 		return err

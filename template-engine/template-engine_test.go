@@ -165,3 +165,13 @@ func TestTemplateEngine_StaticInclude(t *testing.T) {
 	assert.NotNil(t,out)
 	fmt.Println(out)
 }
+
+func TestTemplateEngine_replace(t *testing.T) {
+	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	params := make(map[string]string)
+	params["name"] = "Jolito"
+	out, err := engine.ParseTemplateFile("test_fixtures/replace.yml", params)
+	assert.Nil(t,err)
+	assert.NotNil(t,out)
+	fmt.Println(out)
+}
