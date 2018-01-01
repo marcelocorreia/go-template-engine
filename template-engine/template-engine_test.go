@@ -69,9 +69,9 @@ func TestTemplateEngine_GetFileList(t *testing.T) {
 	dir := "/go/src/github.com/marcelocorreia/go-template-engine/template-engine"
 
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
-	ll, _ := engine.GetFileList(dir, true, []string{})
+	ll, _ := engine.GetFileList(dir, true, []string{}, []string{})
 	assert.True(t, len(ll) > 0)
-	_, err := engine.GetFileList("/a/dir/that/should/not/exist", true, []string{})
+	_, err := engine.GetFileList("/a/dir/that/should/not/exist", true, []string{}, []string{})
 	assert.Error(t, err)
 }
 
@@ -126,12 +126,12 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	dir, _ := os.Getwd()
 	tmpDir := os.TempDir()
-	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"})
+	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},[]string{})
 	assert.Nil(t, err)
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{})
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{},[]string{})
 	assert.Nil(t, err)
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{})
-	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil)
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{},[]string{})
+	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil,nil)
 	assert.Error(t, err)
 }
 

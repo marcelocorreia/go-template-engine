@@ -4,7 +4,8 @@ test-full: clean_docs _docs-check cover-tests cover-out cover-html cover-cleanup
 
 clean_full: clean_bin clean_dist clean_docs
 
-
+view-doc:
+	grip -b
 
 clean_bin:
 	@rm -rf ./bin/*

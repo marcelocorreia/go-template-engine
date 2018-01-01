@@ -1,6 +1,6 @@
 # go-template-engine GTE
 
-![LOGO](docs/images/gte-logo.png)
+![LOGO](gte-logo.png)
 
 Based on Golang templates text SDK.
 
@@ -241,8 +241,21 @@ Outputs:
     Value: !Ref SubnetB2
 ```
 
-
-
+#### Static Include
+```yaml
+---
+list:
+{{staticInclude "test_fixtures/list1.txt"}}
+```
+##### Result
+```yaml
+---
+list:
+  - hey
+  - ho
+  - lets
+  - go
+```
 #### whatever else...
 ```text
 # {{.package_name}}
@@ -325,3 +338,4 @@ outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
 - [x] Accept multiple variable files
 - [x] Recursive processing
 - [x] Custom Delimeters
+- [x] Static Include

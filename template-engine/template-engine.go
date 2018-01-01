@@ -22,10 +22,10 @@ type Engine interface {
 	ParseTemplateString(templateString string, params interface{}) (string, error)
 	VariablesFileMerge(varsFile []string, extra_vars map[string]string) (string, error)
 	LoadVars(filePath string) (interface{}, error)
-	ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error)
-	GetFileList(dir string, fullPath bool, exclusions []string) ([]string, error)
+	ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string) (error)
+	GetFileList(dir string, fullPath bool, dirExclusions []string, fileExclusions []string) ([]string, error)
 	PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error)
-	//staticInclude(name string,sourceFile string)(error)
+	staticInclude(sourceFile string) (string)
 }
 
 type TemplateEngine struct {
@@ -71,11 +71,6 @@ func (gte TemplateEngine) ParseTemplateString(templateString string, params inte
 		"staticInclude": func(path string) string { return gte.staticInclude(path) },
 	}
 
-	//tpl := template.Must(template.New("main").Funcs(funcMap).ParseGlob("*.html"))
-	//tplVars := map[string]string {
-	//	"Title": "Hello world",
-	//	"Content": "Hi there",
-	//}
 	t, err := template.New("letter").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Parse(templateString)
 	if err != nil {
 		return templateString, err
@@ -155,12 +150,12 @@ func cleanYamlFile(file string) (string, error) {
 	return tmpFile.Name(), nil
 }
 
-func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, exclusions []string) (error) {
-	err := gte.PrepareOutputDirectory(sourceDir, targetDir, exclusions)
+func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string) (error) {
+	err := gte.PrepareOutputDirectory(sourceDir, targetDir, dirExclusions)
 	if err != nil {
 		return err
 	}
-	list, err := gte.GetFileList(sourceDir, false, exclusions)
+	list, err := gte.GetFileList(sourceDir, false, dirExclusions,fileExclusions)
 
 	if err != nil {
 		return err
@@ -181,7 +176,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 	return nil
 }
 
-func (gte TemplateEngine) GetFileList(dir string, fullPath bool, exclusions []string) ([]string, error) {
+func (gte TemplateEngine) GetFileList(dir string, fullPath bool, dirExclusions []string, fileExclusions []string) ([]string, error) {
 	var fileList *[]string
 	fileList = &[]string{}
 	files, err := ioutil.ReadDir(dir)
@@ -189,7 +184,7 @@ func (gte TemplateEngine) GetFileList(dir string, fullPath bool, exclusions []st
 		return nil, err
 	}
 	for _, f := range files {
-		if !utils.StringInSlice(f.Name(), exclusions) {
+		if !utils.StringInSlice(f.Name(), dirExclusions) && !utils.StringInSlice(f.Name(), fileExclusions) {
 			if info, err := os.Stat(dir + "/" + f.Name()); err == nil && info.IsDir() {
 				gte.getTempList(dir+"/"+f.Name(), fileList)
 			} else {
