@@ -7,6 +7,7 @@ Based on Golang templates text SDK.
 ## TLDR;
 
 - Added static file include. Tag {{staticInclude "path/to/file.txt"}}
+- Added replace tag. Tag {{replace .var "FROM_THIS" "TO_THIS"}}
 - Accepts JSON and YAML variables files
 - Lookup on file extension and parses accordingly, accepts **.json .yml .yaml** extensions
 - Custom variable delimeter can be set using flags. Default: {{ , }}. Left and Right respectively. Check help menu.
@@ -338,4 +339,5 @@ outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
 - [x] Accept multiple variable files
 - [x] Recursive processing
 - [x] Custom Delimeters
-- [x] Static Include
+- [x] Static Include tag
+- [x] Replace tag
