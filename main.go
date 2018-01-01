@@ -13,7 +13,8 @@ var (
 	templateFile         = app.Flag("source", "Template Source File").Short('s').String()
 	templateVars         = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
 	templateVarsFile     = app.Flag("var-file", "Variables File").Strings()
-	templatesExcludesDir = app.Flag("exclude-dir", "Variables File").Strings()
+	templatesExcludes    = app.Flag("exclude", "Excludes File from template job").Strings()
+	templatesExcludesDir = app.Flag("exclude-dir", "Excludes directory from template job").Strings()
 	templateFileOutput   = app.Flag("output", "File output full path").Short('o').String()
 	delimLeft            = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
 	delimRight           = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
@@ -32,7 +33,7 @@ func main() {
 	var engine template_engine.Engine
 	engine, err := template_engine.GetEngine(*delimLeft, *delimRight)
 	if err != nil {
-		handleErrorExit(err,"Error Loading engine")
+		handleErrorExit(err, "Error Loading engine")
 	}
 
 	if *versionFlag {
@@ -57,7 +58,7 @@ func main() {
 
 func render(jobVars interface{}, engine template_engine.Engine) {
 	if info, err := os.Stat(*templateFile); err == nil && info.IsDir() {
-		err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir)
+		err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir, *templatesExcludes)
 		if err != nil {
 			handleErrorExit(err, fmt.Sprintf("Error Processing templates @ dir: %s\n", *templateFile))
 		}

@@ -1,0 +1,3 @@
+{{staticInclude "test_fixtures/banner1.txt"}}
+{{staticInclude "test_fixtures/banner2.txt"}}
+{{staticInclude "test_fixtures/banner3.txt"}}

@@ -69,9 +69,9 @@ func TestTemplateEngine_GetFileList(t *testing.T) {
 	dir := "/go/src/github.com/marcelocorreia/go-template-engine/template-engine"
 
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
-	ll, _ := engine.GetFileList(dir, true, []string{})
-	assert.True(t,len(ll)>0)
-	_, err := engine.GetFileList("/a/dir/that/should/not/exist", true, []string{})
+	ll, _ := engine.GetFileList(dir, true, []string{}, []string{})
+	assert.True(t, len(ll) > 0)
+	_, err := engine.GetFileList("/a/dir/that/should/not/exist", true, []string{}, []string{})
 	assert.Error(t, err)
 }
 
@@ -126,12 +126,12 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	dir, _ := os.Getwd()
 	tmpDir := os.TempDir()
-	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"})
+	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},[]string{})
 	assert.Nil(t, err)
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{})
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{},[]string{})
 	assert.Nil(t, err)
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{})
-	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil)
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{},[]string{})
+	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil,nil)
 	assert.Error(t, err)
 }
 
@@ -141,12 +141,27 @@ func TestDelims(t *testing.T) {
 	vars, err := engine.LoadVars("test_fixtures/delim.yml")
 	out, err := engine.ParseTemplateFile("test_fixtures/delim.tpl", vars)
 	assert.Nil(t, err)
-	assert.Contains(t,out,"Willie")
-	assert.Contains(t,out,"horses")
-	assert.Contains(t,out,"beer")
+	assert.Contains(t, out, "Willie")
+	assert.Contains(t, out, "horses")
+	assert.Contains(t, out, "beer")
 }
 
 func TestGetEngine(t *testing.T) {
-	template_engine.GetEngine()
-	template_engine.GetEngine("{{{", "}}}")
+	gte, err := template_engine.GetEngine()
+	assert.NotNil(t, gte)
+	assert.Nil(t, err)
+	gte, err = template_engine.GetEngine("{{{", "}}}")
+	assert.NotNil(t, gte)
+	assert.Nil(t, err)
+}
+
+func TestTemplateEngine_StaticInclude(t *testing.T) {
+	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	params := make(map[string]string)
+	params["package_name"] = "Blitzkrieg Bop"
+	params["phrase1"] = "Hey ho, let's go"
+	out, err := engine.ParseTemplateFile("test_fixtures/static-include.yml", params)
+	assert.Nil(t,err)
+	assert.NotNil(t,out)
+	fmt.Println(out)
 }

@@ -35,3 +35,6 @@ target/
 terraform.state*
 vendor/
 .glide/
+.DS_Store
+ci/keys/
+
