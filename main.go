@@ -13,7 +13,7 @@ var (
 	templateFile        = app.Flag("source", "Template Source File").Short('s').String()
 	templateVars        = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
 	templateVarsFile    = app.Flag("var-file", "Variables File").Strings()
-	templateIgnores     = app.Flag("ignore", "Excludes File from template job").Strings()
+	templateIgnores     = app.Flag("skip-parsing", "Includes file but skips parsing").Strings()
 	templateExcludes    = app.Flag("exclude", "Excludes File from template job").Strings()
 	templateExcludesDir = app.Flag("exclude-dir", "Excludes directory from template job").Strings()
 	templateFileOutput  = app.Flag("output", "File output full path").Short('o').String()
