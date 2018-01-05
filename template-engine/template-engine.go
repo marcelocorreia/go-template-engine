@@ -22,7 +22,7 @@ type Engine interface {
 	ParseTemplateString(templateString string, params interface{}) (string, error)
 	VariablesFileMerge(varsFile []string, extra_vars map[string]string) (string, error)
 	LoadVars(filePath string) (interface{}, error)
-	ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string) (error)
+	ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) (error)
 	GetFileList(dir string, fullPath bool, dirExclusions []string, fileExclusions []string) ([]string, error)
 	PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error)
 	staticInclude(sourceFile string) (string)
@@ -156,7 +156,7 @@ func cleanYamlFile(file string) (string, error) {
 	return tmpFile.Name(), nil
 }
 
-func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string) (error) {
+func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) (error) {
 	err := gte.PrepareOutputDirectory(sourceDir, targetDir, dirExclusions)
 	if err != nil {
 		return err
@@ -169,9 +169,18 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 	for _, f := range list {
 		sourceFile := fmt.Sprintf("%s/%s", sourceDir, f)
 		targetFile := fmt.Sprintf("%s/%s", targetDir, f)
-		body, err := gte.ParseTemplateFile(sourceFile, params)
-		if err != nil {
-			fmt.Printf("File: %s can't be loaded as template,\n\tContent writen without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
+		var body string
+		if utils.StringInSlice(sourceFile, fileIgnores) {
+			c, err := ioutil.ReadFile(sourceFile)
+			if err != nil {
+				return err
+			}
+			body = string(c)
+		} else {
+			body, err = gte.ParseTemplateFile(sourceFile, params)
+			if err != nil {
+				fmt.Printf("File: %s can't be loaded as template,\n\tContent writen without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
+			}
 		}
 		err = output(body, targetFile)
 		if err != nil {

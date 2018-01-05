@@ -9,17 +9,18 @@ import (
 )
 
 var (
-	app                  = kingpin.New("go-template-engine", "")
-	templateFile         = app.Flag("source", "Template Source File").Short('s').String()
-	templateVars         = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
-	templateVarsFile     = app.Flag("var-file", "Variables File").Strings()
-	templatesExcludes    = app.Flag("exclude", "Excludes File from template job").Strings()
-	templatesExcludesDir = app.Flag("exclude-dir", "Excludes directory from template job").Strings()
-	templateFileOutput   = app.Flag("output", "File output full path").Short('o').String()
-	delimLeft            = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
-	delimRight           = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
-	versionFlag          = app.Flag("version", "App Version").Short('v').Bool()
-	VERSION              string
+	app                 = kingpin.New("go-template-engine", "")
+	templateFile        = app.Flag("source", "Template Source File").Short('s').String()
+	templateVars        = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
+	templateVarsFile    = app.Flag("var-file", "Variables File").Strings()
+	templateIgnores     = app.Flag("ignore", "Excludes File from template job").Strings()
+	templateExcludes    = app.Flag("exclude", "Excludes File from template job").Strings()
+	templateExcludesDir = app.Flag("exclude-dir", "Excludes directory from template job").Strings()
+	templateFileOutput  = app.Flag("output", "File output full path").Short('o').String()
+	delimLeft           = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
+	delimRight          = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
+	versionFlag         = app.Flag("version", "App Version").Short('v').Bool()
+	VERSION             string
 )
 
 func main() {
@@ -58,7 +59,7 @@ func main() {
 
 func render(jobVars interface{}, engine template_engine.Engine) {
 	if info, err := os.Stat(*templateFile); err == nil && info.IsDir() {
-		err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templatesExcludesDir, *templatesExcludes)
+		err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templateExcludesDir, *templateExcludes, *templateIgnores)
 		if err != nil {
 			handleErrorExit(err, fmt.Sprintf("Error Processing templates @ dir: %s\n", *templateFile))
 		}
