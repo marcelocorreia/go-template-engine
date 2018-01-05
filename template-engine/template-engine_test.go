@@ -130,7 +130,7 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	assert.Nil(t, err)
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,nil)
 	assert.Nil(t, err)
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,[]string{"variables.tfvars"})
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,[]string{".variables.tfvars"})
 	assert.Nil(t, err)
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{".templates"},nil,nil)
 	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil,nil,nil)
