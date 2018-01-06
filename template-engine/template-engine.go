@@ -11,8 +11,8 @@ import (
 	"strings"
 	"text/template"
 	"bufio"
-	"github.com/marcelocorreia/go-template-engine/utils"
 	"errors"
+	"github.com/marcelocorreia/go-template-engine/utils"
 )
 
 var DELIMS = []string{"{{", "}}"}
