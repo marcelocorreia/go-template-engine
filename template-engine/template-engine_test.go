@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"testing"
 	"os"
-	"github.com/marcelocorreia/go-template-engine/utils"
+	"github.com/marcelocorreia/go-template-engine/aux"
 )
 
 var TEST_DELIMS = []string{"{{{", "}}}"}
@@ -83,13 +83,13 @@ func TestPrepareOutputDirectory(t *testing.T) {
 		panic(err)
 	}
 	engine.PrepareOutputDirectory(dir, tmpDir, []string{".templates", "ci"})
-	exists, err := utils.Exists(tmpDir)
+	exists, err := aux.Exists(tmpDir)
 	if err != nil {
 		panic(err)
 	}
 	assert.True(t, exists)
 	os.RemoveAll(tmpDir)
-	exists, _ = utils.Exists(tmpDir)
+	exists, _ = aux.Exists(tmpDir)
 	assert.False(t, exists)
 	tmpDir, err = ioutil.TempDir("/bogus", "gteTest-")
 
@@ -128,13 +128,29 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	tmpDir := os.TempDir()
 	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,nil)
 	assert.Nil(t, err)
+	os.RemoveAll(tmpDir)
+
+	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,nil)
 	assert.Nil(t, err)
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,[]string{"variables.tfvars"})
+	os.RemoveAll(tmpDir)
+
+	tmpDir = os.TempDir()
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,[]string{".variables.tfvars"})
 	assert.Nil(t, err)
+	exists,err:= aux.Exists(tmpDir+"/.variables.tfvars")
+	assert.True(t,exists)
+	os.RemoveAll(tmpDir)
+
+	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{".templates"},nil,nil)
+	assert.Error(t, err)
+	os.RemoveAll(tmpDir)
+
+	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil,nil,nil)
 	assert.Error(t, err)
+	os.RemoveAll(tmpDir)
 }
 
 func TestDelims(t *testing.T) {
@@ -177,3 +193,4 @@ func TestTemplateEngine_replace(t *testing.T) {
 	assert.NotNil(t,out)
 	fmt.Println(out)
 }
+
