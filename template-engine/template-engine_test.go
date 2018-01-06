@@ -128,13 +128,29 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	tmpDir := os.TempDir()
 	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,nil)
 	assert.Nil(t, err)
+	os.RemoveAll(tmpDir)
+
+	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,nil)
 	assert.Nil(t, err)
+	os.RemoveAll(tmpDir)
+
+	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,[]string{".variables.tfvars"})
 	assert.Nil(t, err)
+	exists,err:=utils.Exists(tmpDir+"/.variables.tfvars")
+	assert.True(t,exists)
+	os.RemoveAll(tmpDir)
+
+	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{".templates"},nil,nil)
+	assert.Error(t, err)
+	os.RemoveAll(tmpDir)
+
+	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil,nil,nil)
 	assert.Error(t, err)
+	os.RemoveAll(tmpDir)
 }
 
 func TestDelims(t *testing.T) {
@@ -177,3 +193,4 @@ func TestTemplateEngine_replace(t *testing.T) {
 	assert.NotNil(t,out)
 	fmt.Println(out)
 }
+

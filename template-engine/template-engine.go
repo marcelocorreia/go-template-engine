@@ -170,7 +170,8 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 		sourceFile := fmt.Sprintf("%s/%s", sourceDir, f)
 		targetFile := fmt.Sprintf("%s/%s", targetDir, f)
 		var body string
-		if utils.StringInSlice(sourceFile, fileIgnores) {
+		baseName := filepath.Base(sourceFile)
+		if utils.StringInSlice(baseName, fileIgnores) {
 			c, err := ioutil.ReadFile(sourceFile)
 			if err != nil {
 				return err
