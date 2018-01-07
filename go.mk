@@ -36,7 +36,7 @@ package: build_all
     done
 .PHONY: package
 
-release: test-full build_all  package
+release: build_all  package
 
 lint:
 	@go fmt -x $$(glide nv)
