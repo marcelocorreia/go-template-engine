@@ -12,7 +12,6 @@ import (
 	"text/template"
 	"bufio"
 	"errors"
-	"github.com/marcelocorreia/go-template-engine/utils"
 )
 
 var DELIMS = []string{"{{", "}}"}
@@ -132,7 +131,7 @@ func (gte TemplateEngine) VariablesFileMerge(varsFile []string, extra_vars map[s
 		return "", err
 	}
 	os.Remove(tmpFile.Name())
-	utils.CopyFile(cleanFile, cleanFile+".yml")
+	CopyFile(cleanFile, cleanFile+".yml")
 
 	return cleanFile + ".yml", nil
 }
@@ -171,7 +170,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 		targetFile := fmt.Sprintf("%s/%s", targetDir, f)
 		var body string
 		baseName := filepath.Base(sourceFile)
-		if utils.StringInSlice(baseName, fileIgnores) {
+		if StringInSlice(baseName, fileIgnores) {
 			c, err := ioutil.ReadFile(sourceFile)
 			if err != nil {
 				return err
@@ -200,7 +199,7 @@ func (gte TemplateEngine) GetFileList(dir string, fullPath bool, dirExclusions [
 		return nil, err
 	}
 	for _, f := range files {
-		if !utils.StringInSlice(f.Name(), dirExclusions) && !utils.StringInSlice(f.Name(), fileExclusions) {
+		if !StringInSlice(f.Name(), dirExclusions) && !StringInSlice(f.Name(), fileExclusions) {
 			if info, err := os.Stat(dir + "/" + f.Name()); err == nil && info.IsDir() {
 				gte.getTempList(dir+"/"+f.Name(), fileList)
 			} else {
@@ -238,15 +237,15 @@ func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir str
 		return errors.New("output must be provided when source is a directory")
 	}
 
-	utils.CreateNewDirectoryIfNil(targetDir)
+	CreateNewDirectoryIfNil(targetDir)
 	files, err := ioutil.ReadDir(sourceDir)
 	if err != nil {
 		return err
 	}
 	for _, d := range files {
-		if !utils.StringInSlice(d.Name(), exclusions) {
+		if !StringInSlice(d.Name(), exclusions) {
 			if info, err := os.Stat(sourceDir + "/" + d.Name()); err == nil && info.IsDir() {
-				utils.CreateNewDirectoryIfNil(targetDir + "/" + d.Name())
+				CreateNewDirectoryIfNil(targetDir + "/" + d.Name())
 			}
 		}
 	}

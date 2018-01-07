@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"testing"
 	"os"
-	"github.com/marcelocorreia/go-template-engine/utils"
 )
 
 var TEST_DELIMS = []string{"{{{", "}}}"}
@@ -83,13 +82,13 @@ func TestPrepareOutputDirectory(t *testing.T) {
 		panic(err)
 	}
 	engine.PrepareOutputDirectory(dir, tmpDir, []string{".templates", "ci"})
-	exists, err := utils.Exists(tmpDir)
+	exists, err := template_engine.Exists(tmpDir)
 	if err != nil {
 		panic(err)
 	}
 	assert.True(t, exists)
 	os.RemoveAll(tmpDir)
-	exists, _ = utils.Exists(tmpDir)
+	exists, _ = template_engine.Exists(tmpDir)
 	assert.False(t, exists)
 	tmpDir, err = ioutil.TempDir("/bogus", "gteTest-")
 
@@ -138,7 +137,7 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,[]string{".variables.tfvars"})
 	assert.Nil(t, err)
-	exists,err:= utils.Exists(tmpDir+"/.variables.tfvars")
+	exists,err:= template_engine.Exists(tmpDir+"/.variables.tfvars")
 	assert.True(t,exists)
 	os.RemoveAll(tmpDir)
 
