@@ -30,7 +30,7 @@ _build:
 	@$(call ci_make,lint build GOOS=linux)
 
 _test:
-	@$(call ci_make,lint test GOOS=linux)
+	@$(call ci_make, test GOOS=linux)
 
 _release: _validate-version
 	@$(call ci_make,release)
