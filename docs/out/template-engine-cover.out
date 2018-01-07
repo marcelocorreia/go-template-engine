@@ -47,9 +47,9 @@ github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:192.2,192.12 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:161.16,163.3 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:166.16,168.3 1 0
-github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:169.25,174.47 5 1
+github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:169.25,174.49 5 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:186.3,187.17 2 1
-github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:174.47,176.18 2 1
+github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:174.49,176.18 2 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:179.4,179.20 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:176.18,178.5 1 0
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:180.4,182.18 2 1
@@ -61,8 +61,8 @@ github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:216.2,217.30 2 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:221.2,221.18 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:199.16,201.3 1 1
-github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:202.26,203.98 1 1
-github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:203.98,204.78 1 1
+github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:202.26,203.102 1 1
+github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:203.102,204.78 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:204.78,206.5 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:206.5,208.5 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:212.14,214.3 1 1
@@ -77,8 +77,8 @@ github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:254.2,254.12 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:237.21,239.3 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:243.16,245.3 1 1
-github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:246.26,247.47 1 1
-github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:247.47,248.84 1 1
+github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:246.26,247.49 1 1
+github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:247.49,248.84 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:248.84,250.5 1 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:257.60,259.16 2 1
 github.com/marcelocorreia/go-template-engine/template-engine/template-engine.go:262.2,262.12 1 1
