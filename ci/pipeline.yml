@@ -93,7 +93,7 @@ jobs:
       - task: ci
         file: git-repo-master/ci/release.yml
         params:
-          MAKE_TARGETS: _prepare deps _release
+          MAKE_TARGETS: _prepare deps _build _release
 
       - put: app-github-release
         params:
