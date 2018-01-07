@@ -16,7 +16,7 @@ pwd
 
 cd /go
 
-tree -d
+ls -lR
 
 make -C ${dir} ${MAKE_TARGETS} VERSION=$VERSION
 
