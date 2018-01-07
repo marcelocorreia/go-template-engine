@@ -68,7 +68,7 @@ concourse-start:
 concourse-logs:
 	cd ci && docker-compose logs -f
 
-create-concourse-keys:
+concourse-keys:
 	@[ -f ./ci/keys ] && echo ./ci/keys folder found || $(call create-concourse-keys)
 
 define create-concourse-keys

@@ -7,13 +7,13 @@ git-push:
 pipeline-full: git-push pipeline
 
 pipeline:
-	fly -t dev set-pipeline \
+	fly -t local set-pipeline \
 		-n -p $(APP_NAME) \
 		-c ./ci/pipeline.yml \
 		-l $(HOME)/.ssh/ci-credentials.yml \
 		-l ci/properties.yml
 
-	fly -t dev unpause-pipeline -p $(APP_NAME)
+	fly -t local unpause-pipeline -p $(APP_NAME)
 .PHONY: pipeline
 
 pipeline-destroy:
@@ -30,7 +30,7 @@ _build:
 	@$(call ci_make,lint build GOOS=linux)
 
 _test:
-	@$(call ci_make,lint test GOOS=linux)
+	@$(call ci_make, test GOOS=linux)
 
 _release: _validate-version
 	@$(call ci_make,release)
