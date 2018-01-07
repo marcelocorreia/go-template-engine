@@ -1,4 +1,4 @@
-package aux
+package utils
 
 import (
 	"math"

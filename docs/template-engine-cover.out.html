@@ -82,7 +82,7 @@ import (
         "text/template"
         "bufio"
         "errors"
-        "github.com/marcelocorreia/go-template-engine/utils"
+        "github.com/marcelocorreia/go-template-engine/aux"
 )
 
 var DELIMS = []string{"{{", "}}"}
@@ -202,7 +202,7 @@ func (gte TemplateEngine) VariablesFileMerge(varsFile []string, extra_vars map[s
                 return "", err
         }</span>
         <span class="cov8" title="1">os.Remove(tmpFile.Name())
-        utils.CopyFile(cleanFile, cleanFile+".yml")
+        aux.CopyFile(cleanFile, cleanFile+".yml")
 
         return cleanFile + ".yml", nil</span>
 }
@@ -241,7 +241,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
                 targetFile := fmt.Sprintf("%s/%s", targetDir, f)
                 var body string
                 baseName := filepath.Base(sourceFile)
-                if utils.StringInSlice(baseName, fileIgnores) </span><span class="cov8" title="1">{
+                if aux.StringInSlice(baseName, fileIgnores) </span><span class="cov8" title="1">{
                         c, err := ioutil.ReadFile(sourceFile)
                         if err != nil </span><span class="cov0" title="0">{
                                 return err
@@ -270,7 +270,7 @@ func (gte TemplateEngine) GetFileList(dir string, fullPath bool, dirExclusions [
                 return nil, err
         }</span>
         <span class="cov8" title="1">for _, f := range files </span><span class="cov8" title="1">{
-                if !utils.StringInSlice(f.Name(), dirExclusions) &amp;&amp; !utils.StringInSlice(f.Name(), fileExclusions) </span><span class="cov8" title="1">{
+                if !aux.StringInSlice(f.Name(), dirExclusions) &amp;&amp; !aux.StringInSlice(f.Name(), fileExclusions) </span><span class="cov8" title="1">{
                         if info, err := os.Stat(dir + "/" + f.Name()); err == nil &amp;&amp; info.IsDir() </span><span class="cov8" title="1">{
                                 gte.getTempList(dir+"/"+f.Name(), fileList)
                         }</span><span class="cov8" title="1"> else {
@@ -308,15 +308,15 @@ func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir str
                 return errors.New("output must be provided when source is a directory")
         }</span>
 
-        <span class="cov8" title="1">utils.CreateNewDirectoryIfNil(targetDir)
+        <span class="cov8" title="1">aux.CreateNewDirectoryIfNil(targetDir)
         files, err := ioutil.ReadDir(sourceDir)
         if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
         <span class="cov8" title="1">for _, d := range files </span><span class="cov8" title="1">{
-                if !utils.StringInSlice(d.Name(), exclusions) </span><span class="cov8" title="1">{
+                if !aux.StringInSlice(d.Name(), exclusions) </span><span class="cov8" title="1">{
                         if info, err := os.Stat(sourceDir + "/" + d.Name()); err == nil &amp;&amp; info.IsDir() </span><span class="cov8" title="1">{
-                                utils.CreateNewDirectoryIfNil(targetDir + "/" + d.Name())
+                                aux.CreateNewDirectoryIfNil(targetDir + "/" + d.Name())
                         }</span>
                 }
         }
