@@ -12,5 +12,12 @@ fi
 echo VERSION=${VERSION}
 #echo HOMEBREW_REPO_PATH=${HOMEBREW_REPO_PATH}
 
+pwd
+
+cd /go
+
+tree -d
 
 make -C ${dir} ${MAKE_TARGETS} VERSION=$VERSION
+
+
