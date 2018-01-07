@@ -129,7 +129,6 @@ jobs:
     serial: true
     plan:
       - get: git-repo-master
-        trigger: true
 
       - put: app-resource-version
         params:
