@@ -32,7 +32,11 @@ ifndef FILE
 	$(error FILE is required)
 endif
 
+APP_NAME := go-template-engine
+GITHUB_USER := marcelocorreia
 
+get-last-release:
+	@curl -s https://api.github.com/repos/$(GITHUB_USER)/$(APP_NAME)/tags | jq ".[]|.name" | head -n1 | sed 's/\"//g' | sed 's/v*//g'
 
 homebrew-tap:
 	go-template-engine \

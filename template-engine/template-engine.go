@@ -173,6 +173,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 		if StringInSlice(baseName, fileIgnores) {
 			c, err := ioutil.ReadFile(sourceFile)
 			if err != nil {
+				fmt.Println("Error Reading:", sourceFile)
 				return err
 			}
 			body = string(c)
@@ -184,6 +185,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 		}
 		err = output(body, targetFile)
 		if err != nil {
+			fmt.Println(err)
 			return err
 		}
 	}
