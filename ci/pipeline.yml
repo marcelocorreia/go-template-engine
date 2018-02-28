@@ -34,11 +34,6 @@ resources:
       repository: {{git_repo_name}}
       access_token: {{github_token}}
 
-  - name: slack-alert
-    type: slack-notification
-    source:
-      url: {{slack_webook}}
-
   - name: s3
     type: s3
     source:
