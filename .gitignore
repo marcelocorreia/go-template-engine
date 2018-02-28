@@ -25,7 +25,6 @@ _obj
 _test
 _testmain.go
 bin/
-bin/
 demo/
 dist/
 forks/
@@ -36,5 +35,5 @@ terraform.state*
 vendor/
 .glide/
 .DS_Store
-ci/keys/
+**/keys/
 
