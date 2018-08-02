@@ -94,15 +94,15 @@ jobs:
           file: output/*linux*zip
           acl: public-read
 
-#  - name: update-homebrew-tap
-#    build_logs_to_retain: 10
-#    serial: true
-#    plan:
-#      - get: git-repo-homebrew
-#        trigger: true
-#
-#      - task: update
-#        file: git-repo-master/ci/release.yml
-#        params:
-#          MAKE_TARGETS: _prepare deps _build _release
-#
+  - name: update-homebrew-tap
+    build_logs_to_retain: 10
+    serial: true
+    plan:
+      - get: git-repo-homebrew
+        trigger: true
+
+      - task: update
+        file: git-repo-homebrew/ci/release.yml
+        params:
+          MAKE_TARGETS: _prepare deps _build _release
+
