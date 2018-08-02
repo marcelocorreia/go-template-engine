@@ -59,7 +59,7 @@ jobs:
               repository: marcelocorreia/go-glide-builder
               tag: 'latest'
           inputs:
-          - name: git-repo-dev
+            - name: git-repo-dev
           run:
             path: make
             args: ["-C","git-repo-dev","_prepare","_build"]
@@ -81,7 +81,7 @@ jobs:
         params:
           bump: patch
 
-      - task: ci
+      - task: release
         config:
           platform: linux
           image_resource:
@@ -90,12 +90,14 @@ jobs:
               repository: marcelocorreia/go-glide-builder
               tag: 'latest'
           inputs:
-          - name: git-repo-master
+            - name: git-repo-master
+          outputs:
+            - name: output
           params:
             VERSION: app-resource-version/version
           run:
             path: make
-            args: ["-C","git-repo-master","_prepare","_build","_release"]
+            args: ["-C","git-repo-master","release"]
 
       - put: app-github-release
         params:
