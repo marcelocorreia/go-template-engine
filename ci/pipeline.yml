@@ -51,15 +51,25 @@ jobs:
         trigger: true
 
       - task: ci
-        file: git-repo-dev/ci/integration.yml
-        params:
-          MAKE_TARGETS: _prepare _build
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: marcelocorreia/go-glide-builder
+              tag: 'latest'
+          inputs:
+          - name: git-repo-dev
+          run:
+            path: make
+            args: ["-C","git-repo-dev","_prepare","_build"]
 
   - name: release
     build_logs_to_retain: 10
     serial: true
     plan:
       - get: git-repo-homebrew
+
       - get: git-repo-dev
         passed: ["integration"]
         trigger: false
@@ -90,13 +100,14 @@ jobs:
       - get: git-repo-homebrew
         trigger: true
         passed: ["release"]
+
       - task: update
         config:
           platform: linux
           image_resource:
             type: docker-image
             source:
-              repository: marcelocorreia/terraform
+              repository: marcelocorreia/go-glide-builder
               tag: 'latest'
           inputs:
           - name: git-repo-homebrew
