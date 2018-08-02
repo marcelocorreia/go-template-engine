@@ -20,7 +20,7 @@ include go.mk
 
 
 
-pipeline:
+pipeline: git-push
 	fly -t main set-pipeline \
 		-n -p $(APP_NAME) \
 		-c ./ci/pipeline.yml \
@@ -107,6 +107,9 @@ _release: _validate-version
 	@$(call ci_make,release)
 	pwd
 	cp $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME)/dist/*zip ../output/
+
+git-push:
+	git add . ; git commit -m "updating pipeline"; git push
 
 define ci_make
 	echo ""

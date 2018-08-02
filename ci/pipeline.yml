@@ -75,7 +75,7 @@ jobs:
 
       - put: app-resource-version
         params:
-          bump: minor
+          bump: patch
 
       - task: ci
         file: git-repo-master/ci/release.yml
