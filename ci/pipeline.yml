@@ -55,10 +55,6 @@ jobs:
         params:
           MAKE_TARGETS: _prepare _build
 
-      - put: app-resource-version
-        params:
-          bump: patch
-
   - name: release
     build_logs_to_retain: 10
     serial: true
@@ -66,13 +62,14 @@ jobs:
       - get: git-repo-homebrew
       - get: git-repo-dev
         passed: ["integration"]
+        trigger: false
 
       - get: git-repo-master
         trigger: true
 
       - put: app-resource-version
         params:
-          bump: minor
+          bump: patch
 
       - task: ci
         file: git-repo-master/ci/release.yml
