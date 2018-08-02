@@ -108,9 +108,6 @@ _release: _validate-version
 	pwd
 	cp $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME)/dist/*zip ../output/
 
-git-push:
-	git add . ; git commit -m "updating pipeline"; git push
-
 define ci_make
 	echo ""
 	echo "*** $1::Begin ***"
