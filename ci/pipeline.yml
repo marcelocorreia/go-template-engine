@@ -65,10 +65,10 @@ jobs:
     plan:
       - get: git-repo-homebrew
       - get: git-repo-dev
+        passed: ["integration"]
 
       - get: git-repo-master
         trigger: true
-        passed: ["integration"]
 
       - put: app-resource-version
         params:
