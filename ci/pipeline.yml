@@ -100,9 +100,18 @@ jobs:
     plan:
       - get: git-repo-homebrew
         trigger: true
-
+        passed: ["release"]
       - task: update
-        file: git-repo-homebrew/ci/release.yml
-        params:
-          MAKE_TARGETS: _prepare deps _build _release
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: marcelocorreia/terraform
+              tag: 'latest'
+          inputs:
+          - name: git-repo-homebrew
+          run:
+            path: make
+            args: ["-C","git-repo-homebrew","update_all"]
 
