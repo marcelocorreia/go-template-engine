@@ -42,15 +42,6 @@ resources:
       repository: {{git_repo_name}}
       access_token: {{github_token}}
 
-  - name: s3
-    type: s3
-    source:
-      bucket: {{s3_bucket}}
-      access_key_id: {{labs_aws_access_key_id}}
-      secret_access_key: {{labs_aws_secret_access_key}}
-      region_name: ap-southeast-2
-      regexp: (.*).zip
-
 jobs:
   - name: integration
     build_logs_to_retain: 10
@@ -73,13 +64,15 @@ jobs:
     serial: true
     plan:
       - get: git-repo-homebrew
+      - get: git-repo-dev
 
       - get: git-repo-master
         trigger: true
+        passed: ["integration"]
 
       - put: app-resource-version
         params:
-          bump: patch
+          bump: minor
 
       - task: ci
         file: git-repo-master/ci/release.yml
@@ -92,11 +85,6 @@ jobs:
           tag: app-resource-version/version
           globs:
               - output/*zip
-
-      - put: s3
-        params:
-          file: output/*linux*zip
-          acl: public-read
 
   - name: update-homebrew-tap
     build_logs_to_retain: 10
