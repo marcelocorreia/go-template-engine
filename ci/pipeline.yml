@@ -91,6 +91,8 @@ jobs:
               tag: 'latest'
           inputs:
           - name: git-repo-master
+          params:
+            VERSION: app-resource-version/version
           run:
             path: make
             args: ["-C","git-repo-master","_prepare","_build","_release"]
@@ -119,7 +121,9 @@ jobs:
               repository: marcelocorreia/go-glide-builder
               tag: 'latest'
           inputs:
-          - name: git-repo-homebrew
+            - name: git-repo-homebrew
+          params:
+            VERSION: app-resource-version/version
           run:
             path: make
             args: ["-C","git-repo-homebrew","update_all"]
