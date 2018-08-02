@@ -1,19 +1,33 @@
-hash: 4920f54d6bcf90d754a91078cd0d886842a78c17f036347c089dc7f3d63b65a7
-updated: 2018-01-07T18:58:27.424969252+11:00
+hash: 2a12e04f03bb607b3dadfc385f4ceed786b8860a4ab0a251341b41f3b0fa5e8c
+updated: 2018-06-24T23:32:39.462796+10:00
 imports:
 - name: github.com/alecthomas/template
   version: a0175ee3bccc567396460bf5acd36800cb10c49c
   repo: https://github.com/alecthomas/template
+  subpackages:
+  - parse
 - name: github.com/alecthomas/units
   version: 2efee857e7cfd4f3d0138cc3cbb1b4966962b93a
   repo: https://github.com/alecthomas/units
+- name: github.com/aokoli/goutils
+  version: 3391d3790d23d03408670993e957e8f408993c34
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
   repo: https://github.com/davecgh/go-spew
   subpackages:
   - spew
+- name: github.com/google/uuid
+  version: 064e2069ce9c359c118179501254f67d7d37ba24
 - name: github.com/hashicorp/hcl
   version: 99ce73d4fe576449f7a689d4fc2b2ad09a86bdaa
+- name: github.com/huandu/xstrings
+  version: 7bb0250b58e5c15670406e6f93ffda43281305b1
+- name: github.com/imdario/mergo
+  version: ""
+- name: github.com/Masterminds/semver
+  version: 59c29afe1a994eacb71c833025ca7acf874bb1da
+- name: github.com/Masterminds/sprig
+  version: 6b2a58267f6a8b1dc8e2eb5519b984008fa85e8c
 - name: github.com/pmezard/go-difflib
   version: 792786c7400a136282c1664665ae0a8db921c6c2
   repo: https://github.com/pmezard/go-difflib
@@ -24,6 +38,11 @@ imports:
   repo: https://github.com/stretchr/testify
   subpackages:
   - assert
+- name: golang.org/x/crypto
+  version: 2c99acdd1e9b90d779ca23f632aad86af9909c62
+  subpackages:
+  - pbkdf2
+  - scrypt
 - name: gopkg.in/alecthomas/kingpin.v2
   version: e9044be3ab2a8e11d4e1f418d12f0790d57e8d70
   repo: https://gopkg.in/alecthomas/kingpin.v2
