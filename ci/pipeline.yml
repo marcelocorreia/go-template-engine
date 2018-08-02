@@ -16,6 +16,14 @@ resources:
       private_key: {{git_private_key}}
       username: {{github_user}}
 
+  - name: git-repo-homebrew
+    type: git
+    source:
+      uri: {{git_repo_url}}
+      branch: dev
+      private_key: {{git_private_key}}
+      username: {{github_user}}
+
   - name: app-resource-version
     type: semver
     source:
@@ -38,8 +46,8 @@ resources:
     type: s3
     source:
       bucket: {{s3_bucket}}
-      access_key_id: {{aws_access_key_id}}
-      secret_access_key: {{aws_secret_access_key}}
+      access_key_id: {{labs_aws_access_key_id}}
+      secret_access_key: {{labs_aws_secret_access_key}}
       region_name: ap-southeast-2
       regexp: (.*).zip
 
@@ -85,4 +93,16 @@ jobs:
         params:
           file: output/*linux*zip
           acl: public-read
+
+  - name: update-homebrew-tap
+    build_logs_to_retain: 10
+    serial: true
+    plan:
+      - get: git-repo-homebrew
+        trigger: true
+
+      - task: update
+        file: git-repo-master/ci/release.yml
+        params:
+          MAKE_TARGETS: _prepare deps _build _release
 

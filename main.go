@@ -9,21 +9,30 @@ import (
 )
 
 var (
-	app                 = kingpin.New("go-template-engine", "")
+	app = kingpin.New("go-template-engine", "go-template-engine")
+
 	templateFile        = app.Flag("source", "Template Source File").Short('s').String()
+	headerTemplateFiles = app.Flag("header-sources", "Extra Source Files to append as HEADER to the main template before processing."+
+		"Useful to preload embedded templates").Strings()
+	footerTemplateFiles = app.Flag("footer-sources", "Extra Source Files to append as FOOTER to the main template before processing."+
+		"Useful to preload embedded templates").Strings()
+
 	templateVars        = app.Flag("var", "Params & Variables. Example --var hey=ho --var lets=go").StringMap()
-	templateVarsFile    = app.Flag("var-file", "Variables File").Strings()
+	templateVarsFile    = app.Flag("var-file", "Variables File").String()
 	templateIgnores     = app.Flag("skip-parsing", "Includes file but skips parsing").Strings()
 	templateExcludes    = app.Flag("exclude", "Excludes File from template job").Strings()
 	templateExcludesDir = app.Flag("exclude-dir", "Excludes directory from template job").Strings()
 	templateFileOutput  = app.Flag("output", "File output full path").Short('o').String()
+
 	delimLeft           = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
 	delimRight          = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
-	versionFlag         = app.Flag("version", "App Version").Short('v').Bool()
+	listCustomFunctions = app.Flag("list-custom-functions", "List Custom Commands").Short('c').Bool()
 	VERSION             string
 )
 
 func main() {
+	app.Version(VERSION).VersionFlag.Short('v')
+	kingpin.CommandLine.HelpFlag.Short('h')
 	if len(os.Args) <= 1 {
 		kingpin.Usage()
 		os.Exit(1)
@@ -37,20 +46,20 @@ func main() {
 		handleErrorExit(err, "Error Loading engine")
 	}
 
-	if *versionFlag {
-		fmt.Println(VERSION)
+	if *listCustomFunctions {
+		engine.ListFuncs()
 		os.Exit(0)
 	}
 
-	var varsBundle interface{}
 	var jobVars interface{}
-
-	varsBundle, _ = engine.VariablesFileMerge(*templateVarsFile, *templateVars)
-	jobVars, err = engine.LoadVars(varsBundle.(string))
+	jobVars, err = engine.LoadVars(*templateVarsFile)
 	if err != nil {
 		handleErrorExit(err, "Error:")
 	}
 
+	for k, v := range *templateVars {
+		jobVars.(map[interface{}]interface{})[k] = v
+	}
 	render(jobVars, engine)
 
 	os.Exit(0)

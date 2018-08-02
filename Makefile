@@ -1,4 +1,34 @@
-include env.mk pipeline.mk go.mk
+APP_NAME := go-template-engine
+GITHUB_USER := marcelocorreia
+GOARCH :=amd64
+GOOS := darwin
+GOPATH := /go
+NAMESPACE := github.com/marcelocorreia
+OUTPUT_FILE := ./bin/$(APP_NAME)
+REPO_NAME := $(APP_NAME)
+REPO_URL := git@github.com:$(GITHUB_USER)/$(APP_NAME).git
+TEST_OUTPUT_DIR := tmp
+#VERSION := $(shell make get-last-release)
+WORKDIR := $(GOPATH)/src/$(NAMESPACE)/$(REPO_NAME)
+HOMEBREW_REPO := git@github.com:marcelocorreia/homebrew-taps.git
+HOMEBREW_BINARY := dist/$(APP_NAME)-darwin-amd64-$(VERSION).zip
+#HOMEBREW_BINARY_SUM := $(shell shasum -a 256 $(HOMEBREW_BINARY) | awk '{print $$1}')
+HOMEBREW_REPO_PATH ?= /Users/marcelo/IdeaProjects/tardis/homebrew-taps
+DOCS_DIR := docs
+
+include go.mk
+
+
+
+pipeline:
+	fly -t main set-pipeline \
+		-n -p $(APP_NAME) \
+		-c ./ci/pipeline.yml \
+		-l $(HOME)/.ssh/ci-credentials.yml \
+		-l ci/properties.yml
+
+	fly -t main unpause-pipeline -p $(APP_NAME)
+.PHONY: pipeline
 
 test-full: clean_docs _docs-check cover-tests cover-out cover-html cover-cleanup
 
@@ -20,7 +50,7 @@ build:
 	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),$(APP_NAME))
 
 define build
-	$1 go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=dev" -v
+	$1 go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=dev-mc2" -v ./main.go
 endef
 
 _validate-version:
@@ -38,14 +68,6 @@ GITHUB_USER := marcelocorreia
 get-last-release:
 	@curl -s https://api.github.com/repos/$(GITHUB_USER)/$(APP_NAME)/tags | jq ".[]|.name" | head -n1 | sed 's/\"//g' | sed 's/v*//g'
 
-homebrew-tap:
-	go-template-engine \
-		--source ci/go-template-engine.rb \
-		--var dist_file=dist/go-template-engine-darwin-amd64-1.39.0.zip \
-		--var version=1.39.0 \
-		--var hash_sum=123 \
-		  > /Users/marcelo/IdeaProjects/tardis/homebrew-taps/go-template-engine.rb
-
 
 get-version:
 	@git checkout origin/version -- version && \
@@ -55,34 +77,43 @@ get-version:
 _docs-check:
 	@[ -f $(DOCS_DIR) ] && echo $(DOCS_DIR) folder found || mkdir -p $(DOCS_DIR)
 
-concourse-pull:
-	cd ci && docker-compose pull
-concourse-up:
-	cd ci && CONCOURSE_EXTERNAL_URL=http://localhost:8080 docker-compose up -d
 
-concourse-down:
-	cd ci && docker-compose down
+_validate-app-name:
+ifndef APP_NAME
+	$(error APP_NAME is required)
+endif
 
-concourse-stop:
-	cd ci && docker-compose stop
+update_brew: _validate-app-name
+	./update-brew.sh $(APP_NAME)
 
-concourse-start:
-	cd ci && docker-compose start
+git-push:
+	git add . ; git commit -m "updating pipeline"; git push
 
-concourse-logs:
-	cd ci && docker-compose logs -f
+pipeline-full: git-push pipeline
 
-concourse-keys:
-	@[ -f ./ci/keys ] && echo ./ci/keys folder found || $(call create-concourse-keys)
+_prepare:
+	@echo $(GOPATH) - $(shell pwd)
+	@mkdir -p /go/src/$(NAMESPACE)/$(APP_NAME)/dist
+	@cp -R * /go/src/$(NAMESPACE)/$(APP_NAME)/
+	@$(call ci_make,deps)
 
-define create-concourse-keys
-	echo "Creating Concourse keys"
-	mkdir -p ./ci/keys/web ./ci/keys/worker;
-	ssh-keygen -t rsa -f ./ci/keys/web/tsa_host_key -N ''
-	ssh-keygen -t rsa -f ./ci/keys/web/session_signing_key -N ''
-	ssh-keygen -t rsa -f ./ci/keys/worker/worker_key -N ''
-	cp ./ci/keys/worker/worker_key.pub ./ci/keys/web/authorized_worker_keys
-	cp ./ci/keys/web/tsa_host_key.pub ./ci/keys/worker
+_build:
+	@$(call ci_make,lint build GOOS=linux)
+
+_test:
+	@$(call ci_make, test GOOS=linux)
+
+_release: _validate-version
+	@$(call ci_make,release)
+	pwd
+	cp $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME)/dist/*zip ../output/
+
+define ci_make
+	echo ""
+	echo "*** $1::Begin ***"
+	cd $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME) && \
+    		make $1
+	echo "*** $1::End ***"
+	echo ""
+	cd -
 endef
-
-

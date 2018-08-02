@@ -13,7 +13,6 @@ const (
 )
 
 func SecureRandomAlphaString(length int) string {
-
 	result := make([]byte, length)
 	bufferSize := int(float64(length)*1.3)
 	for i, j, randomBytes := 0, 0, []byte{}; i < length; j++ {

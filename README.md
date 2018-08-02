@@ -5,7 +5,8 @@
 Based on Golang templates text SDK.
 
 ## TLDR;
-
+- Added support to [HCL](https://github.com/hashicorp/hcl) formart for variables file input
+- Added support to all [Masterminds Sprig](https://github.com/Masterminds/sprig) functions
 - Added static file include. Tag {{staticInclude "path/to/file.txt"}}
 - Added replace tag. Tag {{replace .var "FROM_THIS" "TO_THIS"}}
 - Accepts JSON and YAML variables files
@@ -18,6 +19,146 @@ Based on Golang templates text SDK.
     - [https://golang.org/pkg/text/template/](https://golang.org/pkg/text/template/)
 - Can be extended
     - ```$> go get github.com/marcelocorreia/go-template-engine/template-engine```
+
+### Custom functions
+|Function|Source|Desc|
+|--------|------|----|
+|abbrev|[spring](https://github.com/Masterminds/sprig)|na|
+|abbrevboth|[spring](https://github.com/Masterminds/sprig)|na|
+|add|[spring](https://github.com/Masterminds/sprig)|na|
+|add1|[spring](https://github.com/Masterminds/sprig)|na|
+|ago|[spring](https://github.com/Masterminds/sprig)|na|
+|append|[spring](https://github.com/Masterminds/sprig)|na|
+|atoi|[spring](https://github.com/Masterminds/sprig)|na|
+|b32dec|[spring](https://github.com/Masterminds/sprig)|na|
+|b32enc|[spring](https://github.com/Masterminds/sprig)|na|
+|b64dec|[spring](https://github.com/Masterminds/sprig)|na|
+|b64enc|[spring](https://github.com/Masterminds/sprig)|na|
+|base|[spring](https://github.com/Masterminds/sprig)|na|
+|biggest|[spring](https://github.com/Masterminds/sprig)|na|
+|buildCustomCert|[spring](https://github.com/Masterminds/sprig)|na|
+|camelcase|[spring](https://github.com/Masterminds/sprig)|na|
+|cat|[spring](https://github.com/Masterminds/sprig)|na|
+|ceil|[spring](https://github.com/Masterminds/sprig)|na|
+|clean|[spring](https://github.com/Masterminds/sprig)|na|
+|coalesce|[spring](https://github.com/Masterminds/sprig)|na|
+|compact|[spring](https://github.com/Masterminds/sprig)|na|
+|contains|[spring](https://github.com/Masterminds/sprig)|na|
+|date|[spring](https://github.com/Masterminds/sprig)|na|
+|dateInZone|[spring](https://github.com/Masterminds/sprig)|na|
+|dateModify|[spring](https://github.com/Masterminds/sprig)|na|
+|date_in_zone|[spring](https://github.com/Masterminds/sprig)|na|
+|date_modify|[spring](https://github.com/Masterminds/sprig)|na|
+|default|[spring](https://github.com/Masterminds/sprig)|na|
+|derivePassword|[spring](https://github.com/Masterminds/sprig)|na|
+|dict|[spring](https://github.com/Masterminds/sprig)|na|
+|dir|[spring](https://github.com/Masterminds/sprig)|na|
+|div|[spring](https://github.com/Masterminds/sprig)|na|
+|empty|[spring](https://github.com/Masterminds/sprig)|na|
+|env|[spring](https://github.com/Masterminds/sprig)|na|
+|expandenv|[spring](https://github.com/Masterminds/sprig)|na|
+|ext|[spring](https://github.com/Masterminds/sprig)|na|
+|fail|[spring](https://github.com/Masterminds/sprig)|na|
+|first|[spring](https://github.com/Masterminds/sprig)|na|
+|float64|[spring](https://github.com/Masterminds/sprig)|na|
+|floor|[spring](https://github.com/Masterminds/sprig)|na|
+|genCA|[spring](https://github.com/Masterminds/sprig)|na|
+|genPrivateKey|[spring](https://github.com/Masterminds/sprig)|na|
+|genSelfSignedCert|[spring](https://github.com/Masterminds/sprig)|na|
+|genSignedCert|[spring](https://github.com/Masterminds/sprig)|na|
+|has|[spring](https://github.com/Masterminds/sprig)|na|
+|hasKey|[spring](https://github.com/Masterminds/sprig)|na|
+|hasPrefix|[spring](https://github.com/Masterminds/sprig)|na|
+|hasSuffix|[spring](https://github.com/Masterminds/sprig)|na|
+|hello|[spring](https://github.com/Masterminds/sprig)|na|
+|htmlDate|[spring](https://github.com/Masterminds/sprig)|na|
+|htmlDateInZone|[spring](https://github.com/Masterminds/sprig)|na|
+|indent|[spring](https://github.com/Masterminds/sprig)|na|
+|initial|[spring](https://github.com/Masterminds/sprig)|na|
+|initials|[spring](https://github.com/Masterminds/sprig)|na|
+|int|[spring](https://github.com/Masterminds/sprig)|na|
+|int64|[spring](https://github.com/Masterminds/sprig)|na|
+|isAbs|[spring](https://github.com/Masterminds/sprig)|na|
+|join|[spring](https://github.com/Masterminds/sprig)|na|
+|keys|[spring](https://github.com/Masterminds/sprig)|na|
+|kindIs|[spring](https://github.com/Masterminds/sprig)|na|
+|kindOf|[spring](https://github.com/Masterminds/sprig)|na|
+|last|[spring](https://github.com/Masterminds/sprig)|na|
+|list|[spring](https://github.com/Masterminds/sprig)|na|
+|lower|[spring](https://github.com/Masterminds/sprig)|na|
+|max|[spring](https://github.com/Masterminds/sprig)|na|
+|merge|[spring](https://github.com/Masterminds/sprig)|na|
+|min|[spring](https://github.com/Masterminds/sprig)|na|
+|mod|[spring](https://github.com/Masterminds/sprig)|na|
+|mul|[spring](https://github.com/Masterminds/sprig)|na|
+|nindent|[spring](https://github.com/Masterminds/sprig)|na|
+|nospace|[spring](https://github.com/Masterminds/sprig)|na|
+|now|[spring](https://github.com/Masterminds/sprig)|na|
+|omit|[spring](https://github.com/Masterminds/sprig)|na|
+|pick|[spring](https://github.com/Masterminds/sprig)|na|
+|pluck|[spring](https://github.com/Masterminds/sprig)|na|
+|plural|[spring](https://github.com/Masterminds/sprig)|na|
+|prepend|[spring](https://github.com/Masterminds/sprig)|na|
+|push|[spring](https://github.com/Masterminds/sprig)|na|
+|quote|[spring](https://github.com/Masterminds/sprig)|na|
+|randAlpha|[spring](https://github.com/Masterminds/sprig)|na|
+|randAlphaNum|[spring](https://github.com/Masterminds/sprig)|na|
+|randAscii|[spring](https://github.com/Masterminds/sprig)|na|
+|randNumeric|[spring](https://github.com/Masterminds/sprig)|na|
+|regexFind|[spring](https://github.com/Masterminds/sprig)|na|
+|regexFindAll|[spring](https://github.com/Masterminds/sprig)|na|
+|regexMatch|[spring](https://github.com/Masterminds/sprig)|na|
+|regexReplaceAll|[spring](https://github.com/Masterminds/sprig)|na|
+|regexReplaceAllLiteral|[spring](https://github.com/Masterminds/sprig)|na|
+|regexSplit|[spring](https://github.com/Masterminds/sprig)|na|
+|repeat|[spring](https://github.com/Masterminds/sprig)|na|
+|replace|GTE|na|
+|rest|[spring](https://github.com/Masterminds/sprig)|na|
+|reverse|[spring](https://github.com/Masterminds/sprig)|na|
+|round|[spring](https://github.com/Masterminds/sprig)|na|
+|semver|[spring](https://github.com/Masterminds/sprig)|na|
+|semverCompare|[spring](https://github.com/Masterminds/sprig)|na|
+|set|[spring](https://github.com/Masterminds/sprig)|na|
+|sha1sum|[spring](https://github.com/Masterminds/sprig)|na|
+|sha256sum|[spring](https://github.com/Masterminds/sprig)|na|
+|shuffle|[spring](https://github.com/Masterminds/sprig)|na|
+|snakecase|[spring](https://github.com/Masterminds/sprig)|na|
+|sortAlpha|[spring](https://github.com/Masterminds/sprig)|na|
+|split|[spring](https://github.com/Masterminds/sprig)|na|
+|splitList|[spring](https://github.com/Masterminds/sprig)|na|
+|squote|[spring](https://github.com/Masterminds/sprig)|na|
+|staticInclude|GTE|na|
+|sub|[spring](https://github.com/Masterminds/sprig)|na|
+|substr|[spring](https://github.com/Masterminds/sprig)|na|
+|swapcase|[spring](https://github.com/Masterminds/sprig)|na|
+|ternary|[spring](https://github.com/Masterminds/sprig)|na|
+|title|[spring](https://github.com/Masterminds/sprig)|na|
+|toDate|[spring](https://github.com/Masterminds/sprig)|na|
+|toJson|[spring](https://github.com/Masterminds/sprig)|na|
+|toPrettyJson|[spring](https://github.com/Masterminds/sprig)|na|
+|toString|[spring](https://github.com/Masterminds/sprig)|na|
+|toStrings|[spring](https://github.com/Masterminds/sprig)|na|
+|trim|[spring](https://github.com/Masterminds/sprig)|na|
+|trimAll|[spring](https://github.com/Masterminds/sprig)|na|
+|trimPrefix|[spring](https://github.com/Masterminds/sprig)|na|
+|trimSuffix|[spring](https://github.com/Masterminds/sprig)|na|
+|trimall|[spring](https://github.com/Masterminds/sprig)|na|
+|trunc|[spring](https://github.com/Masterminds/sprig)|na|
+|tuple|[spring](https://github.com/Masterminds/sprig)|na|
+|typeIs|[spring](https://github.com/Masterminds/sprig)|na|
+|typeIsLike|[spring](https://github.com/Masterminds/sprig)|na|
+|typeOf|[spring](https://github.com/Masterminds/sprig)|na|
+|uniq|[spring](https://github.com/Masterminds/sprig)|na|
+|unset|[spring](https://github.com/Masterminds/sprig)|na|
+|until|[spring](https://github.com/Masterminds/sprig)|na|
+|untilStep|[spring](https://github.com/Masterminds/sprig)|na|
+|untitle|[spring](https://github.com/Masterminds/sprig)|na|
+|upper|[spring](https://github.com/Masterminds/sprig)|na|
+|uuidv4|[spring](https://github.com/Masterminds/sprig)|na|
+|without|[spring](https://github.com/Masterminds/sprig)|na|
+|wrap|[spring](https://github.com/Masterminds/sprig)|na|
+|wrapWith|[spring](https://github.com/Masterminds/sprig)|na|
+
 
 ### Options
 ```
@@ -341,3 +482,4 @@ outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
 - [x] Custom Delimeters
 - [x] Static Include tag
 - [x] Replace tag
+- [x] Extra functions(tons.... thanks to [Masterminds Spring](https://github.com/Masterminds/sprig)

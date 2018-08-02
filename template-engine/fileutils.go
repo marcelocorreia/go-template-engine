@@ -34,6 +34,11 @@ func CopyFile(source string, dest string) (err error) {
 	return
 }
 
+func IsDirectory(path string) (bool, error) {
+	fileInfo, err := os.Stat(path)
+	return fileInfo.IsDir(), err
+}
+
 func ListDir(dir string) ([]os.FileInfo) {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -121,10 +126,14 @@ func Exists(path string) (bool, error) {
 	return true, err
 }
 
-func CreateNewDirectoryIfNil(path string) (error) {
-	exists, _ := Exists(path)
+func CreateNewDirectoryIfNil(path string) (bool, error) {
+	exists, err := Exists(path)
+	if err != nil {
+		return false, err
+	}
 	if !exists {
 		os.MkdirAll(path, 00750)
+		return true, nil
 	}
-	return nil
+	return false, nil
 }

@@ -24,7 +24,10 @@ func TestParseTemplateString(t *testing.T) {
 	assert.Contains(t, out, "Hey ho, let's go")
 	fmt.Println("Finished Test with vars...\n")
 }
-
+func TestListFuncs(t *testing.T) {
+	engine, _ := template_engine.GetEngine()
+	engine.ListFuncs()
+}
 func TestTemplateJson(t *testing.T) {
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	fmt.Println("Running Test with JSON file...")
@@ -52,26 +55,16 @@ func TestTemplateErrorJson(t *testing.T) {
 	fmt.Println("Finished Testing throwing error...\n")
 }
 
-func TestTemplateEngine_VariablesFileMerge(t *testing.T) {
-	engine, err := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
-	assert.Nil(t, err)
-	out, err := engine.VariablesFileMerge([]string{"test_fixtures/bb.yml", "test_fixtures/combo1.yml"}, getParams())
-	assert.Nil(t, err)
-	out, err = engine.VariablesFileMerge([]string{"test_fixtures/bb.yml", "/a/file/that/should/not/exist"}, getParams())
-	assert.Error(t, err)
-	os.Remove(out)
-	out, err = engine.VariablesFileMerge([]string{"test_fixtures/bb-broken.yml"}, getParams())
-	assert.Nil(t, err)
-}
 
 func TestTemplateEngine_GetFileList(t *testing.T) {
-	dir := "/go/src/github.com/marcelocorreia/go-template-engine/template-engine"
+	//dir := "/go/src/github.com/marcelocorreia/go-template-engine/template-engine"
+	dir := "/go/src/github.com/marcelocorreia/badwolf-templates/templates/badwolf/terraform-stack"
 
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
-	ll, _ := engine.GetFileList(dir, true, []string{}, []string{})
+	ll, _ := engine.GetFileList(dir,  []string{}, []string{})
 	assert.True(t, len(ll) > 0)
-	_, err := engine.GetFileList("/a/dir/that/should/not/exist", true, []string{}, []string{})
-	assert.Error(t, err)
+	//_, err := engine.GetFileList("/a/dir/that/should/not/exist", true, []string{}, []string{})
+	//assert.Error(t, err)
 }
 
 func TestPrepareOutputDirectory(t *testing.T) {
@@ -119,30 +112,33 @@ func TestTemplateEngine_LoadVars(t *testing.T) {
 	vars, err = engine.LoadVars(dir + "/test_fixtures/bb-broken.json")
 	assert.Nil(t, vars)
 	assert.Error(t, err)
+	vars, err = engine.LoadVars(dir + "/test_fixtures/variables.tfvars")
+	assert.NotNil(t, vars)
+	assert.Nil(t, err)
 }
 
 func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	dir, _ := os.Getwd()
 	tmpDir := os.TempDir()
-	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,nil)
+	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil,nil,nil)
 	assert.Nil(t, err)
 	os.RemoveAll(tmpDir)
 
 	tmpDir = os.TempDir()
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,nil)
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil,nil,nil)
 	assert.Nil(t, err)
 	os.RemoveAll(tmpDir)
 
 	tmpDir = os.TempDir()
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, []string{".templates"},nil,[]string{".variables.tfvars"})
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil,nil,nil)
 	assert.Nil(t, err)
 	exists,err:= template_engine.Exists(tmpDir+"/.variables.tfvars")
 	assert.True(t,exists)
 	os.RemoveAll(tmpDir)
 
 	tmpDir = os.TempDir()
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, []string{".templates"},nil,nil)
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, nil,nil,nil)
 	assert.Error(t, err)
 	os.RemoveAll(tmpDir)
 
@@ -192,4 +188,5 @@ func TestTemplateEngine_replace(t *testing.T) {
 	assert.NotNil(t,out)
 	fmt.Println(out)
 }
+
 
