@@ -70,6 +70,7 @@ jobs:
     build_logs_to_retain: 10
     serial: true
     plan:
+      - get: git-repo-homebrew
       - get: git-repo-master
         trigger: true
 
