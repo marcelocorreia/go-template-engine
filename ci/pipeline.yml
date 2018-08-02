@@ -58,10 +58,12 @@ jobs:
     plan:
       - get: git-repo-dev
         trigger: true
+
       - task: ci
         file: git-repo-dev/ci/integration.yml
         params:
           MAKE_TARGETS: _prepare _build
+
       - put: app-resource-version
         params:
           bump: patch
@@ -71,6 +73,7 @@ jobs:
     serial: true
     plan:
       - get: git-repo-homebrew
+
       - get: git-repo-master
         trigger: true
 
@@ -115,4 +118,3 @@ jobs:
           run:
             path: make
             args: ["-C","git-repo-homebrew","update_all"]
-
