@@ -82,9 +82,18 @@ jobs:
           bump: patch
 
       - task: ci
-        file: git-repo-master/ci/release.yml
-        params:
-          MAKE_TARGETS: _prepare deps _build _release
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: marcelocorreia/go-glide-builder
+              tag: 'latest'
+          inputs:
+          - name: git-repo-master
+          run:
+            path: make
+            args: ["-C","git-repo-master","_prepare","_build","_release"]
 
       - put: app-github-release
         params:
