@@ -66,12 +66,12 @@ _release: _setup-versions build_all _git-push _release-warning _setup-versions ;
 		--name $(NEXT_VERSION) \
 		--description "Template engine em Golang full of goodies"
 
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-freebsd-amd64-$(CURRENT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-linux-amd64-$(CURRENT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-netbsd-amd64-$(CURRENT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-openbsd-amd64-$(CURRENT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-windows-amd64-$(CURRENT_VERSION).zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-darwin-amd64-$(NEXT_VERSION).zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-freebsd-amd64-$(NEXT_VERSION).zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-linux-amd64-$(NEXT_VERSION).zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-netbsd-amd64-$(NEXT_VERSION).zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-openbsd-amd64-$(NEXT_VERSION).zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-windows-amd64-$(NEXT_VERSION).zip
 
 
 _release-warning: ;$(info $(M) Release - Warning...)
