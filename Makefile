@@ -8,13 +8,15 @@ OUTPUT_FILE := ./bin/$(APP_NAME)
 REPO_NAME := $(APP_NAME)
 REPO_URL := git@github.com:$(GITHUB_USER)/$(APP_NAME).git
 TEST_OUTPUT_DIR := tmp
-#VERSION := $(shell make get-last-release)
+#VERSION := $(shell make get-version)
+VERSION := 2.5.8
 WORKDIR := $(GOPATH)/src/$(NAMESPACE)/$(REPO_NAME)
 HOMEBREW_REPO := git@github.com:marcelocorreia/homebrew-taps.git
 HOMEBREW_BINARY := dist/$(APP_NAME)-darwin-amd64-$(VERSION).zip
 #HOMEBREW_BINARY_SUM := $(shell shasum -a 256 $(HOMEBREW_BINARY) | awk '{print $$1}')
 HOMEBREW_REPO_PATH ?= /Users/marcelo/IdeaProjects/tardis/homebrew-taps
 DOCS_DIR := docs
+CONCOURSE_EXTERNAL_URL ?= http://localhost:8080
 
 include go.mk
 
@@ -107,7 +109,8 @@ _release: _validate-version
 	@$(call ci_make,release)
 	pwd
 	cp $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME)/dist/*zip ../output/
-
+pack:
+	@$(call ci_make,package)
 define ci_make
 	echo ""
 	echo "*** $1::Begin ***"

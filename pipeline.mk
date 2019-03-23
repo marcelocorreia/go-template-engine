@@ -29,3 +29,18 @@ define ci_make
 	echo ""
 	cd -
 endef
+
+concourse-up: _ci-params
+	cd ci && docker-compose up -d
+
+concourse-logs:
+	cd ci && docker-compose logs -f
+concourse-down:
+	cd ci && docker-compose kill; docker-compose down
+
+_ci-params:
+	@$(eval export CONCOURSE_EXTERNAL_URL=$(CONCOURSE_EXTERNAL_URL))
+
+define concourse
+	cd ci && docker-compose $1
+endef

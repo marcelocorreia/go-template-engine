@@ -89,7 +89,7 @@ func output(out string) {
 	if *templateFileOutput != "" {
 		err := ioutil.WriteFile(*templateFileOutput, []byte(out), 0755)
 		if err != nil {
-			handleErrorExit(err, "Error writing file to " + *templateFileOutput)
+			handleErrorExit(err, "Error writing file to "+*templateFileOutput)
 		}
 	} else {
 		fmt.Println(out)
