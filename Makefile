@@ -21,7 +21,7 @@ SEMVER_DOCKER ?= marcelocorreia/semver
 SEMVER_DOCKER ?= marcelocorreia/semver
 GIT_BRANCH ?= master
 GIT_REMOTE ?= origin
-RELEASE_TYPE ?= patch
+RELEASE_TYPE ?= minor
 
 build:
 	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),$(APP_NAME))
