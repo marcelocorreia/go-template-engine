@@ -63,21 +63,21 @@ _release: _git-push _release-warning _setup-versions ;$(info $(M) Releasing vers
 		-u marcelocorreia \
 		-r go-template-engine \
 		--tag $(NEXT_VERSION) \
-		--name "go-template-engine" \
+		--name $(NEXT_VERSION) \
 		--description "Template engine em Golang full of goodies"
 
 _upload: _setup-versions
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name go-template-engine --file ./dist/go-template-engine-darwin-amd64-2.5.8.zip --description "Template engine em Golang full of goodies"
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name go-template-engine --file ./dist/go-template-engine-freebsd-amd64-2.5.8.zip --description "Template engine em Golang full of goodies"
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name go-template-engine --file ./dist/go-template-engine-linux-amd64-2.5.8.zip --description "Template engine em Golang full of goodies"
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name go-template-engine --file ./dist/go-template-engine-netbsd-amd64-2.5.8.zip --description "Template engine em Golang full of goodies"
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name go-template-engine --file ./dist/go-template-engine-openbsd-amd64-2.5.8.zip --description "Template engine em Golang full of goodies"
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name go-template-engine --file ./dist/go-template-engine-windows-amd64-2.5.8.zip --description "Template engine em Golang full of goodies"
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-darwin-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-freebsd-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-linux-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-netbsd-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-openbsd-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --name $(NEXT_VERSION) --file ./dist/go-template-engine-windows-amd64-2.5.8.zip
 
 
 _release-warning: ;$(info $(M) Release - Warning...)
 	@cowsay -f mario "Make sure evertyhing is pushed"
-	@echo "Press enter when ready or CTRL+C to cancel"
+	
 
 
 _setup-versions:
