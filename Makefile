@@ -120,6 +120,6 @@ define concourse
 endef
 
 _git-push:
-	git add .
-	git commit -m "Release $(NEXT_VERSION)"
-	git push
+	-@git add .
+	-@git commit -m "Release $(NEXT_VERSION)"
+	-@git push
