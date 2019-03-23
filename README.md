@@ -191,13 +191,17 @@ $> go-template-engine run --source template-engine/test_fixtures/cfn.tpl.yml \
 ```
 
 ### Install
-Mac OS
+#### Mac OS
 ```bash
 $> brew tap marcelocorreia/homebrew-taps
    brew install go-template-engine
 ```
 Other Systems Download latest binary from [https://github.com/marcelocorreia/go-template-engine/releases](https://github.com/marcelocorreia/go-template-engine/releases)
 
+#### Docker
+```bash
+$ docker run --rm marcelocorreia/go-template-engine ...
+```
 
 ### Examples
 

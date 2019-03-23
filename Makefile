@@ -56,6 +56,15 @@ current-version: _setup-versions## Show the current version.
 next-version: _setup-versions## Show the current version.
 	@echo $(NEXT_VERSION)
 
+release: _release-warning _setup-versions ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
+	git checkout $(GIT_BRANCH);
+	git tag $(NEXT_VERSION)
+	git push $(GIT_REMOTE) --tags
+
+_release-warning: ;$(info $(M) Release - Warning...)
+	@cowsay -f mario "Make sure evertyhing is pushed"
+	@echo "Press enter when ready or CTRL+C to cancel"
+	@read n
 
 _setup-versions:
 	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
