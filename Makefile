@@ -56,15 +56,24 @@ current-version: _setup-versions## Show the current version.
 next-version: _setup-versions## Show the current version.
 	@echo $(NEXT_VERSION)
 
-release: _release-warning _setup-versions ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
-	git checkout $(GIT_BRANCH);
-	git tag $(NEXT_VERSION)
-	git push $(GIT_REMOTE) --tags
+release: _release _upload
+
+_release: _git-push _release-warning _setup-versions ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
+	github-release release -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION)
+
+_upload: _setup-versions
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --file ./dist/go-template-engine-darwin-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --file ./dist/go-template-engine-freebsd-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --file ./dist/go-template-engine-linux-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --file ./dist/go-template-engine-netbsd-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --file ./dist/go-template-engine-openbsd-amd64-2.5.8.zip
+	github-release upload -u marcelocorreia -r go-template-engine --tag $(CURRENT_VERSION) --file ./dist/go-template-engine-windows-amd64-2.5.8.zip
+
 
 _release-warning: ;$(info $(M) Release - Warning...)
 	@cowsay -f mario "Make sure evertyhing is pushed"
 	@echo "Press enter when ready or CTRL+C to cancel"
-	@read n
+
 
 _setup-versions:
 	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
@@ -89,3 +98,28 @@ cover-cleanup:
 
 docker-build:
 	docker build -t marcelocorreia/go-template-engine .
+
+concourse-up: _ci-params
+	$(call concourse,up -d)
+
+concourse-logs: _ci-params
+	$(call concourse,logs -f)
+
+concourse-down: _ci-params
+	$(call concourse,kill)
+	$(call concourse,down)
+
+peido-%:
+	echo $@
+
+_ci-params:
+	@$(eval export CONCOURSE_EXTERNAL_URL=$(CONCOURSE_EXTERNAL_URL))
+
+define concourse
+	cd ci && docker-compose $1
+endef
+
+_git-push:
+	git add .
+	git commit -m "Release $(NEXT_VERSION)"
+	git push
