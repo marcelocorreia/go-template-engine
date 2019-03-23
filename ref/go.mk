@@ -49,3 +49,22 @@ deps:
 test:
 	@go test $$(glide nv) -cover -v
 .PHONY: test
+
+all-versions: ## Show all versions and the commit
+	@git ls-remote --tags $(GIT_REMOTE)
+
+current-version: _setup-versions## Show the current version.
+	@echo $(CURRENT_VERSION)
+
+next-version: _setup-versions## Show the current version.
+	@echo $(NEXT_VERSION)
+
+GIT_BRANCH ?= master
+GIT_REMOTE ?= origin
+RELEASE_TYPE ?= patch
+_setup-versions:
+	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
+	$(eval export NEXT_VERSION=$(shell docker run --rm --entrypoint=semver $(SEMVER_DOCKER) -c -i $(RELEASE_TYPE) $(CURRENT_VERSION)))
+
+d: _setup-versions
+	echo "docker run --rm --entrypoint=semver $(SEMVER_DOCKER) -c -i $(RELEASE_TYPE) $(CURRENT_VERSION)"

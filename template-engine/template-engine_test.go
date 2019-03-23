@@ -13,8 +13,10 @@ import (
 var TEST_DELIMS = []string{"{{{", "}}}"}
 var DEFAULT_DELIMS = []string{"{{", "}}"}
 
+
+
 func TestParseTemplateString(t *testing.T) {
-	fmt.Println("Running Test with vars...\n\n")
+	fmt.Println("Running Test with vars...")
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	params := make(map[string]string)
 	params["package_name"] = "Blitzkrieg Bop"
@@ -22,7 +24,7 @@ func TestParseTemplateString(t *testing.T) {
 	out, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", params)
 	assert.Contains(t, out, "# Blitzkrieg Bop")
 	assert.Contains(t, out, "Hey ho, let's go")
-	fmt.Println("Finished Test with vars...\n")
+	fmt.Println("Finished Test with vars...")
 }
 func TestListFuncs(t *testing.T) {
 	engine, _ := template_engine.GetEngine()
@@ -41,7 +43,7 @@ func TestTemplateJson(t *testing.T) {
 	assert.Contains(t, outJson, "Hey ho, let's go")
 	fmt.Println(outJson)
 	fmt.Println("===================================================")
-	fmt.Println("Finished Test with JSON file...\n")
+	fmt.Println("Finished Test with JSON file...")
 }
 
 func TestTemplateErrorJson(t *testing.T) {
@@ -52,13 +54,13 @@ func TestTemplateErrorJson(t *testing.T) {
 	json.Unmarshal(file, &varsJson)
 	_, err := engine.ParseTemplateFile("should-not-exist.tpl", varsJson)
 	assert.Error(t, err)
-	fmt.Println("Finished Testing throwing error...\n")
+	fmt.Println("Finished Testing throwing error...")
 }
 
 
 func TestTemplateEngine_GetFileList(t *testing.T) {
-	//dir := "/go/src/github.com/marcelocorreia/go-template-engine/template-engine"
-	dir := "/go/src/github.com/marcelocorreia/badwolf-templates/templates/badwolf/terraform-stack"
+	dir := "/go/src/github.com/marcelocorreia/go-template-engine/template-engine"
+	//dir := "/go/src/github.com/marcelocorreia/badwolf-templates/templates/badwolf/terraform-stack"
 
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	ll, _ := engine.GetFileList(dir,  []string{}, []string{})

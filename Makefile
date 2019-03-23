@@ -1,6 +1,6 @@
 APP_NAME := go-template-engine
 GITHUB_USER := marcelocorreia
-GOARCH :=amd64
+GOARCH := amd64
 GOOS := darwin
 GOPATH := /go
 NAMESPACE := github.com/marcelocorreia
@@ -17,106 +17,66 @@ HOMEBREW_BINARY := dist/$(APP_NAME)-darwin-amd64-$(VERSION).zip
 HOMEBREW_REPO_PATH ?= /Users/marcelo/IdeaProjects/tardis/homebrew-taps
 DOCS_DIR := docs
 CONCOURSE_EXTERNAL_URL ?= http://localhost:8080
-
-include go.mk
-
-
-
-pipeline: git-push
-	fly -t main set-pipeline \
-		-n -p $(APP_NAME) \
-		-c ./ci/pipeline.yml \
-		-l $(HOME)/.ssh/ci-credentials.yml \
-		-l ci/properties.yml
-
-	fly -t main unpause-pipeline -p $(APP_NAME)
-.PHONY: pipeline
-
-test-full: clean_docs _docs-check cover-tests cover-out cover-html cover-cleanup
-
-clean_full: clean_bin clean_dist clean_docs
-
-view-doc:
-	grip -b
-
-clean_bin:
-	@rm -rf ./bin/*
-
-clean_dist:
-	@rm -rf ./dist/*
-
-clean_docs:
-	@rm -rf ./docs/*
+SEMVER_DOCKER ?= marcelocorreia/semver
+SEMVER_DOCKER ?= marcelocorreia/semver
+GIT_BRANCH ?= master
+GIT_REMOTE ?= origin
+RELEASE_TYPE ?= patch
 
 build:
 	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),$(APP_NAME))
 
 define build
-	$1 go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=dev-mc2" -v ./main.go
+	$1 go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=dev" -v ./main.go
 endef
 
-_validate-version:
-ifndef VERSION
-	$(error VERSION is required)
-endif
-_validate-file:
-ifndef FILE
-	$(error FILE is required)
-endif
+DISTDIRS=$(shell ls dist/)
+build_all: package
+	gox -ldflags "-X main.VERSION=$(VERSION)" \
+		--arch amd64 \
+		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(VERSION)/{{.Dir}}
+package:
+	for dir in $(DISTDIRS); do \
+    	cd dist/$$dir/; \
+    	zip ../$$dir.zip * ; \
+        cd -;\
+        rm -rf dist/$$dir/;\
+    done
 
-APP_NAME := go-template-engine
-GITHUB_USER := marcelocorreia
+lint:
+	@go fmt -x $$(glide nv)
+.PHONY: lint
 
-get-last-release:
-	@curl -s https://api.github.com/repos/$(GITHUB_USER)/$(APP_NAME)/tags | jq ".[]|.name" | head -n1 | sed 's/\"//g' | sed 's/v*//g'
+all-versions: ## Show all versions and the commit
+	@git ls-remote --tags $(GIT_REMOTE)
 
+current-version: _setup-versions## Show the current version.
+	@echo $(CURRENT_VERSION)
 
-get-version:
-	@git checkout origin/version -- version && \
-		cat version && \
-		rm version
-
-_docs-check:
-	@[ -f $(DOCS_DIR) ] && echo $(DOCS_DIR) folder found || mkdir -p $(DOCS_DIR)
+next-version: _setup-versions## Show the current version.
+	@echo $(NEXT_VERSION)
 
 
-_validate-app-name:
-ifndef APP_NAME
-	$(error APP_NAME is required)
-endif
+_setup-versions:
+	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
+	$(eval export NEXT_VERSION=$(shell docker run --rm --entrypoint=semver $(SEMVER_DOCKER) -c -i $(RELEASE_TYPE) $(CURRENT_VERSION)))
 
-update_brew: _validate-app-name
-	./update-brew.sh $(APP_NAME)
+cover-tests:
+	@go test . -coverprofile docs/main-cover.out -v
+	@$(foreach var,$(shell glide nv | sed 's/\.//g' | sed 's/\///g' ),go test ./$(var)/... -coverprofile docs/$(var)-cover.out || exit 1;)
 
-git-push:
-	git add . ; git commit -m "updating pipeline"; git push
+cover-out:
+	@echo "mode: set" > docs/coverage.out
+	@$(foreach f,$(shell ls docs/**out),cat $(f) | sed 's/mode: set//g' | perl -p -e 's/^\s*$$//mg' >> docs/coverage.out || exit 1;)
 
-pipeline-full: git-push pipeline
+cover-html:
+	@go tool cover -html=docs/coverage.out -o docs/index.html
+	@$(foreach f,$(shell ls docs/**out),go tool cover -html=$(f) -o $(f).html  || exit 1;)
+	@rm docs/coverage.out.html
 
-_prepare:
-	@echo $(GOPATH) - $(shell pwd)
-	@mkdir -p /go/src/$(NAMESPACE)/$(APP_NAME)/dist
-	@cp -R * /go/src/$(NAMESPACE)/$(APP_NAME)/
-	@$(call ci_make,deps)
+cover-cleanup:
+	@mkdir docs/out
+	@$(foreach f,$(shell ls docs/**out),$(shell echo mv $(f) docs/out/)  || exit 1;)
 
-_build:
-	@$(call ci_make,lint build GOOS=linux)
-
-_test:
-	@$(call ci_make, test GOOS=linux)
-
-_release: _validate-version
-	@$(call ci_make,release)
-	pwd
-	cp $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME)/dist/*zip ../output/
-pack:
-	@$(call ci_make,package)
-define ci_make
-	echo ""
-	echo "*** $1::Begin ***"
-	cd $(GOPATH)/src/$(NAMESPACE)/$(APP_NAME) && \
-    		make $1
-	echo "*** $1::End ***"
-	echo ""
-	cd -
-endef
+docker-build:
+	docker build -t marcelocorreia/go-template-engine .
