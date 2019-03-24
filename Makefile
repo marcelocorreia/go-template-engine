@@ -13,7 +13,7 @@ next-version: _setup-versions
 
 build: _clean_bin _build
 
-build_all: _clean_all _build_all
+build_all: _build_all
 
 #####
 #tests: _setup-versions cover-tests cover-out cover-html
@@ -43,7 +43,7 @@ _package:
 
 
 
-_release: _setup-versions _build_all _package _git-push ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
+_release: _clean_bin _clean_all _setup-versions _build _build_all _package _git-push ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
 	@github-release release \
 		-u marcelocorreia \
 		-r go-template-engine \
