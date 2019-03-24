@@ -39,8 +39,7 @@ _package:
 		fi \
     done
 
-_release: _setup-versions _build_all _package ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
-	$(call  git_push,Releasing $(NEXT_VERSION))
+_release: _setup-versions _build_all _package ;$(call  git_push,Releasing $(NEXT_VERSION)) ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
 	github-release release -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --description "Template engine in Golang full of goodies"
 	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name docker-alias-install.sh --file resources/docker-alias-install.sh;
 	@$(foreach plat,$(PLATFORMS),echo Uploading go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip && github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
@@ -80,9 +79,9 @@ _docker-push: _setup-versions
 	docker push marcelocorreia/go-template-engine:$(CURRENT_VERSION)
 
 define git_push
-	-@git add .
-	-@git commit -m "$1"
-	-@git push
+	-git add .
+	-git commit -m "$1"
+	-git push
 endef
 
 _update_brew: _setup-versions
