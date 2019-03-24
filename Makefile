@@ -46,7 +46,7 @@ _release: _setup-versions _build_all _package _git-push ;$(info $(M) Releasing v
 		-r go-template-engine \
 		--tag $(NEXT_VERSION) \
 		--name $(NEXT_VERSION) \
-		--description "Template engine em Golang full of goodies"
+		--description "Template engine in Golang full of goodies"
 	$(foreach plat,$(PLATFORMS),github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
 	make _update_brew
 	make _docker-build
@@ -75,18 +75,19 @@ cover-cleanup:
 
 _docker-build: _setup-versions
 	sed -i .bk 's/ARG gte.*/ARG gte_version\=\"$(CURRENT_VERSION)\"/' resources/Dockerfile
-	docker build -t marcelocorreia/go-template-engine -f resources/Dockerfile .
+	docker build -t marcelocorreia/go-template-engine:latest -f resources/Dockerfile .
 	docker build -t marcelocorreia/go-template-engine:$(CURRENT_VERSION) -f resources/Dockerfile .
+	$(call git_push,Post Release Updating auto generated stuff - version: $(CURRENT_VERSION))
 
 _docker-push: _setup-versions
-	docker push marcelocorreia/go-template-engine
+	docker push marcelocorreia/go-template-engine:latest
 	docker push marcelocorreia/go-template-engine:$(CURRENT_VERSION)
 
-_git-push:
+define git_push
 	-@git add .
-	-@git commit -m "Release $(NEXT_VERSION)"
+	-@git commit -m "$1"
 	-@git push
-
+endef
 
 _update_brew: _setup-versions
 	-rm -rf /tmp/homebrew-gte
@@ -105,6 +106,3 @@ _update_brew: _setup-versions
 _clean_bin:
 	@rm -rf ./bin/*
 
-#_clean_all: _clean_bin
-#	@rm -rf ./dist/*
-#	@rm -rf ./docs/*
