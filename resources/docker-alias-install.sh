@@ -3,7 +3,7 @@
 set -e
 
 if [[ "$(cat ${HOME}/.bash_profile | grep "_go-template-engine")" = "" ]];then
-	echo "alias go-template-engine=\"docker run --rm -it -v $(pwd):/app -w /app marcelocorreia/go-template-engine"  >> ${HOME}/.bash_profile
+	echo "alias go-template-engine=\"docker run --rm -it -v $(pwd):/app -w /app marcelocorreia/go-template-engine\""  >> ${HOME}/.bash_profile
 else
 	sed -i .bk 's/alias go-template-engine.*/alias go-template-engine=\"docker run --rm -it -v $\(pwd\):\/app -w \/app marcelocorreia\/go-template-engine\"/' ${HOME}/.bash_profile
 fi
