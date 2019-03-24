@@ -108,6 +108,6 @@ _update_brew: _setup-versions
 _clean_bin:
 	@rm -rf ./bin/*
 
-_clean_all: _clean_bin
-	@rm -rf ./dist/*
-	@rm -rf ./docs/*
+#_clean_all: _clean_bin
+#	@rm -rf ./dist/*
+#	@rm -rf ./docs/*
