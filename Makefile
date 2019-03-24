@@ -31,11 +31,11 @@ _build_all: _setup-versions
 
 _package:
 	-@for dir in $(DISTDIRS); do \
-    	cd dist/$$dir/; \
     	zip ../$$dir.zip * ; \
         cd -;\
         rm -rf dist/$$dir/;\
     done
+#    	cd dist/$$dir/; \
 
 
 _release: _setup-versions _build_all _package _git-push ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
@@ -45,7 +45,7 @@ _release: _setup-versions _build_all _package _git-push ;$(info $(M) Releasing v
 		--tag $(NEXT_VERSION) \
 		--name $(NEXT_VERSION) \
 		--description "Template engine em Golang full of goodies"
-	@$(foreach plat,$(PLATFORMS),github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-darwin-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
+	@$(foreach plat,$(PLATFORMS),github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
 	@make _update_brew
 	@make _docker-build
 	@make _docker-push
