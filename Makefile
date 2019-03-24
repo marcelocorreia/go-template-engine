@@ -20,22 +20,29 @@ build_all: _build_all
 
 _build: _setup-versions
 	@go fmt -x $$(glide nv)
-	export GOOS=$(GOOS) GOARCH=$(GOARCH) && \
-	go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=$(CURRENT_VERSION)-dev" -v ./main.go
+	@export GOOS=$(GOOS) GOARCH=$(GOARCH) && \
+		go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=$(CURRENT_VERSION)-dev" -v ./main.go
 
 
 _build_all: _setup-versions
-	gox -ldflags "-X main.VERSION=$(NEXT_VERSION)" \
+	@gox -ldflags "-X main.VERSION=$(NEXT_VERSION)" \
 		--arch amd64 \
 		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(NEXT_VERSION)/{{.Dir}}
 
 _package:
-	-@for dir in $(DISTDIRS); do \
-	   zip ../$$dir.zip * ; \
-	   cd dist/$$dir/; \
-	   cd -;\
-	   rm -rf dist/$$dir/;\
+	@for dir in $(DISTDIRS); do \
+		echo $$dir; \
+		if [[ -d "dist/$$dir" ]];then \
+			cd dist/$$dir/; \
+		   zip ../$$dir.zip * ; \
+		   cd -;\
+		   rm -rf dist/$$dir/;\
+		fi \
     done
+
+_xota:
+		echo yay;\
+	fi
 
 
 #define _zipIt
@@ -43,7 +50,7 @@ _package:
 
 
 
-_release: _setup-versions _build _build_all _package _git-push ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
+_release: _setup-versions _build_all _package _git-push ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
 	@github-release release \
 		-u marcelocorreia \
 		-r go-template-engine \
