@@ -19,18 +19,18 @@ build_all: _build_all
 #tests: _setup-versions cover-tests cover-out cover-html
 
 _build: _setup-versions
-	@go fmt -x $$(glide nv)
-	@export GOOS=$(GOOS) GOARCH=$(GOARCH) && \
+	go fmt -x $$(glide nv)
+	export GOOS=$(GOOS) GOARCH=$(GOARCH) && \
 		go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=$(CURRENT_VERSION)-dev" -v ./main.go
 
 
 _build_all: _setup-versions
-	@gox -ldflags "-X main.VERSION=$(NEXT_VERSION)" \
+	gox -ldflags "-X main.VERSION=$(NEXT_VERSION)" \
 		--arch amd64 \
 		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(NEXT_VERSION)/{{.Dir}}
 
 _package:
-	@for dir in $(DISTDIRS); do \
+	for dir in $(DISTDIRS); do \
 		echo $$dir; \
 		if [[ -d "dist/$$dir" ]];then \
 			cd dist/$$dir/; \
@@ -40,27 +40,17 @@ _package:
 		fi \
     done
 
-_xota:
-		echo yay;\
-	fi
-
-
-#define _zipIt
-#endef
-
-
-
 _release: _setup-versions _build_all _package _git-push ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
-	@github-release release \
+	github-release release \
 		-u marcelocorreia \
 		-r go-template-engine \
 		--tag $(NEXT_VERSION) \
 		--name $(NEXT_VERSION) \
 		--description "Template engine em Golang full of goodies"
-	@$(foreach plat,$(PLATFORMS),github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
-	@make _update_brew
-	@make _docker-build
-	@make _docker-push
+	$(foreach plat,$(PLATFORMS),github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
+	make _update_brew
+	make _docker-build
+	make _docker-push
 
 _setup-versions:
 	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
