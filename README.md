@@ -13,7 +13,7 @@ Based on Golang templates text SDK.
 	- Docker way
 		- cmd ```$ docker run --rm -it -v $\(pwd\):/app -w /app marcelocorreia/go-template-engine\"```
 		- alias ```$ alias go-template-engine="docker run --rm marcelocorreia/go-template-engine"```
-		- automated_alias_install ```$ curl -L https://github.com/marcelocorreia/go-template-engine/releases/download/2.7.1/docker-alias-install.sh | sh```
+		- automated_alias_install ```$ curl -L https://github.com/marcelocorreia/go-template-engine/releases/download/3.0.1/docker-alias-install.sh | sh```
 - Added support to [HCL](https://github.com/hashicorp/hcl) formart for variables file input
 - Added support to all [Masterminds Sprig](https://github.com/Masterminds/sprig) functions
 - Added static file include. Tag {{staticInclude "path/to/file.txt"}}
