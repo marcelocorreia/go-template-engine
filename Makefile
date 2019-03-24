@@ -18,18 +18,18 @@ build_all: _build_all
 #####
 #tests: _setup-versions cover-tests cover-out cover-html
 
-_build: _setup-versions ;@-$(call _cow,mario,Building....)
+_build: _setup-versions
 	go fmt -x $$(glide nv)
 	export GOOS=$(GOOS) GOARCH=$(GOARCH) && \
 		go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=$(CURRENT_VERSION)-dev" -v ./main.go
 
 
-_build_all: _setup-versions ;@-$(call _cow,bender,Building all Platforms)
+_build_all: _setup-versions
 	gox -ldflags "-X main.VERSION=$(NEXT_VERSION)" \
 		--arch amd64 \
 		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(NEXT_VERSION)/{{.Dir}}
 
-_package: ;@-$(call _cow,bender,Packaging)
+_package:
 	for dir in $(DISTDIRS); do \
 		if [[ -d "dist/$$dir" ]];then \
 			cd dist/$$dir/; \
@@ -39,7 +39,7 @@ _package: ;@-$(call _cow,bender,Packaging)
 		fi \
     done
 
-_release: _setup-versions _build_all _package ;$(call  git_push,Releasing $(NEXT_VERSION)) ;@-$(call _cow,mario,Releasing version $(NEXT_VERSION)) ## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
+_release: _setup-versions _build_all _package ;$(call  git_push,Releasing $(NEXT_VERSION)) ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
 	github-release release -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --description "Template engine in Golang full of goodies"
 	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name docker-alias-install.sh --file resources/docker-alias-install.sh
 	@$(foreach plat,$(PLATFORMS),echo Uploading go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip && github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
@@ -68,13 +68,13 @@ cover-cleanup:
 	-@mkdir docs/out
 	@$(foreach f,$(shell ls docs/**out),$(shell echo mv $(f) docs/out/)  || exit 1;)
 
-_docker-build: _setup-versions ;@-$(call _cow,bob,Building Docker Container)
+_docker-build: _setup-versions
 	sed -i .bk 's/ARG gte.*/ARG gte_version\=\"$(CURRENT_VERSION)\"/' resources/Dockerfile
 	docker build -t marcelocorreia/go-template-engine:latest -f resources/Dockerfile .
 	docker build -t marcelocorreia/go-template-engine:$(CURRENT_VERSION) -f resources/Dockerfile .
 	$(call  git_push,Post Release Updating auto generated stuff - version: $(CURRENT_VERSION))
 
-_docker-push: _setup-versions ;@-$(call _cow,bender,Pushing Docker Container)
+_docker-push: _setup-versions
 	docker push marcelocorreia/go-template-engine:latest
 	docker push marcelocorreia/go-template-engine:$(CURRENT_VERSION)
 
@@ -84,13 +84,8 @@ define git_push
 	-git push
 endef
 
-define _cow
-	if [[ "$(SHOW_COW)" != "0" ]];then \
-		$(COW_CMD) -f $1 "$2"; \
-	fi
-endef
-
 _update_brew: _setup-versions
+
 	-rm -rf /tmp/homebrew-gte
 	git clone git@github.com:marcelocorreia/homebrew-taps.git /tmp/homebrew-gte
 	go-template-engine -s resources/go-template-engine.rb \
@@ -107,5 +102,3 @@ _update_brew: _setup-versions
 _clean_bin:
 	@rm -rf ./bin/*
 
-SHOW_COW := 1
-COW_CMD := docker run --rm marcelocorreia/cowsay
