@@ -78,7 +78,6 @@ _release-warning: ;$(info $(M) Release - Warning...)
 	@cowsay -f mario "Make sure evertyhing is pushed"
 	
 
-
 _setup-versions:
 	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
 	$(eval export NEXT_VERSION=$(shell docker run --rm --entrypoint=semver $(SEMVER_DOCKER) -c -i $(RELEASE_TYPE) $(CURRENT_VERSION)))
@@ -127,3 +126,18 @@ _git-push:
 	-@git add .
 	-@git commit -m "Release $(NEXT_VERSION)"
 	-@git push
+
+
+
+update_brew: _setup-versions
+	echo "---" > /tmp/homebrew-gte.yml
+	echo "hash_sum: $(shell shasum -a 256 dist/go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip | awk {'print $$1'})" >> /tmp/homebrew-gte.yml
+	echo "version: $(CURRENT_VERSION)" >> /tmp/homebrew-gte.yml
+	-rm -rf /tmp/homebrew-gte
+	git clone git@github.com:marcelocorreia/homebrew-taps.git /tmp/homebrew-gte
+	@go-template-engine -s go-template-engine.rb --var-file /tmp/homebrew-gte.yml > /tmp/homebrew-gte/go-template-engine.rb
+
+	cd /tmp/homebrew-gte && \
+		git add go-template-engine.rb && \
+		git commit -m "Release go-template-engine $(CURRENT_VERSION)" \
+		&& git push

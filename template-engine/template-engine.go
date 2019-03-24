@@ -103,6 +103,7 @@ func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 			return nil, err
 		}
 	}
+	varsFile=make(map[interface{}]interface{})
 	return varsFile, nil
 }
 

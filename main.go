@@ -52,6 +52,7 @@ func main() {
 	}
 
 	var jobVars interface{}
+
 	jobVars, err = engine.LoadVars(*templateVarsFile)
 	if err != nil {
 		handleErrorExit(err, "Error:")
