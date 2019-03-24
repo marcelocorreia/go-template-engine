@@ -31,7 +31,6 @@ _build_all: _setup-versions
 
 _package:
 	for dir in $(DISTDIRS); do \
-		echo $$dir; \
 		if [[ -d "dist/$$dir" ]];then \
 			cd dist/$$dir/; \
 		   zip ../$$dir.zip * ; \
@@ -47,8 +46,8 @@ _release: _setup-versions _build_all _package ;$(call  git_push,Releasing $(NEXT
 		--tag $(NEXT_VERSION) \
 		--name $(NEXT_VERSION) \
 		--description "Template engine in Golang full of goodies"
-	$(foreach plat,$(PLATFORMS),github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
 	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name docker-alias-install.sh --file docker-alias-install.sh;
+	$(foreach plat,$(PLATFORMS),github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
 	make _update_brew
 	make _docker-build
 	make _docker-push
