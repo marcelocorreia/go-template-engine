@@ -29,7 +29,7 @@ type Engine interface {
 	staticInclude(sourceFile string) (string)
 	replace(input, from, to string) string
 	inList(needle interface{}, haystack []interface{}, ) bool
-	printf(pattern string,params ...string)(string)
+	printf(pattern string, params ...string) (string)
 }
 
 type TemplateEngine struct {
@@ -102,8 +102,9 @@ func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 		if err := hcl.Unmarshal(file, &varsFile); err != nil {
 			return nil, err
 		}
+	} else {
+		varsFile = make(map[interface{}]interface{})
 	}
-	varsFile=make(map[interface{}]interface{})
 	return varsFile, nil
 }
 

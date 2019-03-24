@@ -1,6 +1,0 @@
-app_name: go-template-engine
-git_repo_name: go-template-engine
-git_repo_url: git@github.com:marcelocorreia/go-template-engine.git
-homebrew_repo_url: git@github.com:marcelocorreia/homebrew-taps.git
-homebrew_repo_name: homebrew-taps
-s3_bucket: badwolf-artifacts/badwolf-apps

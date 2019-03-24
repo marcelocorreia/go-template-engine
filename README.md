@@ -1,6 +1,6 @@
 # go-template-engine GTE
 
-![LOGO](gte-logo.png)
+![LOGO](resources/gte-logo.png)
 
 Based on Golang templates text SDK.
 

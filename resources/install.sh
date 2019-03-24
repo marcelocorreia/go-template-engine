@@ -5,7 +5,3 @@ if [[ "$(cat ${HOME}/.bash_profile | grep "_go-template-engine")" = "" ]];then
 else
 	sed -i .bk 's/alias _go-template-engine.*/alias _go-template-engine=\"docker run --rm -it -v $\(pwd\):\/app -w \/app marcelocorreia\/go-template-engine\"/' ${HOME}/.bash_profile
 fi
-
-
-
-#https://raw.githubusercontent.com/marcelocorreia/go-template-engine/dev/Makefile
