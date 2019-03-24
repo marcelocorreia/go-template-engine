@@ -11,7 +11,7 @@ current-version: _setup-versions
 next-version: _setup-versions
 	@echo $(NEXT_VERSION)
 
-build: _clean_bin _build
+build: _build
 
 build_all: _build_all
 
