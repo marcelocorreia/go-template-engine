@@ -87,7 +87,7 @@ endef
 _update_brew: _setup-versions
 	-rm -rf /tmp/homebrew-gte
 	git clone git@github.com:marcelocorreia/homebrew-taps.git /tmp/homebrew-gte
-	/Volumes/work/go/src/github.com/marcelocorreia/go-template-engine/bin/go-template-engine -s resources/go-template-engine.rb \
+	go-template-engine -s resources/go-template-engine.rb \
 		--var hash_sum=$(shell shasum -a 256 dist/go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip | awk {'print $$1'}) \
 		--var version=$(CURRENT_VERSION) \
 		--var dist_file=go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip > \
