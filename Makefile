@@ -31,11 +31,16 @@ _build_all: _setup-versions
 
 _package:
 	-@for dir in $(DISTDIRS); do \
-    	zip ../$$dir.zip * ; \
-    	cd dist/$$dir/; \
-        cd -;\
-        rm -rf dist/$$dir/;\
+	   zip ../$$dir.zip * ; \
+	   cd dist/$$dir/; \
+	   cd -;\
+	   rm -rf dist/$$dir/;\
     done
+
+
+#define _zipIt
+#endef
+
 
 
 _release: _setup-versions _build_all _package _git-push ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
