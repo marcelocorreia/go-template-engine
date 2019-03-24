@@ -3,16 +3,16 @@ package template_engine
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/Masterminds/sprig"
+	"github.com/hashicorp/hcl"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
-	"errors"
-	"github.com/Masterminds/sprig"
-	"github.com/hashicorp/hcl"
 )
 
 var DELIMS = []string{"{{", "}}"}
@@ -21,15 +21,15 @@ type Engine interface {
 	ParseTemplateFile(templateFile string, params interface{}) (string, error)
 	ParseTemplateString(templateString string, params interface{}) (string, error)
 	LoadVars(filePath string) (interface{}, error)
-	ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) (error)
+	ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) error
 	GetFileList(dir string, dirExclusions []string, fileExclusions []string) ([]string, error)
-	PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error)
+	PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) error
 	loadFuncs()
 	ListFuncs()
-	staticInclude(sourceFile string) (string)
+	staticInclude(sourceFile string) string
 	replace(input, from, to string) string
-	inList(needle interface{}, haystack []interface{}, ) bool
-	printf(pattern string, params ...string) (string)
+	inList(needle interface{}, haystack []interface{}) bool
+	printf(pattern string, params ...string) string
 }
 
 type TemplateEngine struct {
@@ -68,7 +68,7 @@ func (gte TemplateEngine) ParseTemplateString(templateString string, params inte
 	funcMap := template.FuncMap{
 		"staticInclude": func(path string) string { return gte.staticInclude(path) },
 		"replace":       func(input, from, to string) string { return gte.replace(input, from, to) },
-		"inList":        func(needle interface{}, haystack []interface{}, ) bool { return gte.inList(needle, haystack) },
+		"inList":        func(needle interface{}, haystack []interface{}) bool { return gte.inList(needle, haystack) },
 	}
 
 	t, err := template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap()).Parse(templateString)
@@ -108,7 +108,7 @@ func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 	return varsFile, nil
 }
 
-func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) (error) {
+func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) error {
 	err := gte.PrepareOutputDirectory(sourceDir, targetDir, dirExclusions)
 	if err != nil {
 		return err
@@ -162,7 +162,7 @@ func (gte TemplateEngine) GetFileList(dir string, dirExclusions []string, fileEx
 	return files, nil
 }
 
-func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) (error) {
+func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) error {
 	if targetDir == "" {
 		return errors.New("output must be provided when source is a directory")
 	}
@@ -184,6 +184,6 @@ func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir str
 	return nil
 }
 
-func output(out string, templateFileOutput string) (error) {
+func output(out string, templateFileOutput string) error {
 	return ioutil.WriteFile(templateFileOutput, []byte(out), 0755)
 }

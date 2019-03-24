@@ -1,15 +1,15 @@
 package template_engine
 
 import (
-	"io/ioutil"
 	"fmt"
-	"strings"
+	"github.com/Masterminds/sprig"
+	"io/ioutil"
 	"reflect"
 	"sort"
-	"github.com/Masterminds/sprig"
+	"strings"
 )
 
-func (gte TemplateEngine) staticInclude(sourceFile string) (string) {
+func (gte TemplateEngine) staticInclude(sourceFile string) string {
 	body, err := ioutil.ReadFile(sourceFile)
 	if err != nil {
 		return fmt.Sprintf("ERROR including file: %s\n", sourceFile)
@@ -21,7 +21,7 @@ func (gte TemplateEngine) replace(input, from, to string) string {
 	return strings.Replace(input, from, to, -1)
 }
 
-func (gte TemplateEngine) inList(needle interface{}, haystack []interface{}, ) bool {
+func (gte TemplateEngine) inList(needle interface{}, haystack []interface{}) bool {
 	for _, h := range haystack {
 		if reflect.DeepEqual(needle, h) {
 			return true
@@ -30,7 +30,7 @@ func (gte TemplateEngine) inList(needle interface{}, haystack []interface{}, ) b
 	return false
 }
 
-func (gte TemplateEngine) printf(pattern string, params ...string) (string) {
+func (gte TemplateEngine) printf(pattern string, params ...string) string {
 	return fmt.Sprintf(pattern, params)
 }
 
@@ -53,6 +53,6 @@ func (gte *TemplateEngine) loadFuncs() {
 
 	gte.Funcs["staticInclude"] = func(path string) string { return gte.staticInclude(path) }
 	gte.Funcs["replace"] = func(input, from, to string) string { return gte.replace(input, from, to) }
-	gte.Funcs["inList"] = func(needle interface{}, haystack []interface{}, ) bool { return gte.inList(needle, haystack) }
-	gte.Funcs["printf"] = func(pattern string, params ...string) (string) { return gte.printf(pattern, params...) }
+	gte.Funcs["inList"] = func(needle interface{}, haystack []interface{}) bool { return gte.inList(needle, haystack) }
+	gte.Funcs["printf"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
 }

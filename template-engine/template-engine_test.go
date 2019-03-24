@@ -6,14 +6,12 @@ import (
 	"github.com/marcelocorreia/go-template-engine/template-engine"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
-	"testing"
 	"os"
+	"testing"
 )
 
 var TEST_DELIMS = []string{"{{{", "}}}"}
 var DEFAULT_DELIMS = []string{"{{", "}}"}
-
-
 
 func TestParseTemplateString(t *testing.T) {
 	fmt.Println("Running Test with vars...")
@@ -57,13 +55,12 @@ func TestTemplateErrorJson(t *testing.T) {
 	fmt.Println("Finished Testing throwing error...")
 }
 
-
 func TestTemplateEngine_GetFileList(t *testing.T) {
 	dir := "/go/src/github.com/marcelocorreia/go-template-engine/template-engine"
 	//dir := "/go/src/github.com/marcelocorreia/badwolf-templates/templates/badwolf/terraform-stack"
 
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
-	ll, _ := engine.GetFileList(dir,  []string{}, []string{})
+	ll, _ := engine.GetFileList(dir, []string{}, []string{})
 	assert.True(t, len(ll) > 0)
 	//_, err := engine.GetFileList("/a/dir/that/should/not/exist", true, []string{}, []string{})
 	//assert.Error(t, err)
@@ -93,7 +90,7 @@ func TestPrepareOutputDirectory(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func getParams() (map[string]string) {
+func getParams() map[string]string {
 	params := make(map[string]string)
 	params["hey"] = "Ho"
 	params["Lets"] = "go"
@@ -123,29 +120,29 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	engine, _ := template_engine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	dir, _ := os.Getwd()
 	tmpDir := os.TempDir()
-	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil,nil,nil)
+	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil, nil, nil)
 	assert.Nil(t, err)
 	os.RemoveAll(tmpDir)
 
 	tmpDir = os.TempDir()
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil,nil,nil)
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil, nil, nil)
 	assert.Nil(t, err)
 	os.RemoveAll(tmpDir)
 
 	tmpDir = os.TempDir()
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil,nil,nil)
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil, nil, nil)
 	assert.Nil(t, err)
-	exists,err:= template_engine.Exists(tmpDir+"/.variables.tfvars")
-	assert.True(t,exists)
+	exists, err := template_engine.Exists(tmpDir + "/.variables.tfvars")
+	assert.True(t, exists)
 	os.RemoveAll(tmpDir)
 
 	tmpDir = os.TempDir()
-	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, nil,nil,nil)
+	err = engine.ProcessDirectory(dir+"/test_fixtures/base", "/a/dir/that/should/not/exist", nil, nil, nil, nil)
 	assert.Error(t, err)
 	os.RemoveAll(tmpDir)
 
 	tmpDir = os.TempDir()
-	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil,nil,nil)
+	err = engine.ProcessDirectory(dir+"/a/dir/that/should/not/exist", "/a/dir/that/should/not/exist", nil, nil, nil, nil)
 	assert.Error(t, err)
 	os.RemoveAll(tmpDir)
 }
@@ -176,8 +173,8 @@ func TestTemplateEngine_StaticInclude(t *testing.T) {
 	params["package_name"] = "Blitzkrieg Bop"
 	params["phrase1"] = "Hey ho, let's go"
 	out, err := engine.ParseTemplateFile("test_fixtures/static-include.yml", params)
-	assert.Nil(t,err)
-	assert.NotNil(t,out)
+	assert.Nil(t, err)
+	assert.NotNil(t, out)
 	fmt.Println(out)
 }
 
@@ -186,9 +183,7 @@ func TestTemplateEngine_replace(t *testing.T) {
 	params := make(map[string]string)
 	params["name"] = "Jolito"
 	out, err := engine.ParseTemplateFile("test_fixtures/replace.yml", params)
-	assert.Nil(t,err)
-	assert.NotNil(t,out)
+	assert.Nil(t, err)
+	assert.NotNil(t, out)
 	fmt.Println(out)
 }
-
-

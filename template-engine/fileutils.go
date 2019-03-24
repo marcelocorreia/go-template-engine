@@ -1,10 +1,10 @@
 package template_engine
 
 import (
-	"os"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"os"
 )
 
 func CopyFile(source string, dest string) (err error) {
@@ -39,7 +39,7 @@ func IsDirectory(path string) (bool, error) {
 	return fileInfo.IsDir(), err
 }
 
-func ListDir(dir string) ([]os.FileInfo) {
+func ListDir(dir string) []os.FileInfo {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		panic(err)
@@ -54,7 +54,7 @@ func ListDir(dir string) ([]os.FileInfo) {
 	return files
 }
 
-func ListDirWithExceptions(dir string, exceptions []string) ([]os.FileInfo) {
+func ListDirWithExceptions(dir string, exceptions []string) []os.FileInfo {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		errorResp := []os.FileInfo{}

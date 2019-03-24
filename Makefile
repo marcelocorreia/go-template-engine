@@ -1,6 +1,6 @@
-include config.mk core.mk
+include config.mk
 
-release: _release update_brew
+release: _release
 
 all-versions:
 	@git ls-remote --tags $(GIT_REMOTE)
@@ -11,24 +11,25 @@ current-version: _setup-versions
 next-version: _setup-versions
 	@echo $(NEXT_VERSION)
 
-tests: _setup-versions cover-tests cover-out cover-html
+build: _clean_bin _build
 
+build_all: _clean_all _build_all
 
 #####
+#tests: _setup-versions cover-tests cover-out cover-html
 
-build:
-	$(call build,GOOS=$(GOOS) GOARCH=$(GOARCH),$(APP_NAME))
-
-define build
-	$1 go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=$(CURRENT_VERSION)" -v ./main.go
-endef
+_build: _setup-versions
+	@go fmt -x $$(glide nv)
+	export GOOS=$(GOOS) GOARCH=$(GOARCH) && \
+	go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=$(CURRENT_VERSION)-dev" -v ./main.go
 
 
-build_all: _setup-versions
+_build_all: _setup-versions
 	gox -ldflags "-X main.VERSION=$(NEXT_VERSION)" \
 		--arch amd64 \
 		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(NEXT_VERSION)/{{.Dir}}
-package:
+
+_package:
 	-@for dir in $(DISTDIRS); do \
     	cd dist/$$dir/; \
     	zip ../$$dir.zip * ; \
@@ -36,32 +37,18 @@ package:
         rm -rf dist/$$dir/;\
     done
 
-lint:
-	@go fmt -x $$(glide nv)
-.PHONY: lint
 
-
-
-
-_release: _setup-versions build_all package _git-push _release-warning _setup-versions ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
-	github-release release \
+_release: _setup-versions _build_all _package _git-push ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
+	@github-release release \
 		-u marcelocorreia \
 		-r go-template-engine \
 		--tag $(NEXT_VERSION) \
 		--name $(NEXT_VERSION) \
 		--description "Template engine em Golang full of goodies"
-
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-darwin-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-darwin-amd64-$(NEXT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-freebsd-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-freebsd-amd64-$(NEXT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-linux-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-linux-amd64-$(NEXT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-netbsd-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-netbsd-amd64-$(NEXT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-openbsd-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-openbsd-amd64-$(NEXT_VERSION).zip
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-windows-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-windows-amd64-$(NEXT_VERSION).zip
-
-
-_release-warning: ;$(info $(M) Release - Warning...)
-	@cowsay -f mario "Make sure evertyhing is pushed"
-
+	@$(foreach plat,$(PLATFORMS),github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-darwin-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
+	@make _update_brew
+	@make _docker-build
+	@make _docker-push
 
 _setup-versions:
 	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
@@ -84,26 +71,14 @@ cover-cleanup:
 	-@mkdir docs/out
 	@$(foreach f,$(shell ls docs/**out),$(shell echo mv $(f) docs/out/)  || exit 1;)
 
-docker-build:
-	docker build -t marcelocorreia/go-template-engine .
+_docker-build: _setup-versions
+	sed -i .bk 's/ARG gte.*/ARG gte_version\=\"$(CURRENT_VERSION)\"/' resources/Dockerfile
+	docker build -t marcelocorreia/go-template-engine -f resources/Dockerfile .
+	docker build -t marcelocorreia/go-template-engine:$(CURRENT_VERSION) -f resources/Dockerfile .
 
-concourse-up: _ci-params
-	$(call concourse,up -d)
-
-concourse-logs: _ci-params
-	$(call concourse,logs -f)
-
-concourse-down: _ci-params
-	$(call concourse,kill)
-	$(call concourse,down)
-
-
-_ci-params:
-	@$(eval export CONCOURSE_EXTERNAL_URL=$(CONCOURSE_EXTERNAL_URL))
-
-define concourse
-	cd ci && docker-compose $1
-endef
+_docker-push: _setup-versions
+	docker push marcelocorreia/go-template-engine
+	docker push marcelocorreia/go-template-engine:$(CURRENT_VERSION)
 
 _git-push:
 	-@git add .
@@ -111,16 +86,23 @@ _git-push:
 	-@git push
 
 
-
-update_brew: _setup-versions
-	echo "---" > /tmp/homebrew-gte.yml
-	echo "hash_sum: $(shell shasum -a 256 dist/go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip | awk {'print $$1'})" >> /tmp/homebrew-gte.yml
-	echo "version: $(CURRENT_VERSION)" >> /tmp/homebrew-gte.yml
+_update_brew: _setup-versions
 	-rm -rf /tmp/homebrew-gte
 	git clone git@github.com:marcelocorreia/homebrew-taps.git /tmp/homebrew-gte
-	@go-template-engine -s go-template-engine.rb --var-file /tmp/homebrew-gte.yml > /tmp/homebrew-gte/go-template-engine.rb
+	/Volumes/work/go/src/github.com/marcelocorreia/go-template-engine/bin/go-template-engine -s resources/go-template-engine.rb \
+		--var hash_sum=$(shell shasum -a 256 dist/go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip | awk {'print $$1'}) \
+		--var version=$(CURRENT_VERSION) \
+		--var dist_file=go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip > \
+		/tmp/homebrew-gte/go-template-engine.rb
 
 	cd /tmp/homebrew-gte && \
 		git add go-template-engine.rb && \
 		git commit -m "Release go-template-engine $(CURRENT_VERSION)" \
 		&& git push
+
+_clean_bin:
+	@rm -rf ./bin/*
+
+_clean_all: _clean_bin
+	@rm -rf ./dist/*
+	@rm -rf ./docs/*

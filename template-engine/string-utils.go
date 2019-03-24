@@ -1,20 +1,20 @@
 package template_engine
 
 import (
-	"log"
 	"crypto/rand"
+	"log"
 	"strings"
 )
 
 const (
-	letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" // 52 possibilities
-	letterIdxBits = 6                    // 6 bits to represent 64 possibilities / indexes
-	letterIdxMask = 1<<letterIdxBits - 1 // All 1-bits, as many as letterIdxBits
+	letterBytes   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" // 52 possibilities
+	letterIdxBits = 6                                                      // 6 bits to represent 64 possibilities / indexes
+	letterIdxMask = 1<<letterIdxBits - 1                                   // All 1-bits, as many as letterIdxBits
 )
 
 func SecureRandomAlphaString(length int) string {
 	result := make([]byte, length)
-	bufferSize := int(float64(length)*1.3)
+	bufferSize := int(float64(length) * 1.3)
 	for i, j, randomBytes := 0, 0, []byte{}; i < length; j++ {
 		if j%bufferSize == 0 {
 			randomBytes = SecureRandomBytes(bufferSize)
