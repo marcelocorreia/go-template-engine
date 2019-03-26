@@ -74,13 +74,31 @@ func render(jobVars interface{}, engine template_engine.Engine) {
 			handleErrorExit(err, fmt.Sprintf("Error Processing templates @ dir: %s\n", *templateFile))
 		}
 	} else {
-		out, err := engine.ParseTemplateFile(*templateFile, jobVars)
+		var out string
+		for _, headerFile := range *headerTemplateFiles {
+			out+= parse(headerFile, jobVars,engine)
+		}
+
+		out+= parse(*templateFile, jobVars,engine)
+		for _, footerFile := range *footerTemplateFiles {
+			out+= parse(footerFile, jobVars,engine)
+		}
+
 		if err != nil {
 			handleErrorExit(err, "Error running template.\n")
 		}
 		output(out)
 	}
 }
+
+func parse(template string, jobVars interface{},engine template_engine.Engine)(string){
+	out,err:=engine.ParseTemplateFile(template,jobVars)
+	if err != nil {
+		handleErrorExit(err, "Error running template.\n")
+	}
+	return out
+}
+
 func handleErrorExit(err error, msg string) {
 	fmt.Println(msg, err)
 	os.Exit(1)
