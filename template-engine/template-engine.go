@@ -129,9 +129,13 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 		if !isDir {
 			body, err := ioutil.ReadFile(sourceFile)
 			if err != nil {
-				fmt.Println(sourceFile)
+				return err
 			}
-			if !utils.StringInSlice(sourceFile,fileExclusions){
+			file, err := os.Stat(sourceFile)
+			if err != nil {
+				return err
+			}
+			if !utils.StringInSlice(file.Name(), fileExclusions) {
 				b, err := gte.ParseTemplateFile(sourceFile, params)
 				if err != nil {
 					fmt.Printf("File: %s can't be loaded as template,\n\tContent writen without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
