@@ -134,7 +134,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 			if err != nil {
 				fmt.Printf("File: %s can't be loaded as template,\n\tContent writen without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
 			}
-			if err := output(b, targetFile); err != nil {
+			if err := Output(b, targetFile); err != nil {
 				return err
 			}
 
@@ -164,7 +164,7 @@ func (gte TemplateEngine) GetFileList(dir string, dirExclusions []string, fileEx
 
 func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) error {
 	if targetDir == "" {
-		return errors.New("output must be provided when source is a directory")
+		return errors.New("Output must be provided when source is a directory")
 	}
 
 	CreateNewDirectoryIfNil(targetDir)
@@ -184,6 +184,6 @@ func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir str
 	return nil
 }
 
-func output(out string, templateFileOutput string) error {
+func Output(out string, templateFileOutput string) error {
 	return ioutil.WriteFile(templateFileOutput, []byte(out), 0755)
 }
