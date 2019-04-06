@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/Masterminds/sprig"
 	"github.com/hashicorp/hcl"
+	"github.com/marcelocorreia/go-utils/utils"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -123,19 +124,21 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 		targetFile := strings.Replace(f, sourceDir, targetDir, -1)
 		isDir, err := IsDirectory(sourceFile)
 		if err != nil {
-
+			return err
 		}
 		if !isDir {
 			body, err := ioutil.ReadFile(sourceFile)
 			if err != nil {
 				fmt.Println(sourceFile)
 			}
-			b, err := gte.ParseTemplateFile(sourceFile, params)
-			if err != nil {
-				fmt.Printf("File: %s can't be loaded as template,\n\tContent writen without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
-			}
-			if err := Output(b, targetFile); err != nil {
-				return err
+			if !utils.StringInSlice(sourceFile,fileExclusions){
+				b, err := gte.ParseTemplateFile(sourceFile, params)
+				if err != nil {
+					fmt.Printf("File: %s can't be loaded as template,\n\tContent writen without modifications.\n\tPlease check the tags is case this is not correct.\n-----------------------------\n%s\n-----------------------------\n", sourceFile, body)
+				}
+				if err := Output(b, targetFile); err != nil {
+					return err
+				}
 			}
 
 		}
