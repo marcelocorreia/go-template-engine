@@ -92,15 +92,18 @@ func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 	file, _ := ioutil.ReadFile(filePath)
 
 	if strings.HasSuffix(filePath, ".json") {
-		if err := json.Unmarshal(file, &varsFile); err != nil {
+		err := json.Unmarshal(file, &varsFile)
+		if err != nil {
 			return nil, err
 		}
 	} else if strings.HasSuffix(filePath, ".yaml") || strings.HasSuffix(filePath, ".yml") {
-		if err := yaml.Unmarshal(file, &varsFile); err != nil {
+		err := yaml.Unmarshal(file, &varsFile)
+		if err != nil {
 			return nil, err
 		}
 	} else if strings.HasSuffix(filePath, ".tf") || strings.HasSuffix(filePath, ".tfvars") {
-		if err := hcl.Unmarshal(file, &varsFile); err != nil {
+		err := hcl.Unmarshal(file, &varsFile)
+		if err != nil {
 			return nil, err
 		}
 	} else {
