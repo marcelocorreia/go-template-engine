@@ -19,7 +19,7 @@ build_all: _build_all
 #tests: _setup-versions cover-tests cover-out cover-html
 
 _build: _setup-versions
-	go fmt -s -w .
+	gofmt -s -w .
 	export GOOS=$(GOOS) GOARCH=$(GOARCH) && \
 		go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=$(CURRENT_VERSION)-dev" -v ./main.go
 
