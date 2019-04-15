@@ -28,7 +28,7 @@ var (
 	delimRight          = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
 	listCustomFunctions = app.Flag("list-custom-functions", "List Custom Commands").Short('c').Bool()
 	//VERSION application
-	VERSION             string
+	VERSION string
 )
 
 func main() {

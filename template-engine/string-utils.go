@@ -38,6 +38,7 @@ func SecureRandomBytes(length int) []byte {
 	}
 	return randomBytes
 }
+
 //Capitalize Capitalizes string
 func Capitalize(term string) string {
 	input := strings.ToLower(term)
@@ -53,7 +54,6 @@ func Capitalize(term string) string {
 	}
 	return strings.Join(words, " ")
 }
-
 
 //StringInSlice Checks for string in slice
 func StringInSlice(a string, list []string) bool {
