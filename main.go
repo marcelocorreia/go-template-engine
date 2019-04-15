@@ -76,12 +76,12 @@ func render(jobVars interface{}, engine template_engine.Engine) {
 	} else {
 		var out string
 		for _, headerFile := range *headerTemplateFiles {
-			out+= parse(headerFile, jobVars,engine)
+			out += parse(headerFile, jobVars, engine)
 		}
 
-		out+= parse(*templateFile, jobVars,engine)
+		out += parse(*templateFile, jobVars, engine)
 		for _, footerFile := range *footerTemplateFiles {
-			out+= parse(footerFile, jobVars,engine)
+			out += parse(footerFile, jobVars, engine)
 		}
 
 		if err != nil {
@@ -91,8 +91,8 @@ func render(jobVars interface{}, engine template_engine.Engine) {
 	}
 }
 
-func parse(template string, jobVars interface{},engine template_engine.Engine)(string){
-	out,err:=engine.ParseTemplateFile(template,jobVars)
+func parse(template string, jobVars interface{}, engine template_engine.Engine) string {
+	out, err := engine.ParseTemplateFile(template, jobVars)
 	if err != nil {
 		handleErrorExit(err, "Error running template.\n")
 	}
