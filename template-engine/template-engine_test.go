@@ -134,7 +134,7 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	assert.Nil(t, err)
 	exists, err := template_engine.Exists(tmpDir + "/.variables.tfvars")
 	assert.True(t, exists)
-	assert.NoError(t,err)
+	assert.NoError(t, err)
 	os.RemoveAll(tmpDir)
 
 	tmpDir = os.TempDir()
@@ -152,9 +152,9 @@ func TestDelims(t *testing.T) {
 	var engine template_engine.Engine
 	engine, _ = template_engine.GetEngine(TEST_DELIMS[0], TEST_DELIMS[1])
 	vars, err := engine.LoadVars("test_fixtures/delim.yml")
-	assert.NoError(t,err)
+	assert.NoError(t, err)
 	out, err := engine.ParseTemplateFile("test_fixtures/delim.tpl", vars)
-	assert.NoError(t,err)
+	assert.NoError(t, err)
 	assert.Contains(t, out, "Willie")
 	assert.Contains(t, out, "horses")
 	assert.Contains(t, out, "beer")
