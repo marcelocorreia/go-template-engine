@@ -1,4 +1,4 @@
-package templateEngine
+package templateengine
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 )
-
+// CopyFile Copies Files around
 func CopyFile(source string, dest string) (err error) {
 	sourcefile, err := os.Open(source)
 	if err != nil {
@@ -34,11 +34,12 @@ func CopyFile(source string, dest string) (err error) {
 	return
 }
 
+//IsDirectory checks if
 func IsDirectory(path string) (bool, error) {
 	fileInfo, err := os.Stat(path)
 	return fileInfo.IsDir(), err
 }
-
+//ListDir Lists files in dir
 func ListDir(dir string) []os.FileInfo {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -53,7 +54,7 @@ func ListDir(dir string) []os.FileInfo {
 
 	return files
 }
-
+//ListDirWithExceptions Lists files in dir, skipping elements in array list
 func ListDirWithExceptions(dir string, exceptions []string) []os.FileInfo {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -71,7 +72,7 @@ func ListDirWithExceptions(dir string, exceptions []string) []os.FileInfo {
 
 	return files
 }
-
+//CopyDir Copies directories
 func CopyDir(source string, dest string) (err error) {
 
 	// get properties of source dir
@@ -115,6 +116,7 @@ func CopyDir(source string, dest string) (err error) {
 	return
 }
 
+//Exists checks if
 func Exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -126,6 +128,7 @@ func Exists(path string) (bool, error) {
 	return true, err
 }
 
+//CreateNewDirectoryIfNil checks and creates fi needed
 func CreateNewDirectoryIfNil(path string) (bool, error) {
 	exists, err := Exists(path)
 	if err != nil {

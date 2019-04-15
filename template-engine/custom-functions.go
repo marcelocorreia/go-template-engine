@@ -1,4 +1,4 @@
-package templateEngine
+package templateengine
 
 import (
 	"fmt"
@@ -33,7 +33,7 @@ func (gte TemplateEngine) inList(needle interface{}, haystack []interface{}) boo
 func (gte TemplateEngine) printf(pattern string, params ...string) string {
 	return fmt.Sprintf(pattern, params)
 }
-
+//ListFuncs Lists Custom functions
 func (gte TemplateEngine) ListFuncs() {
 	funcs := make([]string, 0, len(gte.Funcs))
 	for k := range gte.Funcs {

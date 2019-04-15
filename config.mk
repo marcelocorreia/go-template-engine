@@ -14,6 +14,6 @@ DOCS_DIR := docs
 SEMVER_DOCKER ?= marcelocorreia/semver
 GIT_BRANCH ?= master
 GIT_REMOTE ?= origin
-RELEASE_TYPE ?= patch
+RELEASE_TYPE ?= minor
 DISTDIRS=$(shell ls dist/)
 PLATFORMS := darwin linux freebsd windows openbsd netbsd

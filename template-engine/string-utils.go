@@ -1,4 +1,4 @@
-package templateEngine
+package templateengine
 
 import (
 	"crypto/rand"
@@ -12,6 +12,7 @@ const (
 	letterIdxMask = 1<<letterIdxBits - 1                                   // All 1-bits, as many as letterIdxBits
 )
 
+//SecureRandomAlphaString Generates random string
 func SecureRandomAlphaString(length int) string {
 	result := make([]byte, length)
 	bufferSize := int(float64(length) * 1.3)
@@ -37,7 +38,7 @@ func SecureRandomBytes(length int) []byte {
 	}
 	return randomBytes
 }
-
+//Capitalize Capitalizes string
 func Capitalize(term string) string {
 	input := strings.ToLower(term)
 	words := strings.Fields(input)
@@ -53,6 +54,8 @@ func Capitalize(term string) string {
 	return strings.Join(words, " ")
 }
 
+
+//StringInSlice Checks for string in slice
 func StringInSlice(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {

@@ -27,6 +27,7 @@ var (
 	delimLeft           = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
 	delimRight          = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
 	listCustomFunctions = app.Flag("list-custom-functions", "List Custom Commands").Short('c').Bool()
+	//VERSION application
 	VERSION             string
 )
 
@@ -40,8 +41,8 @@ func main() {
 
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
-	var engine templateEngine.Engine
-	engine, err := templateEngine.GetEngine(*delimLeft, *delimRight)
+	var engine templateengine.Engine
+	engine, err := templateengine.GetEngine(*delimLeft, *delimRight)
 	if err != nil {
 		handleErrorExit(err, "Error Loading engine")
 	}
@@ -67,7 +68,7 @@ func main() {
 
 }
 
-func render(jobVars interface{}, engine templateEngine.Engine) {
+func render(jobVars interface{}, engine templateengine.Engine) {
 	if info, err := os.Stat(*templateFile); err == nil && info.IsDir() {
 		err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templateExcludesDir, *templateExcludes, *templateIgnores)
 		if err != nil {
@@ -91,7 +92,7 @@ func render(jobVars interface{}, engine templateEngine.Engine) {
 	}
 }
 
-func parse(template string, jobVars interface{}, engine templateEngine.Engine) string {
+func parse(template string, jobVars interface{}, engine templateengine.Engine) string {
 	out, err := engine.ParseTemplateFile(template, jobVars)
 	if err != nil {
 		handleErrorExit(err, "Error running template.\n")

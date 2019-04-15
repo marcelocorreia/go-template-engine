@@ -1,4 +1,4 @@
-package templateEngine
+package templateengine
 
 import (
 	"bytes"
@@ -16,8 +16,10 @@ import (
 	"text/template"
 )
 
+//DELIMS Go Template delims
 var DELIMS = []string{"{{", "}}"}
 
+//Engine Engine
 type Engine interface {
 	ParseTemplateFile(templateFile string, params interface{}) (string, error)
 	ParseTemplateString(templateString string, params interface{}) (string, error)
@@ -33,11 +35,13 @@ type Engine interface {
 	printf(pattern string, params ...string) string
 }
 
+// TemplateEngine templateengine
 type TemplateEngine struct {
 	Delims []string
 	Funcs  map[string]interface{}
 }
 
+//GetEngine returns engine
 func GetEngine(delims ...string) (*TemplateEngine, error) {
 	if len(delims) == 2 {
 		DELIMS = delims
@@ -51,6 +55,7 @@ func GetEngine(delims ...string) (*TemplateEngine, error) {
 	return &engine, nil
 }
 
+//ParseTemplateFile Parses file
 func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interface{}) (string, error) {
 	tplFile, err := ioutil.ReadFile(templateFile)
 
@@ -65,6 +70,7 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 	return r, nil
 }
 
+//ParseTemplateString Parses string
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) {
 	funcMap := template.FuncMap{
 		"staticInclude": func(path string) string { return gte.staticInclude(path) },
@@ -87,6 +93,7 @@ func (gte TemplateEngine) ParseTemplateString(templateString string, params inte
 	return resp, nil
 }
 
+//LoadVars Load all vars for job
 func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 	var varsFile interface{}
 	file, _ := ioutil.ReadFile(filePath)
@@ -112,6 +119,7 @@ func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 	return varsFile, nil
 }
 
+//ProcessDirectory Parses a full directory
 func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) error {
 	err := gte.PrepareOutputDirectory(sourceDir, targetDir, dirExclusions)
 	if err != nil {
@@ -154,6 +162,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 	return nil
 }
 
+//GetFileList file list
 func (gte TemplateEngine) GetFileList(dir string, dirExclusions []string, fileExclusions []string) ([]string, error) {
 	var files []string
 	exists, err := Exists(dir)
@@ -172,6 +181,7 @@ func (gte TemplateEngine) GetFileList(dir string, dirExclusions []string, fileEx
 	return files, nil
 }
 
+//PrepareOutputDirectory Prepares output directory
 func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) error {
 	if targetDir == "" {
 		return errors.New("Output must be provided when source is a directory")
@@ -194,6 +204,7 @@ func (gte TemplateEngine) PrepareOutputDirectory(sourceDir string, targetDir str
 	return nil
 }
 
+//Output Output
 func Output(out string, templateFileOutput string) error {
 	return ioutil.WriteFile(templateFileOutput, []byte(out), 0755)
 }
