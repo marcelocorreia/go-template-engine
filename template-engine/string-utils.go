@@ -1,4 +1,4 @@
-package template_engine
+package templateEngine
 
 import (
 	"crypto/rand"

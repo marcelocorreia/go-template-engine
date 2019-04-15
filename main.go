@@ -40,8 +40,8 @@ func main() {
 
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
-	var engine template_engine.Engine
-	engine, err := template_engine.GetEngine(*delimLeft, *delimRight)
+	var engine templateEngine.Engine
+	engine, err := templateEngine.GetEngine(*delimLeft, *delimRight)
 	if err != nil {
 		handleErrorExit(err, "Error Loading engine")
 	}
@@ -67,7 +67,7 @@ func main() {
 
 }
 
-func render(jobVars interface{}, engine template_engine.Engine) {
+func render(jobVars interface{}, engine templateEngine.Engine) {
 	if info, err := os.Stat(*templateFile); err == nil && info.IsDir() {
 		err := engine.ProcessDirectory(*templateFile, *templateFileOutput, jobVars, *templateExcludesDir, *templateExcludes, *templateIgnores)
 		if err != nil {
@@ -91,7 +91,7 @@ func render(jobVars interface{}, engine template_engine.Engine) {
 	}
 }
 
-func parse(template string, jobVars interface{}, engine template_engine.Engine) string {
+func parse(template string, jobVars interface{}, engine templateEngine.Engine) string {
 	out, err := engine.ParseTemplateFile(template, jobVars)
 	if err != nil {
 		handleErrorExit(err, "Error running template.\n")
