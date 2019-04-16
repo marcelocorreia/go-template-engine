@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/marcelocorreia/go-template-engine/template-engine"
+	"github.com/marcelocorreia/go-template-engine/templateengine"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"io/ioutil"
 	"os"
