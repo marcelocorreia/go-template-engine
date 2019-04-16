@@ -96,8 +96,10 @@ func (gte TemplateEngine) ParseTemplateString(templateString string, params inte
 //LoadVars Load all vars for job
 func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 	var varsFile interface{}
-	file, _ := ioutil.ReadFile(filePath)
-
+	file, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return nil,err
+	}
 	if strings.HasSuffix(filePath, ".json") {
 		err := json.Unmarshal(file, &varsFile)
 		if err != nil {
