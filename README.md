@@ -1,10 +1,11 @@
 # go-template-engine GTE
+![LOGO](resources/gte-logo.png)
 
 ![shield](https://img.shields.io/github/release/marcelocorreia/go-template-engine.svg)
 ![shield](https://img.shields.io/github/last-commit/marcelocorreia/go-template-engine.svg)
 ![shield](https://img.shields.io/github/repo-size/marcelocorreia/go-template-engine.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/marcelocorreia/go-template-engine)](https://goreportcard.com/report/github.com/marcelocorreia/go-template-engine)
-![LOGO](resources/gte-logo.png)
+
 
 Based on Golang templates text SDK.
 
