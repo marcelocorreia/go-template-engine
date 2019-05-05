@@ -45,7 +45,7 @@ _release: _setup-versions _build_all _package ;$(call  git_push,Releasing $(NEXT
 	@$(foreach plat,$(PLATFORMS),echo Uploading go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip && github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
 	make _update_brew
 	make _docker-build
-	make _docker-push
+#	make _docker-push
 
 _setup-versions:
 	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
