@@ -150,8 +150,9 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 			}
 			if !utils.StringInSlice(file.Name(), fileExclusions) {
 				b, err := gte.ParseTemplateFile(sourceFile, params)
+				shrug := `¯\_(ツ)_/¯`
 				if err != nil {
-					fmt.Printf("File: %s can't be loaded as template,\n\tContent written without modifications.\n\tPlease check the flags is case this is not correct.\n-----------------------------\n", sourceFile)
+					fmt.Printf("File: %s can't be loaded as template, possibly a binary.\n\tContent written without modifications.\n\tPlease check the flags is case this is not correct.\nThis will be improved soon %s\n-----------------------------\n", file.Name(), shrug)
 				}
 				if err := Output(b, targetFile); err != nil {
 					return err

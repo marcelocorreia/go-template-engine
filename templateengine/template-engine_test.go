@@ -3,7 +3,7 @@ package templateengine_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/marcelocorreia/go-template-engine/template-engine"
+	"github.com/marcelocorreia/go-template-engine/templateengine"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
@@ -56,7 +56,7 @@ func TestTemplateErrorJson(t *testing.T) {
 }
 
 func TestTemplateEngine_GetFileList(t *testing.T) {
-	dir := "/go/src/github.com/marcelocorreia/go-template-engine/template-engine"
+	dir := "/go/src/github.com/marcelocorreia/go-template-engine/templateengine"
 	//dir := "/go/src/github.com/marcelocorreia/badwolf-templates/templates/badwolf/terraform-stack"
 
 	engine, _ := templateengine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
