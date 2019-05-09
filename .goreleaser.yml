@@ -4,7 +4,7 @@ before:
   hooks:
     - go generate ./...
     - gofmt -s -w .
-#    - golint $(go list ./... )
+    #    - golint $(go list ./... )
     - go test ./...
 #    - go test -coverprofile dist/main-cover.out ./...
 #    - go tool cover -html=dist/main-cover.out -o coverage/index.html
@@ -24,18 +24,22 @@ builds:
     goarch:
       - amd64
 
-archive:
-  name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-  replacements:
-    386: i386
-    amd64: x86_64
-#    darwin: Darwin
-#    linux: Linux
-#    windows: Windows
+archives:
+  - id: main
+    name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    replacements:
+      386: i386
+      amd64: x86_64
+#      darwin: Darwin
+#      linux: Linux
+#      windows: Windows
+
 checksum:
   name_template: 'checksums.txt'
+
 snapshot:
   name_template: "{{ .Tag }}-snapshot"
+
 changelog:
   sort: asc
   filters:
@@ -46,6 +50,7 @@ scoop:
   commit_author:
     name: marcelocorreia
     email: marcelo@correia.io
+
 brew:
   name: go-template-engine
   homepage: "https://marcelo.correia.io"
@@ -58,6 +63,7 @@ brew:
     email: marcelo@correia.io
   test: |
     system "#{bin}/go-template-engine --version"
+
 github_urls:
   download: https://github.com/marcelocorreia/{{ .ProjectName }}
 
