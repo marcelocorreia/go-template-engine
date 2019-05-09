@@ -11,7 +11,7 @@ GITHUB_USER ?= marcelocorreia
 GIT_REPO_NAME ?= go-template-engine
 SEMVER_DOCKER ?= marcelocorreia/semver
 HAMMER_CMD := hammer
-RELEASE_TYPE ?= patch
+RELEASE_TYPE ?= minor
 
 # ####
 .PHONY: default
