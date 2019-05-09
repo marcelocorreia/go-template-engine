@@ -55,6 +55,7 @@ brew:
   name: go-template-engine
   homepage: "https://marcelo.correia.io"
   description: "Go Template Engine (GTE) - Easy util to apply Go Templates in BAU jobs"
+  url_template: "https://github.com/marcelocorreia/{{ .Tag }}/{{ .ArtifactName }}"
   github:
     owner: marcelocorreia
     name: homebrew-taps
@@ -64,8 +65,8 @@ brew:
   test: |
     system "#{bin}/go-template-engine --version"
 
-github_urls:
-  download: https://github.com/marcelocorreia/{{ .ProjectName }}
+#github_urls:
+#  download: https://github.com/marcelocorreia/{{ .ProjectName }}
 
 #dockers:
 #  - image_templates:
