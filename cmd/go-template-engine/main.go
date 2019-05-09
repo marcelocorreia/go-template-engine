@@ -1,4 +1,4 @@
-package go_template_engine
+package main
 
 import (
 	"fmt"
