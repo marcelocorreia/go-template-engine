@@ -36,3 +36,4 @@ vendor/
 .glide/
 .DS_Store
 **/keys/
+hammer.yml.bkp

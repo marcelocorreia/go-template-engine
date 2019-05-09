@@ -11,6 +11,7 @@
 ![shield](https://img.shields.io/github/repo-size/marcelocorreia/go-template-engine.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/marcelocorreia/go-template-engine)](https://goreportcard.com/report/github.com/marcelocorreia/go-template-engine)
 
+Easy tool to apply Go Templates in BAU jobs.
 
 Based on Golang templates text SDK.
 
@@ -525,11 +526,11 @@ outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
 
 
 
-[linkedin]: https://www.linkedin.com/in/marcelocorreia/
-[website]: marcelo.correia.io
-[slack]: https://correia-group.slack.com/
+[linkedin]: https://www.linkedin.com/in/marcelocorreia
+[website]: https://marcelo.correia.io
+[slack]: https://correia-group.slack.com
 [email]: marcelo@correia.io
-
+[asciinema]: https://asciinema.org/~marcelocorreia
 [ansible_galaxy_user]: marcelocorreia
 <!-- end -->
 
