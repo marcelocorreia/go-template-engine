@@ -2,17 +2,6 @@ name: go-template-engine
 blueprint:
   name: golang/project/quickstart
 
-main_user:
-  name: Marcelo Correia
-  description: Marcelo Correia
-  github_user: marcelocorreia
-  linkedin: https://www.linkedin.com/in/marcelocorreia/
-  docker_hub_user: marcelocorreia
-  ansible_galaxy_user: marcelocorreia
-  website: marcelo.correia.io
-  email: marcelo@correia.io
-  slack: https://correia-group.slack.com/
-
 metadata:
   variables: {}
 

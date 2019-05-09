@@ -47,7 +47,7 @@ scoop:
     name: marcelocorreia
     email: marcelo@correia.io
 brew:
-  name: hammer
+  name: go-template-engine
   homepage: "https://marcelo.correia.io"
   description: "Go Template Engine (GTE) - Easy util to apply Go Templates in BAU jobs"
   github:
@@ -71,7 +71,7 @@ github_urls:
 #    goarch: amd64
 #    dockerfile: Dockerfile
 #    image_templates:
-#      - "marcelocorreia/hammer:{{ .Tag }}"
-#      - "marcelocorreia/hammer:v{{ .Major }}"
-#      - "marcelocorreia/hammer:v{{ .Major }}.{{ .Minor }}"
-#      - "marcelocorreia/hammer:latest"
+#      - "marcelocorreia/go-template-engine:{{ .Tag }}"
+#      - "marcelocorreia/go-template-engine:v{{ .Major }}"
+#      - "marcelocorreia/go-template-engine:v{{ .Major }}.{{ .Minor }}"
+#      - "marcelocorreia/go-template-engine:latest"
