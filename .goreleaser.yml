@@ -1,0 +1,80 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    - go generate ./...
+    - gofmt -s -w .
+#    - golint $(go list ./... )
+    - go test ./...
+#    - go test -coverprofile dist/main-cover.out ./...
+#    - go tool cover -html=dist/main-cover.out -o coverage/index.html
+#    - go tool cover -func=dist/main-cover.out -o coverage/coverage
+
+builds:
+  - main: ./cmd/go-template-engine/main.go
+    binary: go-template-engine
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+      - openbsd
+      - freebsd
+    goarch:
+      - amd64
+      - arm
+      - arm64
+      - 386
+
+archive:
+  name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  replacements:
+    386: i386
+    amd64: x86_64
+#    darwin: Darwin
+#    linux: Linux
+#    windows: Windows
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-snapshot"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+scoop:
+  commit_author:
+    name: marcelocorreia
+    email: marcelo@correia.io
+brew:
+  name: hammer
+  homepage: "https://marcelo.correia.io"
+  description: "Go Template Engine (GTE) - Easy util to apply Go Templates in BAU jobs"
+  github:
+    owner: marcelocorreia
+    name: homebrew-taps
+  commit_author:
+    name: marcelocorreia
+    email: marcelo@correia.io
+  test: |
+    system "#{bin}/go-template-engine --version"
+github_urls:
+  download: https://github.com/marcelocorreia/{{ .ProjectName }}
+
+#dockers:
+#  - image_templates:
+#    - marcelocorreia/go-template-engine
+#    skip_push: true
+
+#dockers:
+#  - goos: linux
+#    goarch: amd64
+#    dockerfile: Dockerfile
+#    image_templates:
+#      - "marcelocorreia/hammer:{{ .Tag }}"
+#      - "marcelocorreia/hammer:v{{ .Major }}"
+#      - "marcelocorreia/hammer:v{{ .Major }}.{{ .Minor }}"
+#      - "marcelocorreia/hammer:latest"

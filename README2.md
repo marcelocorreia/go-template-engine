@@ -1,9 +1,4 @@
-<!-- Auto generated file, DO NOT EDIT. Please refer to hammer.yml -->
-<!-- Alternatively you can set global properties, please refer to the docs on Hammer configuration -->
-# go-template-engine
-
----
-
+# go-template-engine GTE
 ![LOGO](resources/gte-logo.png)
 
 ![shield](https://img.shields.io/github/release/marcelocorreia/go-template-engine.svg)
@@ -506,31 +501,3 @@ outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
 - [x] Static Include tag
 - [x] Replace tag
 - [x] Extra functions(tons.... thanks to [Masterminds Spring](https://github.com/Masterminds/sprig)
-
----
-
-
-
-
-
-
-
-
-
----
-[:hammer:**Created with a Hammer**:hammer:](https://github.com/marcelocorreia/hammer)
-<!-- Anchors -->
-
-
-
-
-
-[linkedin]: https://www.linkedin.com/in/marcelocorreia/
-[website]: marcelo.correia.io
-[slack]: https://correia-group.slack.com/
-[email]: marcelo@correia.io
-
-[ansible_galaxy_user]: marcelocorreia
-<!-- end -->
-
-

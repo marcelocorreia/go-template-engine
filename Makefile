@@ -1,82 +1,162 @@
-include config.mk
+# Auto generated
+M := $(shell printf "\033[34;1m▶\033[0m")
+#
+PROJECT_HOME := $(shell pwd)
+PROJECT_NAME ?= go-template-engine
+AWS_PROFILE ?= aws-profile
+#AWS_ACCESS_KEY_ID ?= AWS_ACCESS_KEY_ID
+#AWS_SECRET_ACCESS_KEY ?= AWS_SECRET_ACCESS_KEY
+AWS_DEFAULT_REGION ?= ap-southeast-2
+GITHUB_USER ?= marcelocorreia
+GIT_REPO_NAME ?= go-template-engine
+SEMVER_DOCKER ?= marcelocorreia/semver
+HAMMER_CMD := hammer
+RELEASE_TYPE ?= patch
 
-release: _release
+# ####
+.PHONY: default
+default: available-targets
 
-all-versions:
+available-targets: _available-targets
+dep-ensure-update: _dep-ensure-update
+dep-ensure: _dep-ensure
+dep-init: _dep-init
+doc-readme: _readme
+go-build: _go-build
+go-test: _go-test
+go-release: _release
+go-report: _go-report
+go-snapshot: _snapshot
+go-open-coverage: _open-coverage
+github-open-page: _open-page
+git-push: ;$(call git_push,Updating...)
+godoc-open: _godoc-open
+godoc-server-start: _godoc-server-start
+godoc-server-stop: _godoc-server-stop
+grip-open: _grip
+version-all: _all-versions
+version-current: _all-current
+version-next: _all-next
+hammer-forge-all: hammer-forge-make hammer-forge-readme
+hammer-forge-readme:
+	-@hammer forge addon --name README.tpl.md .
+hammer-forge-make:
+	-@hammer forge addon --name Makefile.tpl .
+
+# --
+# Please do not call the targets below directly, instead create a call as the ones above.
+# --
+
+# Builds the application
+_go-build:
+	go build -o ./bin/$(PROJECT_NAME) -ldflags "-X main.VERSION=dev" -v ./cmd/$(PROJECT_NAME)/
+
+# Tests the application
+_go-test:
+	go test -v ./...
+
+# Starts Go Doc Server
+_godoc-server-start:  ;$(info $(M) - Starting Godoc server)
+	godoc -v
+
+# Stops Go Doc Server
+_godoc-server-stop:  ;$(info $(M) - Stopping Godoc server)
+	killall godoc
+
+# Open Go Doc Package page
+_godoc-open: ;$(info $(M) - Opening Godoc page)
+	open http://localhost:6060/pkg/github.com/$(GITHUB_USER)/$(PROJECT_NAME)
+
+# Shows all versions
+_all-versions: ;$(info $(M) - Showing $(PROJECT_NAME) all versions)
 	@git ls-remote --tags $(GIT_REMOTE)
 
-current-version: _setup-versions
+# Shows current version
+_current-version: _setup-versions
 	@echo $(CURRENT_VERSION)
 
-next-version: _setup-versions
+# Shows next  version
+_next-version: _setup-versions
 	@echo $(NEXT_VERSION)
 
-build: _build
+# Builds a snapshot
+_snapshot: ;$(info $(M) - Releasing $(PROJECT_NAME)-snapshot)
+	-@mkdir -p dist coverage
+	goreleaser  release --snapshot  --rm-dist --debug
 
-build_all: _build_all
+# Releases the application
+_release: _require-github-token _setup-versions _tag-push ;$(info $(M) - Releasing $(PROJECT_NAME)-$(NEXT_VERSION))
+	goreleaser release  --rm-dist
 
-#####
-#tests: _setup-versions cover-tests cover-out cover-html
+# Builds a dry run of the app
+_dry-run:
+	goreleaser release  --skip-publish
 
-_build: _setup-versions
-	gofmt -s -w .
-	export GOOS=$(GOOS) GOARCH=$(GOARCH) && \
-		go build -o ./bin/$(APP_NAME) -ldflags "-X main.VERSION=$(CURRENT_VERSION)-dev" -v ./main.go
+# Prepares for release
+_tag-push: ;$(call git_push,Releasing $(PROJECT_NAME)"-"$(NEXT_VERSION)) ;$(info $(M) Tagging $(PROJECT_NAME)-$(NEXT_VERSION))
+	git tag $(NEXT_VERSION)
+	git push --tags
 
-
-_build_all: _setup-versions
-	gox -ldflags "-X main.VERSION=$(NEXT_VERSION)" \
-		--arch amd64 \
-		--output ./dist/{{.Dir}}-{{.OS}}-{{.Arch}}-$(NEXT_VERSION)/{{.Dir}}
-
-_package:
-	for dir in $(DISTDIRS); do \
-		if [[ -d "dist/$$dir" ]];then \
-			cd dist/$$dir/; \
-		   zip ../$$dir.zip * ; \
-		   cd -;\
-		   rm -rf dist/$$dir/;\
-		fi \
-    done
-
-_release: _setup-versions _build_all _package ;$(call  git_push,Releasing $(NEXT_VERSION)) ;$(info $(M) Releasing version $(NEXT_VERSION)...)## Release by adding a new tag. RELEASE_TYPE is 'patch' by default, and can be set to 'minor' or 'major'.
-	github-release release -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name $(NEXT_VERSION) --description "Template engine in Golang full of goodies"
-	github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name docker-alias-install.sh --file resources/docker-alias-install.sh
-	@$(foreach plat,$(PLATFORMS),echo Uploading go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip && github-release upload -u marcelocorreia -r go-template-engine --tag $(NEXT_VERSION) --name go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip --file ./dist/go-template-engine-$(plat)-amd64-$(NEXT_VERSION).zip;)
-	make _update_brew
-	make _docker-build
-#	make _docker-push
-
+# Prepares for release
 _setup-versions:
 	$(eval export CURRENT_VERSION=$(shell git ls-remote --tags $(GIT_REMOTE) | grep -v latest | awk '{ print $$2}'|grep -v 'stable'| sort -r --version-sort | head -n1|sed 's/refs\/tags\///g'))
 	$(eval export NEXT_VERSION=$(shell docker run --rm --entrypoint=semver $(SEMVER_DOCKER) -c -i $(RELEASE_TYPE) $(CURRENT_VERSION)))
 
-cover-tests:
-	@go test . -coverprofile docs/main-cover.out -v
-	@$(foreach var,$(shell glide nv | sed 's/\.//g' | sed 's/\///g'),go test ./$(var)/... -coverprofile docs/$(var)-cover.out || exit 1;)
+# Dep Support - begin
+# Runs dep init
+_dep-init: ;$(info $(M) - Running "dep init")
+	dep init
 
-cover-out:
-	@echo "mode: set" > docs/coverage.out
-	@$(foreach f,$(shell ls docs/**out),cat $(f) | sed 's/mode: set//g' | perl -p -e 's/^\s*$$//mg' >> docs/coverage.out || exit 1;)
+# Runs dep ensure
+_dep-ensure: ;$(info $(M) - Running "dep dep-ensure")
+	dep ensure
 
-cover-html:
-	@go tool cover -html=docs/coverage.out -o docs/index.html
-	@$(foreach f,$(shell ls docs/**out),go tool cover -html=$(f) -o $(f).html  || exit 1;)
-	@rm docs/coverage.out.html
+# Runs dep ensure -update
+_dep-ensure-update: ;$(info $(M) - Running "dep dep-ensure")
+	dep ensure -update
 
-cover-cleanup:
-	-@mkdir docs/out
-	@$(foreach f,$(shell ls docs/**out),$(shell echo mv $(f) docs/out/)  || exit 1;)
+_dep-ensure-add: ;$(info $(M) - Running "dep dep-ensure -add $(PACKAGE)")
+ifndef PACKAGE
+	$(error PACKAGE is required)
+endif
+	dep ensure -add $(PACKAGE)
 
-_docker-build: _setup-versions
-	sed -i .bk 's/ARG gte.*/ARG gte_version\=\"$(CURRENT_VERSION)\"/' resources/Dockerfile
-	docker build -t marcelocorreia/go-template-engine:latest -f resources/Dockerfile .
-	docker build -t marcelocorreia/go-template-engine:$(CURRENT_VERSION) -f resources/Dockerfile .
-	$(call  git_push,Post Release Updating auto generated stuff - version: $(CURRENT_VERSION))
 
-_docker-push: _setup-versions
-	docker push marcelocorreia/go-template-engine:latest
-	docker push marcelocorreia/go-template-engine:$(CURRENT_VERSION)
+# Opens coverage page using default browser
+_open-coverage: ;$(info $(M) - Opening $(PROJECT_NAME)-$(NEXT_VERSION) Test Coverage Report)
+	open ./coverage/index.html
+
+# Opens github page using default browser
+_open-page: ;$(info $(M) - Opening $(PROJECT_NAME) Github Page)
+	open https://github.com/$(GITHUB_USER)/$(GIT_REPO_NAME).git
+
+# Generates README.md file, refer to README.yml
+_readme: ;$(info $(M) - Generates $(PROJECT_NAME) README.md Page)
+	$(HAMMER_CMD) generate --resource-type readme .
+
+# Opens Go Report Card
+_go-report: ;$(info $(M) - Opening $(PROJECT_NAME) Go Report Card)
+	open https://goreportcard.com/report/github.com/$(GITHUB_USER)/$(GIT_REPO_NAME)
+
+# Opens README page in local browser using Github renderer. Requires grip. pip install grip
+_grip:
+	grip -b
+
+# Shows available targets
+_available-targets:
+	@make -pn -C $(PWD) | grep -A1 '^# makefile'| egrep -v '^--|^define|^#' | sort | uniq
+
+# Exports AWS creds environment variables. Profiles are recommended but not mandatory
+_set-aws-creds:
+ifdef AWS_ACCESS_KEY_ID
+	$(eval export AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID))
+	$(eval export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY))
+endif
+ifdef AWS_PROFILE
+	$(eval export AWS_DEFAULT_REGION=$(AWS_DEFAULT_REGION))
+	$(eval export AWS_PROFILE=$(AWS_PROFILE))
+endif
+#
 
 define git_push
 	-git add .
@@ -84,21 +164,7 @@ define git_push
 	-git push
 endef
 
-_update_brew: _setup-versions
-
-	-rm -rf /tmp/homebrew-gte
-	git clone git@github.com:marcelocorreia/homebrew-taps.git /tmp/homebrew-gte
-	go-template-engine -s resources/go-template-engine.rb \
-		--var hash_sum=$(shell shasum -a 256 dist/go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip | awk {'print $$1'}) \
-		--var version=$(CURRENT_VERSION) \
-		--var dist_file=go-template-engine-darwin-amd64-$(CURRENT_VERSION).zip > \
-		/tmp/homebrew-gte/go-template-engine.rb
-
-	cd /tmp/homebrew-gte && \
-		git add go-template-engine.rb && \
-		git commit -m "Release go-template-engine $(CURRENT_VERSION)" \
-		&& git push
-
-_clean_bin:
-	@rm -rf ./bin/*
-
+_require-github-token:
+ifndef GITHUB_TOKEN
+	$(error GITHUB_TOKEN is required)
+endif

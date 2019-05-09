@@ -13,13 +13,24 @@ import (
 var TEST_DELIMS = []string{"{{{", "}}}"}
 var DEFAULT_DELIMS = []string{"{{", "}}"}
 
+var path string
+
+func init() {
+	p, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	path = p
+	fmt.Print(path)
+}
+
 func TestParseTemplateString(t *testing.T) {
 	fmt.Println("Running Test with vars...")
 	engine, _ := templateengine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	params := make(map[string]string)
 	params["package_name"] = "Blitzkrieg Bop"
 	params["phrase1"] = "Hey ho, let's go"
-	out, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", params)
+	out, _ := engine.ParseTemplateFile(path+"/test_fixtures/bb.txt.tpl", params)
 	assert.Contains(t, out, "# Blitzkrieg Bop")
 	assert.Contains(t, out, "Hey ho, let's go")
 	fmt.Println("Finished Test with vars...")
@@ -32,10 +43,10 @@ func TestTemplateJson(t *testing.T) {
 	engine, _ := templateengine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	fmt.Println("Running Test with JSON file...")
 	fmt.Println("===================================================")
-	file, _ := ioutil.ReadFile("test_fixtures/bb.json")
+	file, _ := ioutil.ReadFile(path + "/test_fixtures/bb.json")
 	var varsJson interface{}
 	json.Unmarshal(file, &varsJson)
-	outJson, _ := engine.ParseTemplateFile("test_fixtures/bb.txt.tpl", varsJson)
+	outJson, _ := engine.ParseTemplateFile(path+"/test_fixtures/bb.txt.tpl", varsJson)
 	assert.Contains(t, outJson, "Blitzkrieg Bop")
 	assert.Contains(t, outJson, "The kids are losing their minds")
 	assert.Contains(t, outJson, "Hey ho, let's go")
@@ -47,7 +58,7 @@ func TestTemplateJson(t *testing.T) {
 func TestTemplateErrorJson(t *testing.T) {
 	fmt.Println("Running Testing throwing error...")
 	engine, _ := templateengine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
-	file, _ := ioutil.ReadFile("test_fixtures/vars.json-should-not-exist")
+	file, _ := ioutil.ReadFile(path + "/test_fixtures/vars.json-should-not-exist")
 	var varsJson interface{}
 	json.Unmarshal(file, &varsJson)
 	_, err := engine.ParseTemplateFile("should-not-exist.tpl", varsJson)
@@ -56,7 +67,7 @@ func TestTemplateErrorJson(t *testing.T) {
 }
 
 func TestTemplateEngine_GetFileList(t *testing.T) {
-	dir := "/go/src/github.com/marcelocorreia/go-template-engine/templateengine"
+	dir := path
 	//dir := "/go/src/github.com/marcelocorreia/badwolf-templates/templates/badwolf/terraform-stack"
 
 	engine, _ := templateengine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
@@ -68,7 +79,7 @@ func TestTemplateEngine_GetFileList(t *testing.T) {
 
 func TestPrepareOutputDirectory(t *testing.T) {
 	engine, _ := templateengine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
-	dir := "go-template-engine/template-engine/test_fixtures/base"
+	dir := path + "/test_fixtures/base"
 	tmpDir, err := ioutil.TempDir("/tmp", "gteTest-")
 	if err != nil {
 		panic(err)
