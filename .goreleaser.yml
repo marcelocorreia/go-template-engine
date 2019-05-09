@@ -15,6 +15,7 @@ builds:
     binary: go-template-engine
     env:
       - CGO_ENABLED=0
+      - -ldflags "-X main.VERSION={{ .Version }}"
     goos:
       - linux
       - darwin
