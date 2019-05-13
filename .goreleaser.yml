@@ -67,6 +67,9 @@ brew:
     email: marcelo@correia.io
   test: |
     system "#{bin}/go-template-engine --version"
+  install: |
+    bin.install "go-template-engine"
+    system "ln","-s","/usr/local/bin/go-template-engine","gte"
 
 #github_urls:
 #  download: https://github.com/marcelocorreia/{{ .ProjectName }}
