@@ -13,7 +13,7 @@ SEMVER_DOCKER ?= marcelocorreia/semver
 HAMMER_CMD := hammer
 RELEASE_TYPE ?= patch
 
-# 
+#
 .PHONY: default
 default: hammer-targets
 

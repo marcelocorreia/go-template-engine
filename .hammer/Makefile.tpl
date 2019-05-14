@@ -1,19 +1,16 @@
-# Auto generated
-M := $(shell printf "\033[34;1m▶\033[0m")
 #
 PROJECT_HOME := $(shell pwd)
-PROJECT_NAME ?= go-template-engine
+PROJECT_NAME ?= {{ .name }}
 AWS_PROFILE ?= aws-profile
 #AWS_ACCESS_KEY_ID ?= AWS_ACCESS_KEY_ID
 #AWS_SECRET_ACCESS_KEY ?= AWS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION ?= ap-southeast-2
-GITHUB_USER ?= marcelocorreia
-GIT_REPO_NAME ?= go-template-engine
+GITHUB_USER ?= {{ .main_user.github_user }}
+GIT_REPO_NAME ?= {{ .name }}
 SEMVER_DOCKER ?= marcelocorreia/semver
-HAMMER_CMD := hammer
 RELEASE_TYPE ?= patch
 
-# 
+#
 .PHONY: default
 default: hammer-targets
 
