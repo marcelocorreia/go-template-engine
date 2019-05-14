@@ -69,7 +69,7 @@ brew:
     system "#{bin}/go-template-engine --version"
   install: |
     bin.install "go-template-engine"
-    ln_s '/usr/local/bin/go-template-engine', '/usr/local/bin/gte'
+    bin.install_symlink libexec/"gte"
 
 #github_urls:
 #  download: https://github.com/marcelocorreia/{{ .ProjectName }}
