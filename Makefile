@@ -62,6 +62,9 @@ go-release: _require-github-token _setup-versions tag-push ;$(info $(M) - Releas
 go-release-dry-run:
 	goreleaser release  --skip-publish
 
+go-reporter:
+	goreporter -p . -r goreporter/ -e vendor -f html
+
 # Prepares for release
 tag-push: ;$(call git_push,Releasing $(PROJECT_NAME)"-"$(NEXT_VERSION)) ;$(info $(M) Tagging $(PROJECT_NAME)-$(NEXT_VERSION))
 	git tag $(NEXT_VERSION)
@@ -144,7 +147,7 @@ hammer-forge-readme:
 	-@hammer forge addon --name README.tpl.md .
 
 # Hammer auto generated target
-hammer-parameters:
+hammer-parasameters:
 	@make variables | egrep -v ':=|SHELL|MAKEFLAGS'
 
 # Hammer auto generated target
@@ -154,3 +157,6 @@ hammer-targets:
 # Hammer auto generated target
 hammer-variables:
 	@make -pn | grep -A1 '^# makefile'| egrep -v '^--|^define|^#' | sort | uniq
+
+hammer-doctor:
+	hammer make doctor .
