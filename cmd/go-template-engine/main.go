@@ -61,7 +61,7 @@ func main() {
 
 	}
 
-	if jobVars == nil{
+	if jobVars == nil {
 		jobVars = make(map[string]interface{})
 	}
 
