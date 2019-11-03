@@ -25,6 +25,12 @@ Based on Golang templates text SDK.
 		- cmd ```$ docker run --rm -it -v $\(pwd\):/app -w /app marcelocorreia/go-template-engine\"```
 		- alias ```$ alias go-template-engine="docker run --rm marcelocorreia/go-template-engine"```
 		- automated_alias_install ```$ curl -L https://github.com/marcelocorreia/go-template-engine/releases/download/{REPLACE_WITH_LASTEST_VERSION}/docker-alias-install.sh | sh```
+- Added support ***AWS Secrets Manager***
+    - Supports field Lookup
+    - Tags
+        - {{ secretsManagerField "myJsonSecret" "username"}} 		
+        - {{ secretsManagerField "myJsonSecret" "password"}} 		
+        - {{ secretsManager "myOtherSecret" }} 		
 - Added support to [HCL](https://github.com/hashicorp/hcl) formart for variables file input
 - Added support to all [Masterminds Sprig](https://github.com/Masterminds/sprig) functions
 - Added static file include. Tag {{staticInclude "path/to/file.txt"}}
@@ -43,6 +49,8 @@ Based on Golang templates text SDK.
 ### Custom functions
 |Function|Source|Desc|
 |--------|------|----|
+|secretsManager|GTE|na|
+|secretsManagerField|GTE|na|
 |abbrev|[spring](https://github.com/Masterminds/sprig)|na|
 |abbrevboth|[spring](https://github.com/Masterminds/sprig)|na|
 |add|[spring](https://github.com/Masterminds/sprig)|na|
