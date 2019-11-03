@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	app = kingpin.New("go-template-engine", "go-template-engine")
-
+	app                 = kingpin.New("go-template-engine", "go-template-engine")
+	exitOnError         = app.Flag("exit-on-error", "Exits on error").Short('e').Bool()
 	templateFile        = app.Flag("source", "Template Source File").Short('s').String()
 	headerTemplateFiles = app.Flag("header-sources", "Extra Source Files to append as HEADER to the main template before processing."+
 		"Useful to preload embedded templates").Strings()
@@ -42,7 +42,7 @@ func main() {
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	var engine templateengine.Engine
-	engine, err := templateengine.GetEngine(*delimLeft, *delimRight)
+	engine, err := templateengine.GetEngine(*exitOnError, *delimLeft, *delimRight)
 	if err != nil {
 		handleErrorExit(err, "Error Loading engine")
 	}

@@ -33,23 +33,27 @@ type Engine interface {
 	replace(input, from, to string) string
 	inList(needle interface{}, haystack []interface{}) bool
 	printf(pattern string, params ...string) string
+	secretsManagerGetSecret(secKey string) string
+	secretsManagerGetSecretField(secKey, field string) string
 }
 
 // TemplateEngine templateengine
 type TemplateEngine struct {
-	Delims []string
-	Funcs  map[string]interface{}
+	Delims      []string
+	Funcs       map[string]interface{}
+	ExitOnError bool
 }
 
 //GetEngine returns engine
-func GetEngine(delims ...string) (*TemplateEngine, error) {
+func GetEngine(exitOnError bool, delims ...string) (*TemplateEngine, error) {
 	if len(delims) == 2 {
 		DELIMS = delims
 	}
 
 	engine := TemplateEngine{
-		Delims: DELIMS,
-		Funcs:  make(map[string]interface{}),
+		Delims:      DELIMS,
+		Funcs:       make(map[string]interface{}),
+		ExitOnError: exitOnError,
 	}
 	engine.loadFuncs()
 	return &engine, nil
@@ -73,9 +77,11 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 //ParseTemplateString Parses string
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) {
 	funcMap := template.FuncMap{
-		"staticInclude": func(path string) string { return gte.staticInclude(path) },
-		"replace":       func(input, from, to string) string { return gte.replace(input, from, to) },
-		"inList":        func(needle interface{}, haystack []interface{}) bool { return gte.inList(needle, haystack) },
+		"staticInclude":       func(path string) string { return gte.staticInclude(path) },
+		"replace":             func(input, from, to string) string { return gte.replace(input, from, to) },
+		"inList":              func(needle interface{}, haystack []interface{}) bool { return gte.inList(needle, haystack) },
+		"secretsManager":      func(secKey string) string { return gte.secretsManagerGetSecret(secKey) },
+		"secretsManagerField": func(secKey, field string) string { return gte.secretsManagerGetSecretField(secKey, field) },
 	}
 
 	t, err := template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap()).Parse(templateString)

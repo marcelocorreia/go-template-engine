@@ -200,3 +200,18 @@ func TestTemplateEngine_replace(t *testing.T) {
 	assert.NotNil(t, out)
 	fmt.Println(out)
 }
+
+//
+//func TestTemplateEngine_SecretsManagerGetSecretField(t *testing.T) {
+//	engine, _ := templateengine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+//	params := make(map[string]string)
+//	params["name"] = "John Smith"
+//	out, err := engine.ParseTemplateFile("test_fixtures/config/secret-config.yml", params)
+//	assert.Nil(t, err)
+//	assert.NotNil(t, out)
+//	fmt.Println(out)
+//
+//	err = engine.ProcessDirectory("test_fixtures/config/", "test_fixtures/config-output/", params, nil, nil, nil)
+//	assert.NoError(t,err)
+//
+//}

@@ -3,7 +3,9 @@ package templateengine
 import (
 	"fmt"
 	"github.com/Masterminds/sprig"
+	"github.com/marcelocorreia/go-template-engine/awstools"
 	"io/ioutil"
+	"os"
 	"reflect"
 	"sort"
 	"strings"
@@ -56,4 +58,32 @@ func (gte *TemplateEngine) loadFuncs() {
 	gte.Funcs["replace"] = func(input, from, to string) string { return gte.replace(input, from, to) }
 	gte.Funcs["inList"] = func(needle interface{}, haystack []interface{}) bool { return gte.inList(needle, haystack) }
 	gte.Funcs["printf"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
+	gte.Funcs["secretsManager"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
+	gte.Funcs["secretsManagerField"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
+}
+
+func (gte *TemplateEngine) secretsManagerGetSecret(secKey string) string {
+	sm := awstools.NewSecretsManagerService()
+	out, err := sm.GetSecretString(secKey)
+	if err != nil {
+		if gte.ExitOnError{
+			fmt.Println("Error executing gte..")
+			os.Exit(1)
+		}
+		return fmt.Sprintf("<<ERROR: processing %s>> ", secKey)
+	}
+	return out
+}
+
+func (gte *TemplateEngine) secretsManagerGetSecretField(secKey, field string) string {
+	sm := awstools.NewSecretsManagerService()
+	out, err := sm.GetSecretField(secKey, field)
+	if err != nil {
+		if gte.ExitOnError{
+			fmt.Println("Error executing gte..")
+			os.Exit(1)
+		}
+		return fmt.Sprintf("<<ERROR: processing %s::%s>> ", secKey, field)
+	}
+	return out
 }
