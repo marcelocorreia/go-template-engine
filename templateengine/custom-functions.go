@@ -66,7 +66,7 @@ func (gte *TemplateEngine) secretsManagerGetSecret(secKey string) string {
 	sm := awstools.NewSecretsManagerService()
 	out, err := sm.GetSecretString(secKey)
 	if err != nil {
-		if gte.ExitOnError{
+		if gte.ExitOnError {
 			fmt.Println("Error executing gte..")
 			os.Exit(1)
 		}
@@ -79,7 +79,7 @@ func (gte *TemplateEngine) secretsManagerGetSecretField(secKey, field string) st
 	sm := awstools.NewSecretsManagerService()
 	out, err := sm.GetSecretField(secKey, field)
 	if err != nil {
-		if gte.ExitOnError{
+		if gte.ExitOnError {
 			fmt.Println("Error executing gte..")
 			os.Exit(1)
 		}
