@@ -68,6 +68,7 @@ func (gte *TemplateEngine) secretsManagerGetSecret(secKey string) string {
 	if err != nil {
 		if gte.ExitOnError {
 			fmt.Println("Error executing gte..")
+			fmt.Println(err)
 			os.Exit(1)
 		}
 		return fmt.Sprintf("<<ERROR: processing %s>> ", secKey)
@@ -81,6 +82,7 @@ func (gte *TemplateEngine) secretsManagerGetSecretField(secKey, field string) st
 	if err != nil {
 		if gte.ExitOnError {
 			fmt.Println("Error executing gte..")
+			fmt.Println(err)
 			os.Exit(1)
 		}
 		return fmt.Sprintf("<<ERROR: processing %s::%s>> ", secKey, field)
