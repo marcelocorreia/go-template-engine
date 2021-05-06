@@ -7,6 +7,7 @@ import (
 	"github.com/Masterminds/sprig"
 	"github.com/hashicorp/hcl"
 	"github.com/marcelocorreia/go-utils/utils"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -156,10 +157,10 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 
 			if !utils.StringInSlice(file.Name(), fileExclusions) {
 				b, _ := gte.ParseTemplateFile(sourceFile, params)
-				//shrug := `¯\_(ツ)_/¯`
-				//if err != nil {
-				//	fmt.Printf("File: %s can't be loaded as template, possibly a binary.\n\tContent written without modifications.\n\tPlease check the flags is case this is not correct.\nThis will be improved soon %s\n-----------------------------\n", file.Name(), shrug)
-				//}
+
+				if err != nil {
+					log.Warn("File: %s can't be loaded as template, possibly a binary\n", file.Name())
+				}
 				if err := Output(b, targetFile); err != nil {
 					return err
 				}

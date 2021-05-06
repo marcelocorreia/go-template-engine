@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/marcelocorreia/go-template-engine/templateengine"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"io/ioutil"
 	"os"
@@ -27,11 +28,33 @@ var (
 	delimLeft           = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
 	delimRight          = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
 	listCustomFunctions = app.Flag("list-custom-functions", "List Custom Commands").Short('c').Bool()
+	logLevel            = app.Flag("log", "Log Level. Default Info").Default("info").String()
 	//VERSION application
 	VERSION string
 )
 
 func main() {
+	switch *logLevel {
+	case "info":
+		log.SetLevel(log.InfoLevel)
+	case "debug":
+		log.SetLevel(log.DebugLevel)
+	case "warn":
+		log.SetLevel(log.WarnLevel)
+	case "error":
+		log.SetLevel(log.ErrorLevel)
+	case "trace":
+		log.SetLevel(log.TraceLevel)
+	default:
+		log.SetLevel(log.InfoLevel)
+
+	}
+
+	log.SetFormatter(&log.TextFormatter{
+		DisableColors: true,
+		//FullTimestamp: true,
+	})
+
 	app.Version(VERSION).VersionFlag.Short('v')
 	kingpin.CommandLine.HelpFlag.Short('h')
 	if len(os.Args) <= 1 {
