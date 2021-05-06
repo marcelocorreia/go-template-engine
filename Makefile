@@ -11,7 +11,7 @@ GITHUB_USER ?= marcelocorreia
 GIT_REPO_NAME ?= go-template-engine
 SEMVER_DOCKER ?= marcelocorreia/semver
 HAMMER_CMD := hammer
-RELEASE_TYPE ?= patch
+RELEASE_TYPE ?= major
 
 #
 .PHONY: default
@@ -72,6 +72,8 @@ go-reporter:
 # Prepares for release
 tag-push: ;$(call git_push,Releasing $(PROJECT_NAME)"-"$(NEXT_VERSION)) ;$(info $(M) Tagging $(PROJECT_NAME)-$(NEXT_VERSION))
 	git tag $(NEXT_VERSION)
+	git tag v$(NEXT_VERSION)
+	git tag go/v$(NEXT_VERSION)
 	git push --tags
 
 # Prepares for release
