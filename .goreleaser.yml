@@ -21,8 +21,8 @@ builds:
       - linux
       - darwin
       - windows
-      - openbsd
-      - freebsd
+#      - openbsd
+#      - freebsd
     goarch:
       - amd64
 
