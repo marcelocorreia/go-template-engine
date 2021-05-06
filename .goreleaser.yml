@@ -53,22 +53,22 @@ scoop:
     name: marcelocorreia
     email: marcelo@correia.io
 
-brew:
-  name: go-template-engine
-  homepage: "https://marcelo.correia.io"
-  description: "Go Template Engine (GTE) - Easy util to apply Go Templates in BAU jobs"
-  url_template: "https://github.com/marcelocorreia/{{ .ProjectName }}/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-
-  github:
-    owner: marcelocorreia
-    name: homebrew-taps
-  commit_author:
-    name: marcelocorreia
-    email: marcelo@correia.io
-  test: |
-    system "#{bin}/go-template-engine --version"
-  install: |
-    bin.install "go-template-engine"
+#brew:
+#  name: go-template-engine
+#  homepage: "https://marcelo.correia.io"
+#  description: "Go Template Engine (GTE) - Easy util to apply Go Templates in BAU jobs"
+#  url_template: "https://github.com/marcelocorreia/{{ .ProjectName }}/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+#
+#  github:
+#    owner: marcelocorreia
+#    name: homebrew-taps
+#  commit_author:
+#    name: marcelocorreia
+#    email: marcelo@correia.io
+#  test: |
+#    system "#{bin}/go-template-engine --version"
+#  install: |
+#    bin.install "go-template-engine"
 
 #github_urls:
 #  download: https://github.com/marcelocorreia/{{ .ProjectName }}
