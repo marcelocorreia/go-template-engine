@@ -1,9 +1,8 @@
-package templateengine_test
+package templateengine
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/marcelocorreia/go-template-engine/templateengine"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
@@ -26,7 +25,7 @@ func init() {
 
 func TestParseTemplateString(t *testing.T) {
 	fmt.Println("Running Test with vars...")
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	params := make(map[string]string)
 	params["package_name"] = "Blitzkrieg Bop"
 	params["phrase1"] = "Hey ho, let's go"
@@ -36,11 +35,11 @@ func TestParseTemplateString(t *testing.T) {
 	fmt.Println("Finished Test with vars...")
 }
 func TestListFuncs(t *testing.T) {
-	engine, _ := templateengine.GetEngine(false)
+	engine, _ := GetEngine(false)
 	engine.ListFuncs()
 }
 func TestTemplateJson(t *testing.T) {
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	fmt.Println("Running Test with JSON file...")
 	fmt.Println("===================================================")
 	file, _ := ioutil.ReadFile(path + "/test_fixtures/bb.json")
@@ -57,7 +56,7 @@ func TestTemplateJson(t *testing.T) {
 
 func TestTemplateErrorJson(t *testing.T) {
 	fmt.Println("Running Testing throwing error...")
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	file, _ := ioutil.ReadFile(path + "/test_fixtures/vars.json-should-not-exist")
 	var varsJson interface{}
 	json.Unmarshal(file, &varsJson)
@@ -70,7 +69,7 @@ func TestTemplateEngine_GetFileList(t *testing.T) {
 	dir := path
 	//dir := "/go/src/github.com/marcelocorreia/badwolf-templates/templates/badwolf/terraform-stack"
 
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	ll, _ := engine.GetFileList(dir, []string{}, []string{})
 	assert.True(t, len(ll) > 0)
 	//_, err := engine.GetFileList("/a/dir/that/should/not/exist", true, []string{}, []string{})
@@ -78,20 +77,20 @@ func TestTemplateEngine_GetFileList(t *testing.T) {
 }
 
 func TestPrepareOutputDirectory(t *testing.T) {
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	dir := path + "/test_fixtures/base"
 	tmpDir, err := ioutil.TempDir("/tmp", "gteTest-")
 	if err != nil {
 		panic(err)
 	}
 	engine.PrepareOutputDirectory(dir, tmpDir, []string{".templates", "ci"})
-	exists, err := templateengine.Exists(tmpDir)
+	exists, err := Exists(tmpDir)
 	if err != nil {
 		panic(err)
 	}
 	assert.True(t, exists)
 	os.RemoveAll(tmpDir)
-	exists, _ = templateengine.Exists(tmpDir)
+	exists, _ = Exists(tmpDir)
 	assert.False(t, exists)
 	_, err = ioutil.TempDir("/bogus", "gteTest-")
 
@@ -110,7 +109,7 @@ func getParams() map[string]string {
 }
 
 func TestTemplateEngine_LoadVars(t *testing.T) {
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	dir, _ := os.Getwd()
 	vars, _ := engine.LoadVars(dir + "/test_fixtures/bb.yml")
 	assert.NotNil(t, vars)
@@ -128,7 +127,7 @@ func TestTemplateEngine_LoadVars(t *testing.T) {
 }
 
 func TestTemplateEngine_ProcessDirectory(t *testing.T) {
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	dir, _ := os.Getwd()
 	tmpDir := os.TempDir()
 	err := engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil, nil, nil)
@@ -143,7 +142,7 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 	tmpDir = os.TempDir()
 	err = engine.ProcessDirectory(dir+"/test_fixtures/base", tmpDir, nil, nil, nil, nil)
 	assert.Nil(t, err)
-	exists, err := templateengine.Exists(tmpDir + "/.variables.tfvars")
+	exists, err := Exists(tmpDir + "/.variables.tfvars")
 	assert.True(t, exists)
 	assert.NoError(t, err)
 	os.RemoveAll(tmpDir)
@@ -160,8 +159,8 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 }
 
 func TestDelims(t *testing.T) {
-	var engine templateengine.Engine
-	engine, _ = templateengine.GetEngine(false, TEST_DELIMS[0], TEST_DELIMS[1])
+	var engine Engine
+	engine, _ = GetEngine(false, TEST_DELIMS[0], TEST_DELIMS[1])
 	vars, err := engine.LoadVars("test_fixtures/delim.yml")
 	assert.NoError(t, err)
 	out, err := engine.ParseTemplateFile("test_fixtures/delim.tpl", vars)
@@ -172,16 +171,16 @@ func TestDelims(t *testing.T) {
 }
 
 func TestGetEngine(t *testing.T) {
-	gte, err := templateengine.GetEngine(false)
+	gte, err := GetEngine(false)
 	assert.NotNil(t, gte)
 	assert.Nil(t, err)
-	gte, err = templateengine.GetEngine(false, "{{{", "}}}")
+	gte, err = GetEngine(false, "{{{", "}}}")
 	assert.NotNil(t, gte)
 	assert.Nil(t, err)
 }
 
 func TestTemplateEngine_StaticInclude(t *testing.T) {
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	params := make(map[string]string)
 	params["package_name"] = "Blitzkrieg Bop"
 	params["phrase1"] = "Hey ho, let's go"
@@ -192,7 +191,7 @@ func TestTemplateEngine_StaticInclude(t *testing.T) {
 }
 
 func TestTemplateEngine_replace(t *testing.T) {
-	engine, _ := templateengine.GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+	engine, _ := GetEngine(false, DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 	params := make(map[string]string)
 	params["name"] = "Jolito"
 	out, err := engine.ParseTemplateFile("test_fixtures/replace.yml", params)
@@ -203,7 +202,7 @@ func TestTemplateEngine_replace(t *testing.T) {
 
 //
 //func TestTemplateEngine_SecretsManagerGetSecretField(t *testing.T) {
-//	engine, _ := templateengine.GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
+//	engine, _ := GetEngine(DEFAULT_DELIMS[0], DEFAULT_DELIMS[1])
 //	params := make(map[string]string)
 //	params["name"] = "John Smith"
 //	out, err := engine.ParseTemplateFile("test_fixtures/config/secret-config.yml", params)
