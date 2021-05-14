@@ -8,8 +8,8 @@ github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 h1:JYp7IbQjafo
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20210208195552-ff826a37aa15 h1:AUNCr9CiJuwrRYS3XieqF+Z9B9gNxo/eANAJCF2eiN4=
 github.com/alecthomas/units v0.0.0-20210208195552-ff826a37aa15/go.mod h1:OMCwj8VM1Kc9e19TLln2VL61YJF0x1XFtfdL4JdbSyE=
-github.com/aws/aws-sdk-go v1.38.34 h1:JSAyS6hSDLbRmCAz9VAkwDf5oh/olt9mBTrVBWGJcU8=
-github.com/aws/aws-sdk-go v1.38.34/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
+github.com/aws/aws-sdk-go v1.38.39 h1:n4jkKlE3DfZBN800njuHmOEQlDht4aO/kE2VNk0/6T4=
+github.com/aws/aws-sdk-go v1.38.39/go.mod h1:hcU610XS61/+aQV88ixoOzUoG7v3b31pl2zKMmprdro=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -25,8 +25,8 @@ github.com/jmespath/go-jmespath v0.4.0 h1:BEgLn5cpjn8UN1mAw4NjwDrS35OdebyEtFe+9Y
 github.com/jmespath/go-jmespath v0.4.0/go.mod h1:T8mJZnbsbmF+m6zOOFylbeCJqk5+pHWvzYPziyZiYoo=
 github.com/jmespath/go-jmespath/internal/testify v1.5.1 h1:shLQSRRSCCPj3f2gpwzGwWFoC7ycTf1rcQZHOlsJ6N8=
 github.com/jmespath/go-jmespath/internal/testify v1.5.1/go.mod h1:L3OGu8Wl2/fWfCI6z80xFu9LTZmf1ZRjMHUOPmWr69U=
-github.com/marcelocorreia/go-utils v0.0.0-20210506042455-9a9feded8232 h1:GYidl9b2Y9YZCmMYuLDm/VpUvURrxqD/yXbECDHC6s0=
-github.com/marcelocorreia/go-utils v0.0.0-20210506042455-9a9feded8232/go.mod h1:dWFDmoSl43aIWHmH/UO9hPArhXb+lS7NLtEnicbhiM4=
+github.com/marcelocorreia/go-utils v0.0.0-20210506055503-5b8123177698 h1:OjMR7HTA4oXjOq8dM2aIQGJeAIz7AwDJp2hynZ9E6D8=
+github.com/marcelocorreia/go-utils v0.0.0-20210506055503-5b8123177698/go.mod h1:dWFDmoSl43aIWHmH/UO9hPArhXb+lS7NLtEnicbhiM4=
 github.com/mbndr/figlet4go v0.0.0-20190224160619-d6cef5b186ea h1:mQncVDBpKkAecPcH2IMGpKUQYhwowlafQbfkz2QFqkc=
 github.com/mbndr/figlet4go v0.0.0-20190224160619-d6cef5b186ea/go.mod h1:QzTGLGoOqLHUBK8/EZ0v4Fa4CdyXmdyRwCHcl0YbeO4=
 github.com/mitchellh/copystructure v1.2.0 h1:vpKXTN4ewci03Vljg/q9QvCGUDttBOGBIa15WveJJGw=

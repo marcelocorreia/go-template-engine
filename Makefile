@@ -20,7 +20,7 @@ default: hammer-targets
 
 wrap-up:
 	go mod tidy
-	go mod vendor
+	#go mod vendor
 # Builds the application
 go-build:
 	go build -o ./bin/$(PROJECT_NAME) -ldflags "-X main.VERSION=dev" -v ./cmd/$(PROJECT_NAME)/
