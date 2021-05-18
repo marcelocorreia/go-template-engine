@@ -21,8 +21,8 @@ builds:
       - linux
       - darwin
       - windows
-#      - openbsd
-#      - freebsd
+    #      - openbsd
+    #      - freebsd
     goarch:
       - amd64
 
@@ -53,37 +53,21 @@ scoop:
     name: marcelocorreia
     email: marcelo@correia.io
 
-brew:
-  name: go-template-engine
-  homepage: "https://marcelo.correia.io"
-  description: "Go Template Engine (GTE) - Easy util to apply Go Templates in BAU jobs"
-  url_template: "https://github.com/marcelocorreia/{{ .ProjectName }}/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-
-  github:
-    owner: marcelocorreia
-    name: homebrew-taps
-  commit_author:
-    name: marcelocorreia
-    email: marcelo@correia.io
-  test: |
-    system "#{bin}/go-template-engine --version"
-  install: |
-    bin.install "go-template-engine"
-
-#github_urls:
-#  download: https://github.com/marcelocorreia/{{ .ProjectName }}
-
-#dockers:
-#  - image_templates:
-#    - marcelocorreia/go-template-engine
-#    skip_push: true
-
-#dockers:
-#  - goos: linux
-#    goarch: amd64
-#    dockerfile: Dockerfile
-#    image_templates:
-#      - "marcelocorreia/go-template-engine:{{ .Tag }}"
-#      - "marcelocorreia/go-template-engine:v{{ .Major }}"
-#      - "marcelocorreia/go-template-engine:v{{ .Major }}.{{ .Minor }}"
-#      - "marcelocorreia/go-template-engine:latest"
+brews:
+  - name: go-template-engine
+    tap:
+      owner: marcelocorreia
+      name: homebrew-taps
+      #token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    url_template: "https://github.com/marcelocorreia/{{ .ProjectName }}/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    commit_author:
+      name: marcelocorreia
+      email: marcelo@correia.io
+    folder: Formula
+    homepage: "https://github.com/marcelocorreia/go-template-engine"
+    description: "Easy tool to apply Go Templates in BAU jobs"
+    license: "NotSureYet"
+    test: |
+      system "#{bin}/go-template-engine --version"
+    install: |
+      bin.install "go-template-engine"
