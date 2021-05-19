@@ -1,0 +1,5 @@
+<root>
+    <prop1>my property1</prop1>
+    <prop1>my property2</prop1>
+    <port>38080</port>
+</root>

@@ -1,0 +1,5 @@
+<root>
+    <prop1>{{.app.prop1}}</prop1>
+    <prop1>{{.app.prop2}}</prop1>
+    <port>{{.app.port}}</port>
+</root>

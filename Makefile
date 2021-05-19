@@ -166,3 +166,9 @@ hammer-variables:
 
 hammer-doctor:
 	hammer make doctor .
+
+_test-bin:
+	go-template-engine -s /Volumes/work/go/src/github.com/marcelocorreia/go-template-engine/templateengine/test_fixtures/config/dev/app1 \
+	-o /Volumes/work/go/src/github.com/marcelocorreia/go-template-engine/tmp \
+	--var-file /Volumes/work/go/src/github.com/marcelocorreia/go-template-engine/templateengine/test_fixtures/config/dev/config.yaml \
+	--log debug

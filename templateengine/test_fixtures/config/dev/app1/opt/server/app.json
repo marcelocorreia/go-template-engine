@@ -1,0 +1,5 @@
+{
+  "prop1": "{{.app.prop1}}",
+  "prop2": "{{.app.prop2}}",
+  "port": "{{.app.port}}"
+}

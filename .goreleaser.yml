@@ -71,3 +71,9 @@ brews:
       system "#{bin}/go-template-engine --version"
     install: |
       bin.install "go-template-engine"
+
+
+dockers:
+  - image_templates:
+    - marcelocorreia/go-template-engine
+    skip_push: true

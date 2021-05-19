@@ -37,3 +37,4 @@ vendor/
 .DS_Store
 **/keys/
 hammer.yml.bkp
+./tmp/

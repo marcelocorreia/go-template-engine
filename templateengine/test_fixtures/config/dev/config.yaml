@@ -1,0 +1,4 @@
+app:
+  prop1: my property1
+  prop2: my property2
+  port: 38080

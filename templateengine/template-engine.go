@@ -61,16 +61,20 @@ func GetEngine(exitOnError bool, delims ...string) (*TemplateEngine, error) {
 
 //ParseTemplateFile Parses file
 func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interface{}) (string, error) {
+	log.Debugf("Processing: %s", templateFile)
 	tplFile, err := ioutil.ReadFile(templateFile)
 
 	if err != nil {
+		log.Debugf("Processing: %s - failed", templateFile)
 		return "", err
 	}
 
 	r, err := gte.ParseTemplateString(string(tplFile), params)
+	log.Debugf("Processing: %s - failed", templateFile)
 	if err != nil {
 		return r, err
 	}
+	log.Debugf("Processing: %s - success", templateFile)
 	return r, nil
 }
 
@@ -159,7 +163,7 @@ func (gte TemplateEngine) ProcessDirectory(sourceDir string, targetDir string, p
 				b, _ := gte.ParseTemplateFile(sourceFile, params)
 
 				if err != nil {
-					log.Warn("File: %s can't be loaded as template, possibly a binary\n", file.Name())
+					log.Warnf("File: %s can't be loaded as template, possibly a binary\n", file.Name())
 				}
 				if err := Output(b, targetFile); err != nil {
 					return err

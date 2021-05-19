@@ -34,6 +34,15 @@ var (
 )
 
 func main() {
+	app.Version(VERSION).VersionFlag.Short('v')
+	kingpin.CommandLine.HelpFlag.Short('h')
+	if len(os.Args) <= 1 {
+		kingpin.Usage()
+		os.Exit(1)
+	}
+
+	kingpin.MustParse(app.Parse(os.Args[1:]))
+
 	switch *logLevel {
 	case "info":
 		log.SetLevel(log.InfoLevel)
@@ -55,14 +64,7 @@ func main() {
 		//FullTimestamp: true,
 	})
 
-	app.Version(VERSION).VersionFlag.Short('v')
-	kingpin.CommandLine.HelpFlag.Short('h')
-	if len(os.Args) <= 1 {
-		kingpin.Usage()
-		os.Exit(1)
-	}
 
-	kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	var engine templateengine.Engine
 	engine, err := templateengine.GetEngine(*exitOnError, *delimLeft, *delimRight)
