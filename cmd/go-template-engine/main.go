@@ -64,8 +64,6 @@ func main() {
 		//FullTimestamp: true,
 	})
 
-
-
 	var engine templateengine.Engine
 	engine, err := templateengine.GetEngine(*exitOnError, *delimLeft, *delimRight)
 	if err != nil {
