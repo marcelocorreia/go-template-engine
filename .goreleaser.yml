@@ -76,4 +76,4 @@ brews:
 dockers:
   - image_templates:
     - marcelocorreia/go-template-engine
-    skip_push: true
+#    skip_push: true

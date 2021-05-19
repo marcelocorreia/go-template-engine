@@ -61,7 +61,7 @@ func GetEngine(exitOnError bool, delims ...string) (*TemplateEngine, error) {
 
 //ParseTemplateFile Parses file
 func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interface{}) (string, error) {
-	log.Debugf("Processing: %s", templateFile)
+	log.Debugf("Processing: %s - started", templateFile)
 	tplFile, err := ioutil.ReadFile(templateFile)
 
 	if err != nil {
@@ -70,7 +70,6 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 	}
 
 	r, err := gte.ParseTemplateString(string(tplFile), params)
-	log.Debugf("Processing: %s - failed", templateFile)
 	if err != nil {
 		return r, err
 	}
