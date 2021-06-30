@@ -36,6 +36,22 @@ func (gte TemplateEngine) printf(pattern string, params ...string) string {
 	return fmt.Sprintf(pattern, params)
 }
 
+func (gte TemplateEngine) parameterStore(key string) string {
+	ps := awstools.NewParameterStore()
+
+	oo, _ := ps.GetParameter(key)
+
+	return oo
+}
+
+func (gte TemplateEngine) parameterStoreField(key, field string) string {
+	ps := awstools.NewParameterStore()
+
+	oo, _ := ps.GetParameterField(key, field)
+
+	return oo
+}
+
 //ListFuncs Lists Custom functions
 func (gte TemplateEngine) ListFuncs() {
 	funcs := make([]string, 0, len(gte.Funcs))

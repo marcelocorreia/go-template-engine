@@ -29,7 +29,7 @@ var (
 	delimRight          = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
 	listCustomFunctions = app.Flag("list-custom-functions", "List Custom Commands").Short('c').Bool()
 	logLevel            = app.Flag("log", "Log Level. Default Info").Default("info").String()
-	noColor = app.Flag("no-color","No color output").Bool()
+	noColor             = app.Flag("no-color", "No color output").Bool()
 	//VERSION application
 	VERSION string
 )

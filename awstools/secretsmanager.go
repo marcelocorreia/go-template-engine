@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/aws/aws-sdk-go/service/sts"
 	"os"
@@ -20,13 +19,13 @@ type SecretsManagerService interface {
 	PrintSecretsList() error
 }
 
-type SecretsManager struct {
+type secretsManager struct {
 	AwsProfile string
 	Region     string
 }
 
 func NewSecretsManagerService() SecretsManagerService {
-	sm := SecretsManager{}
+	sm := secretsManager{}
 	if os.Getenv("AWS_DEFAULT_REGION") != "" {
 		sm.Region = os.Getenv("AWS_DEFAULT_REGION")
 	} else {
@@ -36,7 +35,7 @@ func NewSecretsManagerService() SecretsManagerService {
 	return sm
 }
 
-func (sm SecretsManager) PrintSecretsList() error {
+func (sm secretsManager) PrintSecretsList() error {
 	list, err := sm.Secrets()
 	if err != nil {
 		return err
@@ -47,8 +46,8 @@ func (sm SecretsManager) PrintSecretsList() error {
 	return nil
 }
 
-func (sm SecretsManager) Secrets() ([]string, error) {
-	cli := secretsmanager.New(sm.getSession(sm.Region))
+func (sm secretsManager) Secrets() ([]string, error) {
+	cli := secretsmanager.New(GetSession(sm.Region))
 	var res int64
 	res = maxResults
 	var list, err = cli.ListSecrets(&secretsmanager.ListSecretsInput{
@@ -67,8 +66,8 @@ func (sm SecretsManager) Secrets() ([]string, error) {
 	return resp, nil
 }
 
-func (sm SecretsManager) GetSecretString(key string) (string, error) {
-	cli := secretsmanager.New(sm.getSession(sm.Region))
+func (sm secretsManager) GetSecretString(key string) (string, error) {
+	cli := secretsmanager.New(GetSession(sm.Region))
 	input := secretsmanager.GetSecretValueInput{
 		SecretId: aws.String(key),
 	}
@@ -80,8 +79,8 @@ func (sm SecretsManager) GetSecretString(key string) (string, error) {
 	return *o.SecretString, nil
 }
 
-func (sm SecretsManager) GetSecretField(key, field string) (string, error) {
-	cli := secretsmanager.New(sm.getSession(sm.Region))
+func (sm secretsManager) GetSecretField(key, field string) (string, error) {
+	cli := secretsmanager.New(GetSession(sm.Region))
 	input := secretsmanager.GetSecretValueInput{
 		SecretId: aws.String(key),
 	}
@@ -102,19 +101,11 @@ func (sm SecretsManager) GetSecretField(key, field string) (string, error) {
 	}
 }
 
-func (sm SecretsManager) getSession(region string) *session.Session {
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-		Config: aws.Config{
-			Region: aws.String(region),
-		},
-	}))
-	return sess
-}
 
-func (sm SecretsManager) whoami() (*sts.GetCallerIdentityOutput, error) {
+
+func (sm secretsManager) whoami() (*sts.GetCallerIdentityOutput, error) {
 	input := &sts.GetCallerIdentityInput{}
-	svc := sts.New(sm.getSession(sm.Region))
+	svc := sts.New(GetSession(sm.Region))
 	result, err := svc.GetCallerIdentity(input)
 
 	if err != nil {

@@ -35,6 +35,8 @@ type Engine interface {
 	printf(pattern string, params ...string) string
 	secretsManagerGetSecret(secKey string) string
 	secretsManagerGetSecretField(secKey, field string) string
+	parameterStore(key string) string
+	parameterStoreField(key, field string) string
 }
 
 // TemplateEngine templateengine
