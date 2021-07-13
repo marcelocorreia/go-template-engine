@@ -76,6 +76,8 @@ func (gte *TemplateEngine) loadFuncs() {
 	gte.Funcs["printf"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
 	gte.Funcs["secretsManager"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
 	gte.Funcs["secretsManagerField"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
+	gte.Funcs["parameterStore"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
+	gte.Funcs["parameterStoreField"] = func(pattern string, params ...string) string { return gte.printf(pattern, params...) }
 }
 
 func (gte *TemplateEngine) secretsManagerGetSecret(secKey string) string {

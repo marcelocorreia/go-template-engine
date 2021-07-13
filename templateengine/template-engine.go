@@ -27,6 +27,7 @@ type Engine interface {
 	ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) error
 	GetFileList(dir string, dirExclusions []string, fileExclusions []string) ([]string, error)
 	PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) error
+
 	loadFuncs()
 	ListFuncs()
 	staticInclude(sourceFile string) string
@@ -44,10 +45,11 @@ type TemplateEngine struct {
 	Delims      []string
 	Funcs       map[string]interface{}
 	ExitOnError bool
+	template    *template.Template
 }
 
 //GetEngine returns engine
-func GetEngine(exitOnError bool, delims ...string) (*TemplateEngine, error) {
+func GetEngine(exitOnError bool, delims []string, options ...string) (*TemplateEngine, error) {
 	if len(delims) == 2 {
 		DELIMS = delims
 	}
@@ -58,7 +60,28 @@ func GetEngine(exitOnError bool, delims ...string) (*TemplateEngine, error) {
 		ExitOnError: exitOnError,
 	}
 	engine.loadFuncs()
+	engine.setup()
+
+	if len(options) > 0 {
+		engine.template.Option(options...)
+
+	}
+
 	return &engine, nil
+}
+
+func (gte *TemplateEngine) setup() {
+	funcMap := template.FuncMap{
+		"staticInclude":       func(path string) string { return gte.staticInclude(path) },
+		"replace":             func(input, from, to string) string { return gte.replace(input, from, to) },
+		"inList":              func(needle interface{}, haystack []interface{}) bool { return gte.inList(needle, haystack) },
+		"secretsManager":      func(secKey string) string { return gte.secretsManagerGetSecret(secKey) },
+		"secretsManagerField": func(secKey, field string) string { return gte.secretsManagerGetSecretField(secKey, field) },
+		"parameterStore":      func(path string) string { return gte.parameterStore(path) },
+		"parameterStoreField": func(path, field string) string { return gte.parameterStoreField(path, field) },
+	}
+
+	gte.template = template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap())
 }
 
 //ParseTemplateFile Parses file
@@ -81,15 +104,16 @@ func (gte TemplateEngine) ParseTemplateFile(templateFile string, params interfac
 
 //ParseTemplateString Parses string
 func (gte TemplateEngine) ParseTemplateString(templateString string, params interface{}) (string, error) {
-	funcMap := template.FuncMap{
-		"staticInclude":       func(path string) string { return gte.staticInclude(path) },
-		"replace":             func(input, from, to string) string { return gte.replace(input, from, to) },
-		"inList":              func(needle interface{}, haystack []interface{}) bool { return gte.inList(needle, haystack) },
-		"secretsManager":      func(secKey string) string { return gte.secretsManagerGetSecret(secKey) },
-		"secretsManagerField": func(secKey, field string) string { return gte.secretsManagerGetSecretField(secKey, field) },
-	}
+	//funcMap := template.FuncMap{
+	//	"staticInclude":       func(path string) string { return gte.staticInclude(path) },
+	//	"replace":             func(input, from, to string) string { return gte.replace(input, from, to) },
+	//	"inList":              func(needle interface{}, haystack []interface{}) bool { return gte.inList(needle, haystack) },
+	//	"secretsManager":      func(secKey string) string { return gte.secretsManagerGetSecret(secKey) },
+	//	"secretsManagerField": func(secKey, field string) string { return gte.secretsManagerGetSecretField(secKey, field) },
+	//}
 
-	t, err := template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap()).Parse(templateString)
+	//t, err := template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap()).Parse(templateString)
+	t, err := gte.template.Parse(templateString)
 	if err != nil {
 		return templateString, err
 	}

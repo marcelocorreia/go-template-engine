@@ -24,6 +24,7 @@ var (
 	templateExcludes    = app.Flag("exclude", "Excludes File from template job").Strings()
 	templateExcludesDir = app.Flag("exclude-dir", "Excludes directory from template job").Strings()
 	templateFileOutput  = app.Flag("output", "File output full path").Short('o').String()
+	templateOptions     = app.Flag("option", "Go template options").Strings()
 
 	delimLeft           = app.Flag("delim-left", "Left Delimiter").Default("{{").String()
 	delimRight          = app.Flag("delim-right", "Right Delimiter").Default("}}").String()
@@ -66,7 +67,7 @@ func main() {
 	})
 
 	var engine templateengine.Engine
-	engine, err := templateengine.GetEngine(*exitOnError, *delimLeft, *delimRight)
+	engine, err := templateengine.GetEngine(*exitOnError, []string{*delimLeft, *delimRight}, *templateOptions...)
 	if err != nil {
 		handleErrorExit(err, "Error Loading engine")
 	}
