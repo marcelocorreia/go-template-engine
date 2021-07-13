@@ -35,7 +35,7 @@ func TestParseTemplateString(t *testing.T) {
 	fmt.Println("Finished Test with vars...")
 }
 func TestListFuncs(t *testing.T) {
-	engine, _ := GetEngine(false,nil)
+	engine, _ := GetEngine(false, nil)
 	engine.ListFuncs()
 }
 func TestTemplateJson(t *testing.T) {
@@ -160,7 +160,7 @@ func TestTemplateEngine_ProcessDirectory(t *testing.T) {
 
 func TestDelims(t *testing.T) {
 	var engine Engine
-	engine, _ = GetEngine(false, []string{ TEST_DELIMS[0], TEST_DELIMS[1]})
+	engine, _ = GetEngine(false, []string{TEST_DELIMS[0], TEST_DELIMS[1]})
 	vars, err := engine.LoadVars("test_fixtures/delim.yml")
 	assert.NoError(t, err)
 	out, err := engine.ParseTemplateFile("test_fixtures/delim.tpl", vars)
@@ -171,10 +171,10 @@ func TestDelims(t *testing.T) {
 }
 
 func TestGetEngine(t *testing.T) {
-	gte, err := GetEngine(false,nil)
+	gte, err := GetEngine(false, nil)
 	assert.NotNil(t, gte)
 	assert.Nil(t, err)
-	gte, err = GetEngine(false, []string{ DEFAULT_DELIMS[0], DEFAULT_DELIMS[1]})
+	gte, err = GetEngine(false, []string{DEFAULT_DELIMS[0], DEFAULT_DELIMS[1]})
 	assert.NotNil(t, gte)
 	assert.Nil(t, err)
 }

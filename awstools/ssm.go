@@ -65,7 +65,6 @@ func (pm parameterStore) GetParameterField(name, field string) (string, error) {
 	return f[field].(string), err
 }
 
-
 func (pm parameterStore) GetParametersByPath(path string, recursive bool, encrypted bool) error {
 	ssmsvc := ssm.New(GetSession(pm.Region))
 	out, err := ssmsvc.GetParametersByPath(&ssm.GetParametersByPathInput{
@@ -81,7 +80,6 @@ func (pm parameterStore) GetParametersByPath(path string, recursive bool, encryp
 	return err
 }
 
-
 func GetSession(region string) *session.Session {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
@@ -91,5 +89,3 @@ func GetSession(region string) *session.Session {
 	}))
 	return sess
 }
-
-

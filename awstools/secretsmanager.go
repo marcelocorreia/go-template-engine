@@ -101,8 +101,6 @@ func (sm secretsManager) GetSecretField(key, field string) (string, error) {
 	}
 }
 
-
-
 func (sm secretsManager) whoami() (*sts.GetCallerIdentityOutput, error) {
 	input := &sts.GetCallerIdentityInput{}
 	svc := sts.New(GetSession(sm.Region))
