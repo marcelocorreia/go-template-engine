@@ -70,7 +70,7 @@ go-reporter:
 	goreporter -p . -r goreporter/ -e vendor -f html
 
 # Prepares for release
-tag-push: ;$(call git_push,Releasing $(PROJECT_NAME)"-"$(NEXT_VERSION)) ;$(info $(M) Tagging $(PROJECT_NAME)-$(NEXT_VERSION))
+tag-push: _setup-versions ;$(call git_push,Releasing $(PROJECT_NAME)"-"$(NEXT_VERSION)) ;$(info $(M) Tagging $(PROJECT_NAME)-$(NEXT_VERSION))
 	git tag $(NEXT_VERSION)
 	git tag v$(NEXT_VERSION)
 	git tag go/v$(NEXT_VERSION)
