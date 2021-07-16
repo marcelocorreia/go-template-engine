@@ -18,11 +18,16 @@ RELEASE_TYPE ?= minor
 default: hammer-targets
 
 
+fmt:
+	go fmt ./awstools ./cmd/go-template-engine ./templateengine
+
 wrap-up:
 	go mod tidy
-	#go mod vendor
+	go mod vendor
+	go mod download
+
 # Builds the application
-go-build:
+go-build: fmt
 	go build -o ./bin/$(PROJECT_NAME) -ldflags "-X main.VERSION=dev" -v ./cmd/$(PROJECT_NAME)/
 
 # Tests the application
@@ -54,16 +59,16 @@ next-version: _setup-versions
 	@echo $(NEXT_VERSION)
 
 # Builds a snapshot
-go-snapshot: ;$(info $(M) - Releasing $(PROJECT_NAME)-snapshot)
+go-snapshot: fmt ;$(info $(M) - Releasing $(PROJECT_NAME)-snapshot)
 	-@mkdir -p dist coverage
 	goreleaser  release --snapshot  --rm-dist --debug
 
 # Releases the application
-go-release: _require-github-token _setup-versions tag-push ;$(info $(M) - Releasing $(PROJECT_NAME)-$(NEXT_VERSION))
+go-release: fmt _require-github-token _setup-versions tag-push ;$(info $(M) - Releasing $(PROJECT_NAME)-$(NEXT_VERSION))
 	goreleaser release  --rm-dist
 
 # Builds a dry run of the app
-go-release-dry-run:
+go-release-dry-run: fmt
 	goreleaser release  --skip-publish
 
 go-reporter:

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/Masterminds/sprig"
 	"github.com/hashicorp/hcl"
 	"github.com/marcelocorreia/go-utils/utils"
@@ -60,17 +61,12 @@ func GetEngine(exitOnError bool, delims []string, options ...string) (*TemplateE
 		ExitOnError: exitOnError,
 	}
 	engine.loadFuncs()
-	engine.setup()
-
-	if len(options) > 0 {
-		engine.template.Option(options...)
-
-	}
+	engine.setup(options)
 
 	return &engine, nil
 }
 
-func (gte *TemplateEngine) setup() {
+func (gte *TemplateEngine) setup(options []string) {
 	funcMap := template.FuncMap{
 		"staticInclude":       func(path string) string { return gte.staticInclude(path) },
 		"replace":             func(input, from, to string) string { return gte.replace(input, from, to) },
@@ -81,7 +77,12 @@ func (gte *TemplateEngine) setup() {
 		"parameterStoreField": func(path, field string) string { return gte.parameterStoreField(path, field) },
 	}
 
-	gte.template = template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap())
+	if len(options) > 0 {
+		gte.template = template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap()).Option(options[0])
+	} else {
+		gte.template = template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap())
+	}
+	fmt.Println(gte.template)
 }
 
 //ParseTemplateFile Parses file

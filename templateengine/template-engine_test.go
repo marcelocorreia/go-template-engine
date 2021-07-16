@@ -168,6 +168,18 @@ func TestDelims(t *testing.T) {
 	assert.Contains(t, out, "Willie")
 	assert.Contains(t, out, "horses")
 	assert.Contains(t, out, "beer")
+	fmt.Println(out)
+}
+
+func TestGoTemplateOptions(t *testing.T) {
+	fmt.Println("Running Test with options...")
+	engine, _ := GetEngine(false, []string{DEFAULT_DELIMS[0], DEFAULT_DELIMS[1]}, "missingkey=zero")
+	params := make(map[string]string)
+	params["jingle"] = "is it me you're looking for?"
+	out, err := engine.ParseTemplateFile(path+"/test_fixtures/options.yaml", params)
+	assert.NoError(t, err)
+	fmt.Println(out)
+	assert.NotEmpty(t, out)
 }
 
 func TestGetEngine(t *testing.T) {
