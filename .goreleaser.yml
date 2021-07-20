@@ -58,6 +58,7 @@ brews:
     tap:
       owner: marcelocorreia
       name: homebrew-taps
+      #token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     url_template: "https://github.com/marcelocorreia/{{ .ProjectName }}/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     commit_author:
       name: marcelocorreia
@@ -74,5 +75,5 @@ brews:
 
 dockers:
   - image_templates:
-    - marcelocorreia/go-template-engine
+      - marcelocorreia/go-template-engine
 #    skip_push: true
