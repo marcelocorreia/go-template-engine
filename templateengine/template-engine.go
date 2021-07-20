@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/Masterminds/sprig"
 	"github.com/hashicorp/hcl"
 	"github.com/marcelocorreia/go-utils/utils"
@@ -24,7 +23,7 @@ var DELIMS = []string{"{{", "}}"}
 type Engine interface {
 	ParseTemplateFile(templateFile string, params interface{}) (string, error)
 	ParseTemplateString(templateString string, params interface{}) (string, error)
-	LoadVars(filePath string) (interface{}, error)
+	LoadVars(filePath string) (map[string]interface{}, error)
 	ProcessDirectory(sourceDir string, targetDir string, params interface{}, dirExclusions []string, fileExclusions []string, fileIgnores []string) error
 	GetFileList(dir string, dirExclusions []string, fileExclusions []string) ([]string, error)
 	PrepareOutputDirectory(sourceDir string, targetDir string, exclusions []string) error
@@ -82,7 +81,7 @@ func (gte *TemplateEngine) setup(options []string) {
 	} else {
 		gte.template = template.New("gte").Delims(gte.Delims[0], gte.Delims[1]).Funcs(funcMap).Funcs(sprig.GenericFuncMap())
 	}
-	fmt.Println(gte.template)
+
 }
 
 //ParseTemplateFile Parses file
@@ -130,8 +129,8 @@ func (gte TemplateEngine) ParseTemplateString(templateString string, params inte
 }
 
 //LoadVars Load all vars for job
-func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
-	var varsFile interface{}
+func (gte TemplateEngine) LoadVars(filePath string) (map[string]interface{}, error) {
+	var varsFile map[string]interface{}
 	file, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return nil, err
@@ -152,7 +151,7 @@ func (gte TemplateEngine) LoadVars(filePath string) (interface{}, error) {
 			return nil, err
 		}
 	} else {
-		varsFile = make(map[interface{}]interface{})
+		varsFile = make(map[string]interface{})
 	}
 	return varsFile, nil
 }

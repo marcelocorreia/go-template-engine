@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -173,10 +174,17 @@ func TestDelims(t *testing.T) {
 
 func TestGoTemplateOptions(t *testing.T) {
 	fmt.Println("Running Test with options...")
-	engine, _ := GetEngine(false, []string{DEFAULT_DELIMS[0], DEFAULT_DELIMS[1]}, "missingkey=zero")
-	params := make(map[string]string)
-	params["jingle"] = "is it me you're looking for?"
-	out, err := engine.ParseTemplateFile(path+"/test_fixtures/options.yaml", params)
+	engine, _ := GetEngine(false, []string{DEFAULT_DELIMS[0], DEFAULT_DELIMS[1]}, "missingkey=error")
+	//params := make(map[string]string)
+	//params["jingle"] = "is it me you're looking for?"
+	body, err := os.ReadFile(path + "/test_fixtures/options-vars.yaml")
+	assert.NoError(t, err)
+
+	var testVars map[string]interface{}
+	err = yaml.Unmarshal(body, &testVars)
+	assert.NoError(t, err)
+
+	out, err := engine.ParseTemplateFile(path+"/test_fixtures/options.yaml", testVars)
 	assert.NoError(t, err)
 	fmt.Println(out)
 	assert.NotEmpty(t, out)

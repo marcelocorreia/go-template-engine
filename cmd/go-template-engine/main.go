@@ -77,9 +77,10 @@ func main() {
 		os.Exit(0)
 	}
 
-	var jobVars interface{}
+	var jobVars map[string]interface{}
 	if templateVarsFile != nil && *templateVarsFile != "" {
 		jobVars, err = engine.LoadVars(*templateVarsFile)
+
 		if err != nil {
 			handleErrorExit(err, "Error:")
 		}
@@ -91,7 +92,7 @@ func main() {
 	}
 
 	for k, v := range *templateVars {
-		jobVars.(map[string]interface{})[k] = v
+		jobVars[k] = v
 	}
 	render(jobVars, engine)
 

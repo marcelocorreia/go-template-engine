@@ -2,5 +2,9 @@
 package_name: Blitzkrieg Bop
 phrase1: Hey ho, let's go
 blah:
-hello: {{ .jingle }}
+hello: {{ or .jingle "" }}
+
+
+
+
 
