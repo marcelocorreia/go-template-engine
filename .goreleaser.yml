@@ -58,7 +58,6 @@ brews:
     tap:
       owner: marcelocorreia
       name: homebrew-taps
-      #token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     url_template: "https://github.com/marcelocorreia/{{ .ProjectName }}/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     commit_author:
       name: marcelocorreia
