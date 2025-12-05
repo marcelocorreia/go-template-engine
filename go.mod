@@ -15,7 +15,7 @@ require (
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/marcelocorreia/go-utils v0.0.0-20210506055503-5b8123177698
 	github.com/mitchellh/copystructure v1.2.0 // indirect
-	github.com/sirupsen/logrus v1.8.1
+	github.com/sirupsen/logrus v1.8.3
 	github.com/stretchr/testify v1.7.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/yaml.v2 v2.4.0
